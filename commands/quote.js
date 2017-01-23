@@ -10,7 +10,6 @@ exports.run = async (client, msg, params = []) => {
       response = params[0].substr(params[0].indexOf('|') + 1);
       params[0] = params[0].substr(0, params[0].indexOf('|'));
     }
-    client.log(params[0]);
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     const embed = new client.methods.Embed();
     embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
@@ -36,7 +35,7 @@ exports.run = async (client, msg, params = []) => {
     }
     await msg.edit(response, { embed: embed });
   } catch (e) {
-    client.log(require('util').inspect(e, false, 0));
+    client.log(e.res.text);
     msg.edit(`${msg.content}
 
 \`E-ROHR\`
