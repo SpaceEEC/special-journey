@@ -35,7 +35,7 @@ exports.run = async (client, msg, params = []) => {
     }
     await msg.edit(response, { embed: embed });
   } catch (e) {
-    client.log(e.res.text);
+    client.log(e.response.res.text);
     msg.edit(`${msg.content}
 
 \`E-ROHR\`
