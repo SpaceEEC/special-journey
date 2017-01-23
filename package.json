@@ -1,0 +1,25 @@
+{
+  "name": "selfbot",
+  "version": "1.0.0",
+  "description": "YADSB",
+  "main": "self.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpaceEEC/special-journey.git"
+  },
+  "author": "spaceeec",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpaceEEC/special-journey/issues"
+  },
+  "homepage": "https://github.com/SpaceEEC/special-journey#readme",
+  "dependencies": {
+    "discord.js": "git://github.com/hydrabolt/discord.js.git#master",
+    "fs-extra-promise": "^0.4.1",
+    "moment": "^2.17.1",
+    "moment-duration-format": "^1.3.0"
+  }
+}

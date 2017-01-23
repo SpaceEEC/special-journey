@@ -1,0 +1,7 @@
+#dev stuff
+node_modules/
+.vscode/
+.eslintrc.json
+
+#config and token 
+var/
