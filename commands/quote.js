@@ -15,7 +15,7 @@ exports.run = async (client, msg, params = []) => {
     const embed = new client.methods.Embed();
     embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
-      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tage], H [Stunden], m [Minuten] und s [Sekunden]')}`)
+      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen], H [Stunden], m [Minuten] und s [Sekunden]')}`)
       .setDescription(messages.first().content);
     if (params[1]) {
       params = params.slice(1);
