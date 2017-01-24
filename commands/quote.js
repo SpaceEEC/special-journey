@@ -1,4 +1,5 @@
 const moment = require('moment');
+
 moment.locale('de');
 require('moment-duration-format');
 
@@ -35,14 +36,17 @@ exports.run = async (client, msg, params = []) => {
         if (breakvar) break;
       }
     }
+    if (!embed.fields.length && messages.first().embeds && messages.first().embeds[0] && messages.first().embeds[0].thumbnail && messages.first().embeds[0].thumbnail.url) {
+      embed.setDescription(embed.description.replace(messages.first().embeds[0].thumbnail.url, ''));
+      embed.setThumbnail(messages.first().embeds[0].thumbnail.url);
+    }
     await msg.edit(response, { embed: embed });
   } catch (e) {
     msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${e}
-${require('util').inspect(JSON.parse(e.response.res.text))}
+${e}${e && e.response && e.response.res && e.response.res.text ? `\n${require('util').inspect(JSON.parse(e.response.res.text))}` : ''}
 \`\`\``);
   }
 };
