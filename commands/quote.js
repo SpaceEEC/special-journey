@@ -42,8 +42,8 @@ exports.run = async (client, msg, params = []) => {
 \`E-ROHR\`
 \`\`\`js
 ${e}
+${require('util').inspect(JSON.parse(e.response.res.text))}
 \`\`\``);
-    client.log(e.response.res.text);
   }
 };
 
