@@ -12,11 +12,11 @@ exports.run = async (client, msg, params = []) => {
       params[0] = params[0].substr(0, params[0].indexOf('|'));
     }
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
-    // messages.first().member = await msg.guild.fetchMember(messages.first().user);
+    messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
     embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
-      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen], H [Stunden], m [Minuten] und s [Sekunden]')}`)
+      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
     if (params[1]) {
       params = params.slice(1);
@@ -31,14 +31,18 @@ exports.run = async (client, msg, params = []) => {
           breakvar = true;
         }
         const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
-        // add.first().member = await msg.guild.fetchMember(add.first().user);
+        add.first().member = await msg.guild.fetchMember(add.first().author);
         embed.addField(add.first().member.displayName, add.first().content);
         if (breakvar) break;
       }
     }
-    if (!embed.fields.length && messages.first().embeds && messages.first().embeds[0] && messages.first().embeds[0].thumbnail && messages.first().embeds[0].thumbnail.url) {
-      embed.setDescription(embed.description.replace(messages.first().embeds[0].thumbnail.url, ''));
-      embed.setImage(messages.first().embeds[0].thumbnail.url);
+    if (!embed.fields.length) {
+      if (messages.first().embeds && messages.first().embeds[0] && messages.first().embeds[0].thumbnail && messages.first().embeds[0].thumbnail.url) {
+        embed.setDescription(embed.description.replace(messages.first().embeds[0].thumbnail.url, ''));
+        embed.setImage(messages.first().embeds[0].thumbnail.url);
+      } else if (messages.first().attachments.size && messages.first().attachments.first() && messages.first().attachments.first().url) {
+        embed.setImage(messages.first().attachments.first().url);
+      }
     }
     await msg.edit(response, { embed: embed });
   } catch (e) {
