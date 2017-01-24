@@ -38,7 +38,7 @@ exports.run = async (client, msg, params = []) => {
     }
     if (!embed.fields.length && messages.first().embeds && messages.first().embeds[0] && messages.first().embeds[0].thumbnail && messages.first().embeds[0].thumbnail.url) {
       embed.setDescription(embed.description.replace(messages.first().embeds[0].thumbnail.url, ''));
-      embed.setThumbnail(messages.first().embeds[0].thumbnail.url);
+      embed.setImage(messages.first().embeds[0].thumbnail.url);
     }
     await msg.edit(response, { embed: embed });
   } catch (e) {
