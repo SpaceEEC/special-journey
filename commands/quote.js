@@ -11,6 +11,7 @@ exports.run = async (client, msg, params = []) => {
       params[0] = params[0].substr(0, params[0].indexOf('|'));
     }
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
+    // messages.first().member = await msg.guild.fetchMember(messages.first().user);
     const embed = new client.methods.Embed();
     embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
@@ -29,6 +30,7 @@ exports.run = async (client, msg, params = []) => {
           breakvar = true;
         }
         const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
+        // add.first().member = await msg.guild.fetchMember(add.first().user);
         embed.addField(add.first().member.displayName, add.first().content);
         if (breakvar) break;
       }
@@ -48,7 +50,7 @@ ${e}
 function getColorForPlebsLikeCrawl(member) {
   let colorarray = member.roles.map(r => {
     return { position: r.position, color: r.color };
-  }).sort((a, b) => a.position - b.position);
+  }).sort((a, b) => b.position - a.position);
   let color = 0;
   for (const role in colorarray) {
     if (colorarray[role].color) {
