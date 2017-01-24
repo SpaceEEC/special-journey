@@ -13,8 +13,8 @@ exports.run = async (client, msg, params = []) => {
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     const embed = new client.methods.Embed();
     embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
-      .setColor(messages.first().member.highestRole.color)
-      .setFooter(`Nachricht gesendet vor: ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tage], H [Stunden], m [Minuten], s [Sekunden]')}`)
+      .setColor(getColorForPlebsLikeCrawl(messages.first().member))
+      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tage], H [Stunden], m [Minuten], s [Sekunden]')}`)
       .setDescription(messages.first().content);
     if (params[1]) {
       params = params.slice(1);
@@ -35,16 +35,29 @@ exports.run = async (client, msg, params = []) => {
     }
     await msg.edit(response, { embed: embed });
   } catch (e) {
-    client.log(e.response.res.text);
     msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
 ${e}
 \`\`\``);
+    client.log(e.response.res.text);
   }
 };
 
+function getColorForPlebsLikeCrawl(member) {
+  let colorarray = member.roles.map(r => {
+    return { position: r.position, color: r.color };
+  }).sort((a, b) => a.position - b.position);
+  let color = 0;
+  for (const role in colorarray) {
+    if (colorarray[role].color) {
+      color = colorarray[role].color;
+      break;
+    }
+  }
+  return color;
+}
 
 exports.conf = {
   enabled: true,
