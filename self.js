@@ -8,6 +8,7 @@ client.conf = JSON.parse(fs.readFileSync('./var/config.json', 'utf8'));
 
 client.log = (msg) => { console.log(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`); }; // eslint-disable-line
 client.err = (msg) => { console.error(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`); }; // eslint-disable-line
+client.discard = (msg) => msg;
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
