@@ -16,7 +16,7 @@ exports.run = async (client, msg, params = []) => {
 
 \`evaled\\returned:\` \`typeof: ${response_typeof}\`
 \`\`\`js
-${evaled ? evaled : 'falsy'}
+${evaled}
 \`\`\`
 Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
   } catch (e) {
