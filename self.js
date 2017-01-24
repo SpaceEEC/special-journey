@@ -23,7 +23,6 @@ fs.readdirAsync('./commands/')
     files.forEach(f => {
       try {
         const props = require(`./commands/${f}`);
-        // client.log(`Lade Befehl: ${props.help.name}`); // spam
         client.commands.set(props.help.name, props);
         props.conf.aliases.forEach(alias => {
           client.aliases.set(alias, props.help.name);
