@@ -18,7 +18,8 @@ exports.run = async (client, msg, params = []) => {
 \`\`\`js
 ${evaled}
 \`\`\`
-Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
+Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
+      .catch(err => client.discard(err));
   } catch (e) {
     msg.edit(`${msg.content}
 
@@ -26,7 +27,8 @@ Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
 \`\`\`js
 ${e}
 \`\`\`
-Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
+Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
+      .catch(err => client.discard(err));
   }
 };
 
