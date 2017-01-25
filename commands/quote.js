@@ -55,13 +55,13 @@ ${e}${e && e.response && e.response.res && e.response.res.text ? `\n${client.ins
 };
 
 function getColorForPlebsLikeCrawl(member) {
-  let colorarray = member.roles.map(r => {
+  let roles = member.roles.map(r => {
     return { position: r.position, color: r.color };
   }).sort((a, b) => b.position - a.position);
   let color = 0;
-  for (const role in colorarray) {
-    if (colorarray[role].color) {
-      color = colorarray[role].color;
+  for (const i in roles) {
+    if (roles[i].color) {
+      color = roles[i].color;
       break;
     }
   }
