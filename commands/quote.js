@@ -1,5 +1,4 @@
 const moment = require('moment');
-
 moment.locale('de');
 require('moment-duration-format');
 
@@ -18,7 +17,7 @@ exports.run = async (client, msg, params = []) => {
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
       // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
-    if (params[1]) {
+    if (params[1] && params[1].match(/^[0-9]+$/g)) {
       params = params.slice(1);
       let breakvar = false;
       for (const i in params) {
