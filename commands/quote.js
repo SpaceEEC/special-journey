@@ -49,7 +49,7 @@ exports.run = async (client, msg, params = []) => {
 
 \`E-ROHR\`
 \`\`\`js
-${e}${e && e.response && e.response.res && e.response.res.text ? `\n${require('util').inspect(JSON.parse(e.response.res.text))}` : ''}
+${e}${e && e.response && e.response.res && e.response.res.text ? `\n${client.inspect(JSON.parse(e.response.res.text))}` : ''}
 \`\`\``);
   }
 };

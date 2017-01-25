@@ -6,7 +6,7 @@ exports.run = async (client, msg, params = []) => {
     if (evaled instanceof Promise) evaled = await evaled;
     const response_typeof = typeof evaled;
     if (typeof evaled !== 'string') {
-      evaled = require('util').inspect(evaled, false, 0);
+      evaled = client.inspect(evaled, false, 0);
     }
     if (evaled.includes(client.token)) {
       msg.edit('Was willst du damit anstellen? 👀.');
