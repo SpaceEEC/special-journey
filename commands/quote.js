@@ -17,16 +17,16 @@ exports.run = async (client, msg, params = []) => {
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
       // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
-    if (params[1] && params[1].match(/^[0-9]+$/g)) {
+    if (params[1]) {
       params = params.slice(1);
       let breakvar = false;
       for (const i in params) {
-        if (params[i].includes('|') && params[i].indexOf('|') === 0) {
-          response = params.slice(i).join(' ').substr(1);
+        if (params[i].search(/\D/g) === 0) {
+          response = params.slice(i).join(' ');
           break;
-        } else if (params[i].includes('|')) {
-          response = params[i].substr(params[i].indexOf('|') + 1) + params.slice(i + 1);
-          params[i] = params[i].substr(0, params[i].indexOf('|'));
+        } else if (params[i].search(/\D/g) !== -1) {
+          response = params[i].substr(params[i].search(/\D/g)) + params.slice(i + 1);
+          params[i] = params[i].substr(0, params[i].search(/\D/g));
           breakvar = true;
         }
         const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
