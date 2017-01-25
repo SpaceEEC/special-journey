@@ -14,9 +14,9 @@ exports.run = async (client, msg, params = []) => {
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
-    embed.setAuthor(messages.first().member.displayName, messages.first().author.displayAvatarURL)
+    embed.setAuthor(`${messages.first().member.displayName} (${moment.duration(messages.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, messages.first().author.displayAvatarURL)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
-      .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
+      // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
     if (params[1]) {
       params = params.slice(1);
@@ -32,7 +32,7 @@ exports.run = async (client, msg, params = []) => {
         }
         const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
         add.first().member = await msg.guild.fetchMember(add.first().author);
-        embed.addField(add.first().member.displayName, add.first().content);
+        embed.addField(`${add.first().member.displayName} (${moment.duration(add.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, add.first().content);
         if (breakvar) break;
       }
     }
