@@ -13,7 +13,7 @@ exports.run = async (client, msg, params = []) => {
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
-    embed.setAuthor(`${messages.first().member.displayName} (${moment.duration(messages.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, messages.first().author.displayAvatarURL)
+    embed.setAuthor(`${messages.first().member.displayName} (${moment.duration(messages.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, messages.first().author.displayAvatarURL, client.conf.github)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
       // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
