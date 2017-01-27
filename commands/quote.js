@@ -13,7 +13,7 @@ exports.run = async (client, msg, params = []) => {
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
-    embed.setAuthor(`${messages.first().member.displayName} (${moment.duration(messages.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, messages.first().author.displayAvatarURL, client.conf.github)
+    embed.setAuthor(`${messages.first().member.displayName} ${getTime(messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
       .setColor(getColorForPlebsLikeCrawl(messages.first().member))
       // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
@@ -31,7 +31,7 @@ exports.run = async (client, msg, params = []) => {
         }
         const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
         add.first().member = await msg.guild.fetchMember(add.first().author);
-        embed.addField(`${add.first().member.displayName} (${moment.duration(add.first().createdAt - moment().startOf('day')).format('hh:mm')} CET)`, add.first().content);
+        embed.addField(`${add.first().member.displayName} ${getTime(add.first().createdAt)}`, add.first().content);
         if (breakvar) break;
       }
     }
@@ -53,6 +53,12 @@ ${e}${e && e.response && e.response.res && e.response.res.text ? `\n${client.ins
 \`\`\``);
   }
 };
+
+function getTime(time) {
+  time = moment.duration(time - moment().startOf('day')).format('hh:mm');
+  if (time.length === 2) time = `00:${time}`;
+  return `(${time} CET)`;
+}
 
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
 function getColorForPlebsLikeCrawl(member) {
