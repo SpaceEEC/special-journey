@@ -54,11 +54,13 @@ ${e}${e && e.response && e.response.res && e.response.res.text ? `\n${client.ins
   }
 };
 
+
 function getTime(time) {
   time = moment.duration(time - moment().startOf('day')).format('hh:mm');
   if (time.length === 2) time = `00:${time}`;
   return `(${time} CET)`;
 }
+
 
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
 function getColorForPlebsLikeCrawl(member) {
@@ -66,6 +68,7 @@ function getColorForPlebsLikeCrawl(member) {
   const role = roles[roles.length - 1];
   return role ? role.color : 0;
 }
+
 
 exports.conf = {
   enabled: true,
