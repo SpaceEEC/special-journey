@@ -65,8 +65,7 @@ function getTime(time) {
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
 function getColorForPlebsLikeCrawl(member) {
   const roles = member.roles.filter(r => r.color !== 0).array().sort((a, b) => a.position - b.position);
-  const role = roles[roles.length - 1];
-  return role ? role.color : 0;
+  return roles[roles.length - 1] ? roles[roles.length - 1].color : 0;
 }
 
 
