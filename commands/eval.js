@@ -12,20 +12,19 @@ exports.run = async (client, msg, params = []) => {
       msg.edit('Was willst du damit anstellen? 👀.');
       return;
     }
-    msg.edit(`${msg.content}
+    await msg.edit(`${msg.content}
 
 \`evaled\\returned:\` \`typeof: ${response_typeof}\`
 \`\`\`js
 ${evaled}
 \`\`\`
-Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
-      .catch(err => client.discard(err));
+Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
   } catch (e) {
     msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${e}
+${e}${e.response && e.response.res && e.response.res.text ? `\n${JSON.parse(e.response.res.text).content}` : ''}
 \`\`\`
 Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
       .catch(err => client.discard(err));
