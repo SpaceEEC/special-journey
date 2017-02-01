@@ -58,7 +58,7 @@ ${e}${e.response && e.response.res && e.response.res.text ? `\n${JSON.parse(e.re
 
 
 function getTime(time) {
-  time = moment.duration(time - moment().startOf('day')).format('hh:mm');
+  time = moment.duration(time - moment(time).startOf('day')).format('hh:mm');
   if (time.length === 2) time = `00:${time}`;
   return `(${time} CET)`;
 }
