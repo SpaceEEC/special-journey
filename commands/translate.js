@@ -3,19 +3,17 @@ const request = require('superagent');
 
 exports.run = async (client, msg, params = []) => {
   const obj = {};
-  if (!params[1]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
-  if (params[0].match(/^-..$/g)) {
-    obj.to = params[0].replace('-', '');
+  if (!params[0]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
+  if (params[0].match(/^-..$/)) {
+    obj.to = params.shift().replace('-', '');
     if (!langs.includes(obj.to)) return msg.edit(`${msg.content}\n\nUnbekannte Sprache \`${obj.to}\`!`);
   }
-  if (params[1].match(/^-..$/g)) {
-    obj.from = params[1].replace('-', '');
+  if (params[0].match(/^-..$/)) {
+    obj.from = params.shift().replace('-', '');
     if (!langs.includes(obj.from)) return msg.edit(`${msg.content}\n\nUnbekannte Sprache \`${obj.from}\`!`);
-    if (!params[2]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
-    obj.query = params.slice(2).join(' ');
-  } else {
-    obj.query = params.slice(1).join(' ');
+    if (!params[0]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
   }
+  obj.query = params.join(' ');
   const res = await request.post(`https://api.kurisubrooks.com/api/translate`)
     .send(obj)
     .set('Content-Type', 'application/json');
