@@ -3,7 +3,7 @@ exports.run = async (client, msg, params = []) => {
   try {
     const code = params.join(' ');
     let evaled = eval(code);
-    if (evaled instanceof Promise) await evaled;
+    if (evaled instanceof Promise) evaled = await evaled;
     const response_typeof = typeof evaled;
     if (typeof evaled !== 'string') {
       evaled = client.inspect(evaled, false, 0);
@@ -39,7 +39,7 @@ exports.conf = {
 
 
 exports.help = {
-  name: 'eval',
+  name: 'await',
   shortdescription: '-',
   description: '-',
   usage: '-',
