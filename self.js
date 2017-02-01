@@ -26,6 +26,7 @@ client.methods = {};
 client.methods.moment = moment;
 client.methods.Embed = Discord.RichEmbed;
 client.methods.Collection = Discord.Collection;
+client.methods.Constants = Discord.Constants;
 
 fs.readdirAsync('./commands/')
   .then((files) => {

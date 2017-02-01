@@ -2,19 +2,21 @@ const moment = require('moment');
 moment.locale('de');
 require('moment-duration-format');
 
-
 exports.run = async (client, msg, params = []) => {
   try {
     let response = '';
-    if (params[0].indexOf('|') !== -1) {
-      response = params[0].substr(params[0].indexOf('|') + 1);
-      params[0] = params[0].substr(0, params[0].indexOf('|'));
+    let color = 0;
+    if (params[0].startsWith('0x')) color = params.shift();
+    else if (client.methods.Constants.Colors[params[0].toUpperCase()]) color = client.methods.Constants.Colors[params.shift().toUpperCase()];
+    if (params[0].search(/\D/g) !== -1) {
+      response = params[0].substr(params[0].search(/\D/g) + 1);
+      params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
     const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
     embed.setAuthor(`${messages.first().member.displayName} ${getTime(messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
-      .setColor(getColorForPlebsLikeCrawl(messages.first().member))
+      .setColor(color || getColorForPlebsLikeCrawl(messages.first().member))
       // .setFooter(`Nachricht gesendet vor ${moment.duration(+new Date() - messages.first().createdTimestamp).format(' D [Tagen,] H [Stunden,] m [Minuten und] s [Sekunden]')}`)
       .setDescription(messages.first().content);
     if (params[1]) {
