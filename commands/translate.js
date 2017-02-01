@@ -24,9 +24,9 @@ exports.run = async (client, msg, params = []) => {
       embed:
       new client.methods.Embed()
         .setColor(0xb89bf8)
-        .setAuthor(`API-Schnittstelle bereitgestellt von Kurisu`, 'http://kurisubrooks.com/favicon.ico', 'http://kurisubrooks.com/')
-        .addField(`Von ${res.body.from.name} (${res.body.from.local})`, res.body.query)
-        .addField(`In ${res.body.to.name} (${res.body.to.local})`, res.body.result)
+        .setAuthor(`API by Kurisu`, 'http://kurisubrooks.com/favicon.ico', 'http://kurisubrooks.com/')
+        .addField(`From ${res.body.from.name} (${res.body.from.local})`, res.body.query)
+        .addField(`To ${res.body.to.name} (${res.body.to.local})`, res.body.result)
     });
   } else {
     return msg.edit(`${msg.content}
