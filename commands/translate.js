@@ -11,8 +11,8 @@ exports.run = async (client, msg, params = []) => {
   if (params[0].match(/^-..$/)) {
     obj.from = params.shift().replace('-', '');
     if (!langs.includes(obj.from)) return msg.edit(`${msg.content}\n\nUnbekannte Sprache \`${obj.from}\`!`);
-    if (!params[0]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
   }
+  if (!params[0]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
   obj.query = params.join(' ');
   const res = await request.post(`https://api.kurisubrooks.com/api/translate`)
     .send(obj)
