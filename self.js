@@ -76,7 +76,8 @@ client.on('disconnect', () => {
 });
 
 process.on('unhandledRejection', (err) => {
-  client.err(`Uncaught Promise Error:\n${err.stack ? err.stack : err}`);
+  if (err.response && err.response.res && err.response.res.text) client.err(`Uncaught Promise Error:\n$ ${err.response.res.text}`);
+  else client.err(`Uncaught Promise Error:\n${err.stack ? err.stack : err}`);
 });
 
 client.login(client.conf.token);
