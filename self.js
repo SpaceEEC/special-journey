@@ -2,7 +2,15 @@ const Discord = require('discord.js');
 const fs = require('fs-extra-promise');
 const moment = require('moment');
 require('moment-duration-format');
-const client = new Discord.Client();
+const client = new Discord.Client({
+  disabledEvents: [
+    'USER_NOTE_UPDATE',
+    'VOICE_STATE_UPDATE',
+    'TYPING_START',
+    'RELATIONSHIP_ADD',
+    'RELATIONSHIP_REMOVE'
+  ]
+});
 // ({ fetchAllMembers: true, });
 client.conf = JSON.parse(fs.readFileSync('./var/config.json', 'utf8'));
 
@@ -15,6 +23,7 @@ client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 
 client.methods = {};
+client.methods.moment = moment;
 client.methods.Embed = Discord.RichEmbed;
 client.methods.Collection = Discord.Collection;
 
