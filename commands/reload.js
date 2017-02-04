@@ -27,7 +27,7 @@ ${e}
 
 exports.conf = {
   enabled: true,
-  aliases: [],
+  aliases: ['relaod'],
 };
 
 
