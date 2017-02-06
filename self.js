@@ -9,7 +9,8 @@ const client = new Discord.Client({
     'TYPING_START',
     'RELATIONSHIP_ADD',
     'RELATIONSHIP_REMOVE'
-  ]
+  ],
+  disableEveryone: true
 });
 // ({ fetchAllMembers: true, });
 client.conf = JSON.parse(fs.readFileSync('./var/config.json', 'utf8'));
