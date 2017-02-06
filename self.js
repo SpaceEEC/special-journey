@@ -14,8 +14,8 @@ const client = new Discord.Client({
 // ({ fetchAllMembers: true, });
 client.conf = JSON.parse(fs.readFileSync('./var/config.json', 'utf8'));
 
-client.log = (msg) => console.log(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`); // eslint-disable-line
-client.err = (msg) => console.error(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`); // eslint-disable-line
+client.log = (msg) => console.log(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`);
+client.err = (msg) => console.error(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`);
 client.inspect = (obj, hidden = false, depth = 0) => require('util').inspect(obj, hidden, depth);
 client.discard = (msg) => msg;
 

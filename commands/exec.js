@@ -17,10 +17,10 @@ ${error.stack ? `\`E-ROHR\`\n\`\`\`js\n${error.stack}\n\`\`\`` : ''}
 ${error.code ? `Error Code: ${error.code}` : ''}
 ${error.signal ? `Signal received: ${error.signal}` : ''}
 `, {
-            embed: new client.methods.Embed() // eslint-disable-line
+  embed: new client.methods.Embed()
               .setColor(0xffff00)
               .setDescription(`Befehlsausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms.`)
-          }); // eslint-disable-line
+});
       } else {
         mes.edit(`\`EXEC\`
 \`\`\`xl
@@ -29,10 +29,10 @@ ${params.join(' ')}
 ${stdout ? `\`STDOUT\`\n\`\`\`xl\n${stdout}\`\`\`` : ''}
 ${stderr ? `\`STERR\`\n\`\`\`xl\n${stderr}\`\`\`` : ''}
 `, {
-            embed: new client.methods.Embed() // eslint-disable-line
+  embed: new client.methods.Embed()
               .setColor(0x00ff08)
               .setDescription(`Befehlsausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms.`)
-          }); // eslint-disable-line
+});
       }
     });
   });

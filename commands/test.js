@@ -1,4 +1,4 @@
-exports.run = async (client, msg, params = []) => { // eslint-disable-line
+exports.run = async (client, msg, params = []) => { // eslint-disable-line no-unused-vars
   msg.delete();
 };
 
