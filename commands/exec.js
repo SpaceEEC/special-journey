@@ -2,7 +2,7 @@ exports.run = async (client, msg, params = []) => {
   msg.edit(msg.content, {
     embed: new client.methods.Embed()
       .setColor(0x0800ff)
-      .setDescription('Befehlsausführungvorgang läuft...')
+      .setDescription('Befehlsausführungsvorgang läuft...')
   }).then(mes => {
     const exec = require('child_process');
     const time = +new Date;
