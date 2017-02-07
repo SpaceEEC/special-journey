@@ -6,13 +6,18 @@ exports.run = async (client, msg, params = []) => {
   try {
     let response = '';
     let color = 0;
+    let channel = msg.channel;
     if (params[0].startsWith('0x')) color = params.shift();
     else if (client.methods.Constants.Colors[params[0].toUpperCase()]) color = client.methods.Constants.Colors[params.shift().toUpperCase()];
+    if (params[0].startsWith('-c')) {
+      channel = client.channels.get(params.slice(1).shift());
+      params = params.slice(2);
+    }
     if (params[0].search(/\D/g) !== -1) {
       response = params[0].substr(params[0].search(/\D/g) + 1);
       params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
-    const messages = await msg.channel.fetchMessages({ around: params[0], limit: 1 });
+    const messages = await channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await msg.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
     embed.setAuthor(`${messages.first().member.displayName} ${getTime(messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
@@ -31,7 +36,7 @@ exports.run = async (client, msg, params = []) => {
           params[i] = params[i].substr(0, params[i].search(/\D/g));
           breakvar = true;
         }
-        const add = await msg.channel.fetchMessages({ around: params[i], limit: 1 });
+        const add = await channel.fetchMessages({ around: params[i], limit: 1 });
         add.first().member = await msg.guild.fetchMember(add.first().author);
         embed.addField(`${add.first().member.displayName} ${getTime(add.first().createdAt)}`, add.first().content);
         if (breakvar) break;
