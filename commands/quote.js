@@ -7,8 +7,14 @@ exports.run = async (client, msg, params = []) => {
     let response = '';
     let color = 0;
     let channel = msg.channel;
-    if (params[0].startsWith('0x')) color = params.shift();
-    else if (client.methods.Constants.Colors[params[0].toUpperCase()]) color = client.methods.Constants.Colors[params.shift().toUpperCase()];
+    if (params[0].startsWith('0x')) {
+      color = params.shift();
+    } else if (client.methods.Constants.Colors[params[0].toUpperCase()]) {
+      color = client.methods.Constants.Colors[params.shift().toUpperCase()];
+    } else if (params[0].toLowerCase() === 'random') {
+      color = Math.floor(Math.random() * (0xFFFFFF + 1));
+      params.shift();
+    }
     if (params[0].startsWith('-c')) {
       channel = client.channels.get(params.slice(1).shift());
       params = params.slice(2);
