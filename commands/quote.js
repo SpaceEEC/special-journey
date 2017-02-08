@@ -1,6 +1,3 @@
-const moment = require('moment');
-moment.locale('de');
-require('moment-duration-format');
 
 exports.run = async (client, msg, params = []) => {
   try {
@@ -26,7 +23,7 @@ exports.run = async (client, msg, params = []) => {
     const messages = await channel.fetchMessages({ around: params[0], limit: 1 });
     messages.first().member = await channel.guild.fetchMember(messages.first().author);
     const embed = new client.methods.Embed();
-    embed.setAuthor(`${messages.first().member.displayName} ${getTime(messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
+    embed.setAuthor(`${messages.first().member.displayName} ${getTime(client, messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
       .setColor(color || getColorForPlebsLikeCrawl(messages.first().member))
       .setDescription(messages.first().content);
     if (params[1]) {
@@ -43,7 +40,7 @@ exports.run = async (client, msg, params = []) => {
         }
         const add = await channel.fetchMessages({ around: params[i], limit: 1 });
         add.first().member = await channel.guild.fetchMember(add.first().author);
-        embed.addField(`${add.first().member.displayName} ${getTime(add.first().createdAt)}`, add.first().content);
+        embed.addField(`${add.first().member.displayName} ${getTime(client, add.first().createdAt)}`, add.first().content);
         if (breakvar) break;
       }
     }
@@ -67,10 +64,10 @@ ${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.
 };
 
 
-function getTime(time) {
-  time = moment.duration(time - moment(time).startOf('day')).format('hh:mm');
+function getTime(client, time) {
+  if (!client.methods.moment(time).isSame(new Date(), 'day')) time = client.methods.moment(time).format('DD.MM.YYYY - hh:mm');
+  else time = client.methods.moment.duration(time - client.methods.moment(time).startOf('day')).format('hh:mm');
   if (time.length === 2) time = `00:${time}`;
-  if (moment(time).startOf('day') !== moment().startOf('day')) return `(${time} CET)`;
   return `(${time} CET)`;
 }
 
