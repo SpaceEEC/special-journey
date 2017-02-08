@@ -1,4 +1,3 @@
-
 exports.run = async (client, msg, params = []) => {
   try {
     let response = '';
