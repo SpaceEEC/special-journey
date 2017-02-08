@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs-extra-promise');
 const moment = require('moment');
+moment.locale('de');
 require('moment-duration-format');
 const client = new Discord.Client({
   disabledEvents: [
