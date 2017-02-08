@@ -1,8 +1,9 @@
 exports.run = async (client, msg, params = []) => {
   const time = new Date().getTime();
   try {
-    const code = params.join(' ');
-    let evaled = eval(code);
+    let evaled;
+    if (msg.cmd === 'async') evaled = eval(`(async(client,msg,params=[])=>{${params.join(' ')}})(client,msg,params);`);
+    else evaled = eval(params.join(' '));
     if (evaled instanceof Promise) {
       if (msg.cmd === 'eval') await evaled;
       else evaled = await evaled;
@@ -37,7 +38,7 @@ Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
 
 exports.conf = {
   enabled: true,
-  aliases: ['await'],
+  aliases: ['await', 'async'],
 };
 
 
