@@ -18,7 +18,7 @@ exports.run = async (client, msg, params = []) => {
     .send(obj)
     .set('Content-Type', 'application/json');
   if (res.body.ok) {
-    return msg.edit('', {
+    return msg.edit({
       embed:
       new client.methods.Embed()
         .setColor(0xb89bf8)
