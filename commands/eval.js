@@ -28,7 +28,7 @@ Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
 
 \`E-ROHR\`
 \`\`\`js
-${e}${e.response && e.response.res && e.response.res.text ? `\n${JSON.parse(e.response.res.text).content}` : ''}
+${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.text}` : ''}
 \`\`\`
 Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
       .catch(err => client.discard(err));
