@@ -1,16 +1,8 @@
 exports.run = async (client, msg, params = []) => {
   try {
     let response = '';
-    let color = 0;
+    const color = getColor(client, params);
     let channel = msg.channel;
-    if (params[0].startsWith('0x')) {
-      color = params.shift();
-    } else if (client.methods.Constants.Colors[params[0].toUpperCase()]) {
-      color = client.methods.Constants.Colors[params.shift().toUpperCase()];
-    } else if (params[0].toLowerCase() === 'random') {
-      color = Math.floor(Math.random() * (0xFFFFFF + 1));
-      params.shift();
-    }
     if (params[0].startsWith('-c')) {
       channel = client.channels.get(params.slice(1).shift());
       params = params.slice(2);
@@ -19,9 +11,8 @@ exports.run = async (client, msg, params = []) => {
       response = params[0].substr(params[0].search(/\D/g) + 1);
       params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
-    let fetched = await channel.fetchMessages({ around: params[0], limit: 1 });
-    fetched = fetched.first();
-    if (fetched.guild) fetched.member = await channel.guild.fetchMember(fetched.author);
+    const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 })).first();
+    fetched.member = channel.guild ? await channel.guild.fetchMember(fetched.author) : null;
     const embed = new client.methods.Embed();
     embed.setAuthor(`${fetched.member ? fetched.member.displayName : fetched.author.username} ${getTime(client, fetched.createdAt)}`, fetched.author.displayAvatarURL, client.conf.github)
       .setColor(color || getColorForPlebsLikeCrawl(fetched.member))
@@ -38,9 +29,8 @@ exports.run = async (client, msg, params = []) => {
           params[i] = params[i].substr(0, params[i].search(/\D/g));
           breakvar = true;
         }
-        let add = await channel.fetchMessages({ around: params[i], limit: 1 });
-        add = add.first();
-        if (add.guild) add.member = await channel.guild.fetchMember(add.author);
+        const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).first();
+        add.member = channel.guild ? await channel.guild.fetchMember(add.author) : null;
         embed.addField(`${add.member ? add.member.displayName : add.author.username} ${getTime(client, add.createdAt)}`, add.content);
         if (breakvar) break;
       }
@@ -64,21 +54,29 @@ ${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.
   }
 };
 
+const getColor = (client, params) => {
+  if (params[0].startsWith('0x')) return params.shift();
+  if (client.methods.Constants.Colors[params[0].toUpperCase()]) return client.methods.Constants.Colors[params.shift().toUpperCase()];
+  if (params[0].toLowerCase() === 'random') {
+    params.shift();
+    return Math.floor(Math.random() * (0xFFFFFF + 1));
+  }
+  return 0;
+};
 
-function getTime(client, time) {
-  if (!client.methods.moment(time).isSame(new Date(), 'day')) time = client.methods.moment(time).format('DD.MM.YYYY - hh:mm');
-  else time = client.methods.moment.duration(time - client.methods.moment(time).startOf('day')).format('hh:mm');
+const getTime = (client, time) => {
+  if (client.methods.moment(time).isSame(new Date(), 'day')) time = client.methods.moment.duration(time - client.methods.moment(time).startOf('day')).format('hh:mm');
+  else time = client.methods.moment(time).format('DD.MM.YYYY - hh:mm');
   if (time.length === 2) time = `00:${time}`;
   return `(${time} CET)`;
-}
-
+};
 
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
-function getColorForPlebsLikeCrawl(member) {
+const getColorForPlebsLikeCrawl = (member) => {
   if (!member) return 0;
   const roles = member.roles.filter(r => r.color !== 0).array().sort((a, b) => a.position - b.position);
   return roles[roles.length - 1] ? roles[roles.length - 1].color : 0;
-}
+};
 
 
 exports.conf = {
