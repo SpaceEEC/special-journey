@@ -19,12 +19,13 @@ exports.run = async (client, msg, params = []) => {
       response = params[0].substr(params[0].search(/\D/g) + 1);
       params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
-    const messages = await channel.fetchMessages({ around: params[0], limit: 1 });
-    messages.first().member = await channel.guild.fetchMember(messages.first().author);
+    let fetched = await channel.fetchMessages({ around: params[0], limit: 1 });
+    fetched = fetched.first();
+    if (fetched.guild) fetched.member = await channel.guild.fetchMember(fetched.author);
     const embed = new client.methods.Embed();
-    embed.setAuthor(`${messages.first().member.displayName} ${getTime(client, messages.first().createdAt)}`, messages.first().author.displayAvatarURL, client.conf.github)
-      .setColor(color || getColorForPlebsLikeCrawl(messages.first().member))
-      .setDescription(messages.first().content);
+    embed.setAuthor(`${fetched.member ? fetched.member.displayName : fetched.author.username} ${getTime(client, fetched.createdAt)}`, fetched.author.displayAvatarURL, client.conf.github)
+      .setColor(color || getColorForPlebsLikeCrawl(fetched.member))
+      .setDescription(fetched.content);
     if (params[1]) {
       params = params.slice(1);
       let breakvar = false;
@@ -37,18 +38,19 @@ exports.run = async (client, msg, params = []) => {
           params[i] = params[i].substr(0, params[i].search(/\D/g));
           breakvar = true;
         }
-        const add = await channel.fetchMessages({ around: params[i], limit: 1 });
-        add.first().member = await channel.guild.fetchMember(add.first().author);
-        embed.addField(`${add.first().member.displayName} ${getTime(client, add.first().createdAt)}`, add.first().content);
+        let add = await channel.fetchMessages({ around: params[i], limit: 1 });
+        add = add.first();
+        if (add.guild) add.member = await channel.guild.fetchMember(add.author);
+        embed.addField(`${add.member ? add.member.displayName : add.author.username} ${getTime(client, add.createdAt)}`, add.content);
         if (breakvar) break;
       }
     }
     if (!embed.fields.length) {
-      if (messages.first().embeds && messages.first().embeds[0] && messages.first().embeds[0].thumbnail && messages.first().embeds[0].thumbnail.url) {
-        embed.setDescription(embed.description.replace(messages.first().embeds[0].thumbnail.url, ''));
-        embed.setImage(messages.first().embeds[0].thumbnail.url);
-      } else if (messages.first().attachments.size && messages.first().attachments.first() && messages.first().attachments.first().url) {
-        embed.setImage(messages.first().attachments.first().url);
+      if (fetched.embeds && fetched.embeds[0] && fetched.embeds[0].thumbnail && fetched.embeds[0].thumbnail.url) {
+        embed.setDescription(embed.description.replace(fetched.embeds[0].thumbnail.url, ''));
+        embed.setImage(fetched.embeds[0].thumbnail.url);
+      } else if (fetched.attachments.size && fetched.attachments.first() && fetched.attachments.first().url) {
+        embed.setImage(fetched.attachments.first().url);
       }
     }
     await msg.edit(response, { embed: embed });
@@ -73,6 +75,7 @@ function getTime(client, time) {
 
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
 function getColorForPlebsLikeCrawl(member) {
+  if (!member) return 0;
   const roles = member.roles.filter(r => r.color !== 0).array().sort((a, b) => a.position - b.position);
   return roles[roles.length - 1] ? roles[roles.length - 1].color : 0;
 }
