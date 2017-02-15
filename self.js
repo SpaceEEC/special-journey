@@ -1,3 +1,4 @@
+// const Discord = require('../discord.js/src/index.js');
 const Discord = require('discord.js');
 const fs = require('fs-extra-promise');
 const moment = require('moment');
