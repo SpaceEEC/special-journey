@@ -1,4 +1,4 @@
-const Canvas = require('../../glowing-potato/node_modules/canvas/index.js');
+const Canvas = require('Canvas');
 const request = require('superagent');
 const fs = require('fs-extra-promise');
 exports.run = async (client, msg, params = []) => {
