@@ -35,17 +35,17 @@ fs.readdirAsync('./commands/')
   .then((files) => {
     files = files.filter(f => f.slice(-3) === '.js');
     client.log(`Lade insgesamt ${files.length} Befehle.`);
-    files.forEach(f => {
+    for (const f of files) {
       try {
         const props = require(`./commands/${f}`);
         client.commands.set(props.help.name, props);
-        props.conf.aliases.forEach(alias => {
+        for (const alias of props.conf.aliases) {
           client.aliases.set(alias, props.help.name);
-        });
+        }
       } catch (e) {
         client.err(`Fehler beim Laden von ${f}.js\n${e.stack ? e.stack : e}`);
       }
-    });
+    }
   });
 
 client.on('message', async (msg) => {
