@@ -10,9 +10,9 @@ exports.run = async (client, msg, params = []) => {
       if (cmd2 === params[0]) client.aliases.delete(alias);
     });
     client.commands.set(params[0], cmd);
-    cmd.conf.aliases.forEach(alias => {
+    for (const alias of cmd.conf.aliases) {
       client.aliases.set(alias, cmd.help.name);
-    });
+    }
     return msg.delete();
   } catch (e) {
     return msg.edit(`${msg.content}
