@@ -11,10 +11,12 @@ exports.run = async (client, msg, params = []) => {
       response = params[0].substr(params[0].search(/\D/g) + 1);
       params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
-    const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 })).first();
+    const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 })).filter(m => params[0] === m.id).first();
+    if (!fetched) throw String('Message not found');
     fetched.member = channel.guild ? await channel.guild.fetchMember(fetched.author) : null;
     const embed = new client.methods.Embed();
-    embed.setAuthor(`${fetched.member ? fetched.member.displayName : fetched.author.username} ${getTime(client, fetched.createdAt)}`, fetched.author.displayAvatarURL, client.conf.github)
+    maybeSetTitle(embed, msg, fetched)
+      .setAuthor(`${fetched.member ? fetched.member.displayName : fetched.author.username} ${getTime(client, fetched.createdAt)}`, fetched.author.displayAvatarURL, client.conf.github)
       .setColor(color || getColorForPlebsLikeCrawl(fetched.member))
       .setDescription(fetched.content);
     if (params[1]) {
@@ -29,7 +31,8 @@ exports.run = async (client, msg, params = []) => {
           params[i] = params[i].substr(0, params[i].search(/\D/g));
           breakvar = true;
         }
-        const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).first();
+        const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).filter(m => params[0] === m.id).first();
+        if (!add) continue;
         add.member = channel.guild ? await channel.guild.fetchMember(add.author) : null;
         embed.addField(`${add.member ? add.member.displayName : add.author.username} ${getTime(client, add.createdAt)}`, add.content);
         if (breakvar) break;
@@ -52,6 +55,14 @@ exports.run = async (client, msg, params = []) => {
 ${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.text}` : ''}
 \`\`\``);
   }
+};
+
+const maybeSetTitle = (embed, msg, fetched) => {
+  if (msg.guild.id === fetched.guild.id) {
+    if (msg.channel.id !== fetched.channel.id) {
+      return embed.setTitle(`from: #${fetched.channel.name}`);
+    } else { return embed; }
+  } else { return embed.setTitle(`from: ${fetched.guild.name}#${fetched.channel.name}`); }
 };
 
 const getColor = (client, params) => {
