@@ -14,13 +14,12 @@ const client = new Discord.Client({
   ],
   disableEveryone: true
 });
-// ({ fetchAllMembers: true, });
 client.conf = JSON.parse(fs.readFileSync('./var/config.json', 'utf8'));
 
 client.log = (msg) => console.log(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`);
 client.err = (msg) => console.error(`[${moment().format('DD.MM.YYYY HH:mm:ss')}]: ${msg}`);
 client.inspect = (obj, hidden = false, depth = 0) => require('util').inspect(obj, hidden, depth);
-client.discard = (msg) => msg;
+client.discard = () => { }; // eslint-disable-line no-empty-function
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -76,7 +75,7 @@ client.once('ready', () => {
 
 client.on('disconnect', () => {
   client.log(`Disconnected nach ${moment.duration(client.uptime).format(' D [Tage], H [Stunden], m [Minuten], s [Sekunden]')}.`);
-  // process.exit(237);
+  // process.exit(237); -- no process manager locally installed
 });
 
 process.on('unhandledRejection', (err) => {
