@@ -62,7 +62,7 @@ const maybeSetTitle = (embed, msg, fetched) => {
     if (msg.channel.id !== fetched.channel.id) {
       return embed.setTitle(`from: #${fetched.channel.name}`);
     } else { return embed; }
-  } else { return embed.setTitle(`from: ${fetched.guild.name}#${fetched.channel.name}`); }
+  } else { return embed.setTitle(`from: ${fetched.guild.name} #${fetched.channel.name}`); }
 };
 
 const getColor = (client, params) => {
