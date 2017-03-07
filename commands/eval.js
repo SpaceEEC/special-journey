@@ -2,7 +2,7 @@ exports.run = async (client, msg, params = []) => {
   const time = new Date().getTime();
   try {
     let evaled;
-    if (msg.cmd === 'async') evaled = eval(`(async(client,msg,params=[])=>{${params.join(' ')}})(client,msg,params);`);
+    if (msg.cmd === 'async') evaled = eval(`(async()=>{${params.join(' ')}})();`);
     else evaled = eval(params.join(' '));
     if (evaled instanceof Promise) {
       if (msg.cmd === 'eval') await evaled;
