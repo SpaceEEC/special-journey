@@ -9,7 +9,7 @@ exports.run = async (client, msg, params = []) => {
   const date = moment(snowflake.date).format('DD.MM.YYYY HH:mm:ss [(CET)]');
   return msg.edit(`${msg.content}
   \`\`\`LDIF
-Date: ${date}\`\`\``);
+Erstellungsdatum: ${date}\`\`\``);
 };
 
 

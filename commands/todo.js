@@ -6,7 +6,7 @@ exports.run = async (client, msg, params = []) => {
   }
   if (!isNaN(params[0])) {
     if (!fields[parseInt(params[0]) - 1]) {
-      msg.edit(`Eintrag nicht gefunden.`);
+      msg.edit(`Eintrag wurde nicht gefunden.`);
     } else {
       msg.edit(`Eintrag \`${params[0]}:\``, {
         embed: new client.methods.Embed().setColor('RANDOM')
@@ -20,7 +20,7 @@ exports.run = async (client, msg, params = []) => {
       e.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b');
       for (const field of fields) e.addField(field.name, field.value);
       todoMsg.edit({ embed: e });
-      msg.edit(`Edited: ${fields[parseInt(params[1]) - 1].name}`);
+      msg.edit(`Bearbeitet: ${fields[parseInt(params[1]) - 1].name}`);
     }
   } else if (params[0] === 'add') {
     if (params[1] && params.slice(1).join(' ').split('|')[1]) {
@@ -30,9 +30,9 @@ exports.run = async (client, msg, params = []) => {
         .setFooter('\u200b');
       for (const field of fields) e.addField(field.name, field.value);
       todoMsg.edit({ embed: e });
-      msg.edit(`Added Entry \`${fields.length}\``, { embed: new client.methods.Embed().setColor('RANDOM').addField(fields[fields.length - 1].name, fields[fields.length - 1].value) });
+      msg.edit(`Eintrag hinzugefügt. Anzahl: \`${fields.length}\``, { embed: new client.methods.Embed().setColor('RANDOM').addField(fields[fields.length - 1].name, fields[fields.length - 1].value) });
     } else {
-      msg.edit(`${msg.content} \n\nSomething is missing tho.`);
+      msg.edit(`${msg.content} \n\nDa fehlt etwas.`);
     }
   } else if (params[0] === 'remove') {
     if (fields[parseInt(params[1]) - 1]) {
@@ -42,16 +42,16 @@ exports.run = async (client, msg, params = []) => {
         .setFooter('\u200b');
       for (const field of fields) e.addField(field.name, field.value);
       todoMsg.edit({ embed: e });
-      msg.edit(`Removed entry: ${removed}`);
+      msg.edit(`Eintrag entfernt: ${removed}`);
     } else {
-      msg.edit(`Entry not found.`);
+      msg.edit(`Dieser Eintrag wurde nicht gefunden.`);
     }
   } else if (params[0] === 'list') {
     const e = (new client.methods.Embed()).setColor('RANDOM');
     for (const i in fields) e.addField(`\`${parseInt(i) + 1}\`: ${fields[i].name}`, fields[i].value);
     msg.edit('To-do-list', { embed: e });
   } else {
-    msg.edit(`${fields.length} thing${fields.length === 1 ? '' : 's'} to do.`);
+    msg.edit(`${fields.length} Sache${fields.length === 1 ? '' : 'n'} zu erledigen.`);
   }
 };
 

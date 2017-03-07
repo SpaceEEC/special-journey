@@ -12,7 +12,7 @@ exports.run = async (client, msg, params = []) => {
       params[0] = params[0].substr(0, params[0].search(/\D/g));
     }
     const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 })).filter(m => params[0] === m.id).first();
-    if (!fetched) throw String('Message not found');
+    if (!fetched) throw String('Nachricht wurde nicht gefunden.');
     fetched.member = channel.guild ? await channel.guild.fetchMember(fetched.author) : null;
     const embed = new client.methods.Embed();
     maybeSetTitle(embed, msg, fetched)
@@ -60,9 +60,9 @@ ${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.
 const maybeSetTitle = (embed, msg, fetched) => {
   if (msg.guild.id === fetched.guild.id) {
     if (msg.channel.id !== fetched.channel.id) {
-      return embed.setTitle(`from: #${fetched.channel.name}`);
+      return embed.setTitle(`#${fetched.channel.name}`);
     } else { return embed; }
-  } else { return embed.setTitle(`from: ${fetched.guild.name} #${fetched.channel.name}`); }
+  } else { return embed.setTitle(`${fetched.guild.name} #${fetched.channel.name}`); }
 };
 
 const getColor = (client, params) => {
