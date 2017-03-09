@@ -39,10 +39,10 @@ exports.run = async (client, msg, params = []) => {
       }
     }
     if (!embed.fields.length) {
-      if (fetched.embeds && fetched.embeds[0] && fetched.embeds[0].thumbnail && fetched.embeds[0].thumbnail.url) {
+      if (fetched.embeds[0] && fetched.embeds[0].thumbnail && fetched.embeds[0].thumbnail.url) {
         embed.setDescription(embed.description.replace(fetched.embeds[0].thumbnail.url, ''));
         embed.setImage(fetched.embeds[0].thumbnail.url);
-      } else if (fetched.attachments.size && fetched.attachments.first() && fetched.attachments.first().url) {
+      } else if (fetched.attachments.first() && fetched.attachments.first().width) {
         embed.setImage(fetched.attachments.first().url);
       }
     }
@@ -85,8 +85,7 @@ const getTime = (client, time) => {
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
 const getColorForPlebsLikeCrawl = (member) => {
   if (!member) return 0;
-  const roles = member.roles.filter(r => r.color !== 0).array().sort((a, b) => a.position - b.position);
-  return roles[roles.length - 1] ? roles[roles.length - 1].color : 0;
+  return member.displayColor;
 };
 
 
