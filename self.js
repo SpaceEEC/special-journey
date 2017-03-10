@@ -73,8 +73,9 @@ client.once('ready', () => {
   client.log(`(${client.conf.prefix}): [${moment().format('DD.MM.YYY HH:mm:ss')}]: Stalke ${client.users.size} Nutzer, in ${client.channels.size} Channeln von ${client.guilds.size} Servern.`);
 });
 
-client.on('disconnect', () => {
-  client.log(`Disconnected nach ${moment.duration(client.uptime).format(' D [Tage], H [Stunden], m [Minuten], s [Sekunden]')}.`);
+client.on('disconnect', (event) => {
+  client.log(`Disconnected nach ${moment.duration(client.uptime).format(' D [Tage], H [Stunden], m [Minuten], s [Sekunden]')}.
+CloseEvent code: ${event.code}`);
   // process.exit(237); -- no process manager locally installed
 });
 
