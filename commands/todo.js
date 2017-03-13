@@ -8,7 +8,7 @@ exports.run = async (client, msg, params = []) => {
     if (!fields[parseInt(params[0]) - 1]) {
       msg.edit(`Eintrag wurde nicht gefunden.`);
     } else {
-      msg.edit(`Eintrag \`${params[0]}:\``, {
+      msg.edit(`Eintrag \`${params[0]}\`:`, {
         embed: new client.methods.Embed().setColor('RANDOM')
           .addField(fields[parseInt(params[0]) - 1].name, fields[parseInt(params[0]) - 1].value)
       });
@@ -30,7 +30,7 @@ exports.run = async (client, msg, params = []) => {
         .setFooter('\u200b');
       for (const field of fields) e.addField(field.name, field.value);
       todoMsg.edit({ embed: e });
-      msg.edit(`Eintrag hinzugefügt. Anzahl: \`${fields.length}\``, { embed: new client.methods.Embed().setColor('RANDOM').addField(fields[fields.length - 1].name, fields[fields.length - 1].value) });
+      msg.edit(`Eintrag Nummer \`${fields.length}\` hinzugefügt.`, { embed: new client.methods.Embed().setColor('RANDOM').addField(fields[fields.length - 1].name, fields[fields.length - 1].value) });
     } else {
       msg.edit(`${msg.content} \n\nDa fehlt etwas.`);
     }
@@ -42,7 +42,7 @@ exports.run = async (client, msg, params = []) => {
         .setFooter('\u200b');
       for (const field of fields) e.addField(field.name, field.value);
       todoMsg.edit({ embed: e });
-      msg.edit(`Eintrag entfernt: ${removed}`);
+      msg.edit(`Eintrag \`${removed}\` entfernt.`);
     } else {
       msg.edit(`Dieser Eintrag wurde nicht gefunden.`);
     }
