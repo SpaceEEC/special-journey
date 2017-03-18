@@ -23,7 +23,7 @@ exports.run = async (client, msg, params = []) => {
       new client.methods.Embed()
         .setColor(0xb89bf8)
         .setAuthor(`Translate`, 'http://kurisubrooks.com/favicon.ico', 'http://kurisubrooks.com/')
-        .addField(`From ${res.body.from.name} (${res.body.from.local})`, res.body.query)
+        .addField(res.body.from ? `From ${res.body.from.name} (${res.body.from.local})` : '\u200b', res.body.query)
         .addField(`To ${res.body.to.name} (${res.body.to.local})`, res.body.result)
     });
   } else {

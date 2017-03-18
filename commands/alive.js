@@ -1,17 +1,17 @@
 exports.run = async (client, msg, params = []) => { // eslint-disable-line no-unused-vars
-  msg.delete();
+	msg.delete();
 };
 
 
 exports.conf = {
-  enabled: true,
-  aliases: [],
+	enabled: true,
+	aliases: [],
 };
 
 
 exports.help = {
-  name: 'alive',
-  shortdescription: '-',
-  description: '-',
-  usage: '-',
+	name: 'alive',
+	shortdescription: '-',
+	description: '-',
+	usage: '-',
 };
