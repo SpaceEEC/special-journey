@@ -68,6 +68,10 @@ ${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.
 };
 
 const maybeSetTitle = (embed, msg, fetched) => {
+	if (!fetched.guild) {
+		if (msg.channel.id === fetched.channel.id) return embed;
+		return embed.setTitle('#DM');
+	}
 	if (msg.guild.id === fetched.guild.id) {
 		if (msg.channel.id !== fetched.channel.id) {
 			return embed.setTitle(`#${fetched.channel.name}`);
