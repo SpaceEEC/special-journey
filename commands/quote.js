@@ -39,7 +39,7 @@ exports.run = async (client, msg, params = []) => {
 					breakvar = true;
 				}
 
-				const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).filter(m => params[0] === m.id).first();
+				const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).filter(m => params[i] === m.id).first();
 				if (!add) continue;
 				add.member = channel.guild ? await channel.guild.fetchMember(add.author) : null;
 				embed.addField(`${add.member ? add.member.displayName : add.author.username} ${getTime(client, add.createdAt)}`, add.content);
