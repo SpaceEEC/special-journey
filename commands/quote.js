@@ -14,14 +14,18 @@ exports.run = async (client, msg, params = []) => {
 			params[0] = params[0].substr(0, params[0].search(/\D/g));
 		}
 
-		const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 })).filter(m => params[0] === m.id).first();
+		const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 }))
+			.filter(message => params[0] === message.id).first();
 		if (!fetched) throw String('Nachricht wurde nicht gefunden.');
 		fetched.member = channel.guild ? await channel.guild.fetchMember(fetched.author) : null;
 
 		const embed = new client.methods.Embed();
 
 		maybeSetTitle(embed, msg, fetched)
-			.setAuthor(`${fetched.member ? fetched.member.displayName : fetched.author.username} ${getTime(client, fetched.createdAt)}`, fetched.author.displayAvatarURL, client.conf.github)
+			.setAuthor(`${fetched.member
+				? fetched.member.displayName
+				: fetched.author.username} ${getTime(client, fetched.createdAt)}`,
+			fetched.author.displayAvatarURL, client.conf.github)
 			.setColor(color || getColorForPlebsLikeCrawl(fetched.member))
 			.setDescription(fetched.content);
 
@@ -39,10 +43,13 @@ exports.run = async (client, msg, params = []) => {
 					breakvar = true;
 				}
 
-				const add = (await channel.fetchMessages({ around: params[i], limit: 1 })).filter(m => params[i] === m.id).first();
+				const add = (await channel.fetchMessages({ around: params[i], limit: 1 }))
+					.filter(message => params[i] === message.id).first();
 				if (!add) continue;
 				add.member = channel.guild ? await channel.guild.fetchMember(add.author) : null;
-				embed.addField(`${add.member ? add.member.displayName : add.author.username} ${getTime(client, add.createdAt)}`, add.content);
+				embed.addField(`${add.member
+					? add.member.displayName
+					: add.author.username} ${getTime(client, add.createdAt)}`, add.content);
 
 				if (breakvar) break;
 			}
@@ -57,12 +64,12 @@ exports.run = async (client, msg, params = []) => {
 			}
 		}
 		await msg.edit(response, { embed: embed });
-	} catch (e) {
+	} catch (error) {
 		msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.text}` : ''}
+${error}${error.response && error.response.res && error.response.res.text ? `\n${error.response.res.text}` : ''}
 \`\`\``);
 	}
 };
@@ -81,7 +88,9 @@ const maybeSetTitle = (embed, msg, fetched) => {
 
 const getColor = (client, params) => {
 	if (params[0].startsWith('0x')) return params.shift();
-	if (client.methods.Constants.Colors[params[0].toUpperCase()]) return client.methods.Constants.Colors[params.shift().toUpperCase()];
+	if (client.methods.Constants.Colors[params[0].toUpperCase()]) {
+		return client.methods.Constants.Colors[params.shift().toUpperCase()];
+	}
 	if (params[0].toLowerCase() === 'random') {
 		params.shift();
 		return Math.floor(Math.random() * (0xFFFFFF + 1));
@@ -90,14 +99,17 @@ const getColor = (client, params) => {
 };
 
 const getTime = (client, time) => {
-	if (client.methods.moment(time).isSame(new Date(), 'day')) time = client.methods.moment.duration(time - client.methods.moment(time).startOf('day')).format('hh:mm');
-	else time = client.methods.moment(time).format('DD.MM.YYYY - hh:mm');
+	if (client.methods.moment(time).isSame(new Date(), 'day')) {
+		time = client.methods.moment.duration(time - client.methods.moment(time).startOf('day')).format('hh:mm');
+	} else {
+		time = client.methods.moment(time).format('DD.MM.YYYY - hh:mm');
+	}
 	if (time.length === 2) time = `00:${time}`;
 	return `(${time} CET)`;
 };
 
 // thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
-const getColorForPlebsLikeCrawl = (member) => {
+const getColorForPlebsLikeCrawl = member => {
 	if (!member) return 0;
 	return member.displayColor;
 };
@@ -105,7 +117,7 @@ const getColorForPlebsLikeCrawl = (member) => {
 
 exports.conf = {
 	enabled: true,
-	aliases: [],
+	aliases: []
 };
 
 
@@ -113,5 +125,5 @@ exports.help = {
 	name: 'quote',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };

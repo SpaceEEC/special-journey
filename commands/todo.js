@@ -1,5 +1,7 @@
 exports.run = async (client, msg, params = []) => {
-	const todoMsg = (await client.channels.get(client.conf.todoChannel).fetchMessages({ around: client.conf.todoMessage, limit: 1 })).filter(m => m.id === client.conf.todoMessage).first();
+	const todoMsg = (await client.channels.get(client.conf.todoChannel)
+		.fetchMessages({ around: client.conf.todoMessage, limit: 1 }))
+		.filter(message => message.id === client.conf.todoMessage).first();
 	const fields = todoMsg.embeds[0].fields;
 	if (!params[0]) {
 		params[0] = 'lazyness';
@@ -16,40 +18,43 @@ exports.run = async (client, msg, params = []) => {
 	} else if (params[0] === 'edit') {
 		if (!isNaN(params[1]) && fields[parseInt(params[1]) - 1] && params[2]) {
 			fields[parseInt(params[1]) - 1].value = params.slice(2).join(' ');
-			const e = new client.methods.Embed();
-			e.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b');
-			for (const field of fields) e.addField(field.name, field.value);
-			todoMsg.edit({ embed: e });
+			const embed = new client.methods.Embed();
+			embed.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b');
+			for (const field of fields) embed.addField(field.name, field.value);
+			todoMsg.edit({ embed });
 			msg.edit(`Bearbeitet: ${fields[parseInt(params[1]) - 1].name}`);
 		}
 	} else if (params[0] === 'add') {
 		if (params[1] && params.slice(1).join(' ').split('|')[1]) {
 			fields.push({ name: params.slice(1).join(' ').split('|')[0], value: params.slice(1).join(' ').split('|')[1] });
-			const e = new client.methods.Embed();
-			e.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b')
+			const embed = new client.methods.Embed();
+			embed.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b')
 				.setFooter('\u200b');
-			for (const field of fields) e.addField(field.name, field.value);
-			todoMsg.edit({ embed: e });
-			msg.edit(`Eintrag Nummer \`${fields.length}\` hinzugefügt.`, { embed: new client.methods.Embed().setColor('RANDOM').addField(fields[fields.length - 1].name, fields[fields.length - 1].value) });
+			for (const field of fields) embed.addField(field.name, field.value);
+			todoMsg.edit({ embed });
+			msg.edit(`Eintrag Nummer \`${fields.length}\` hinzugefügt.`, {
+				embed: new client.methods.Embed().setColor('RANDOM')
+					.addField(fields[fields.length - 1].name, fields[fields.length - 1].value)
+			});
 		} else {
 			msg.edit(`${msg.content} \n\nDa fehlt etwas.`);
 		}
 	} else if (params[0] === 'remove') {
 		if (fields[parseInt(params[1]) - 1]) {
 			const removed = fields.splice(parseInt(params[1]) - 1, 1)[0].name;
-			const e = new client.methods.Embed();
-			e.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b')
+			const embed = new client.methods.Embed();
+			embed.setColor('RANDOM').setTitle('To-do-list').setDescription('\u200b')
 				.setFooter('\u200b');
-			for (const field of fields) e.addField(field.name, field.value);
-			todoMsg.edit({ embed: e });
+			for (const field of fields) embed.addField(field.name, field.value);
+			todoMsg.edit({ embed });
 			msg.edit(`Eintrag \`${removed}\` entfernt.`);
 		} else {
 			msg.edit(`Dieser Eintrag wurde nicht gefunden.`);
 		}
 	} else if (params[0] === 'list') {
-		const e = (new client.methods.Embed()).setColor('RANDOM');
-		for (const i in fields) e.addField(`\`${parseInt(i) + 1}\`: ${fields[i].name}`, fields[i].value);
-		msg.edit('To-do-list', { embed: e });
+		const embed = (new client.methods.Embed()).setColor('RANDOM');
+		for (const i in fields) embed.addField(`\`${parseInt(i) + 1}\`: ${fields[i].name}`, fields[i].value);
+		msg.edit('To-do-list', { embed });
 	} else {
 		msg.edit(`${fields.length} Sache${fields.length === 1 ? '' : 'n'} zu erledigen.`);
 	}
@@ -58,7 +63,7 @@ exports.run = async (client, msg, params = []) => {
 
 exports.conf = {
 	enabled: true,
-	aliases: ['doshit'],
+	aliases: ['doshit']
 };
 
 
@@ -66,5 +71,5 @@ exports.help = {
 	name: 'todo',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };

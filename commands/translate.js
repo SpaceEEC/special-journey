@@ -46,7 +46,7 @@ const langs = ['af', 'sq', 'am', 'ar', 'hy', 'az', 'eu', 'be', 'bn', 'bn', 'bs',
 
 exports.conf = {
 	enabled: true,
-	aliases: ['t'],
+	aliases: ['t']
 };
 
 
@@ -54,5 +54,5 @@ exports.help = {
 	name: 'translate',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };

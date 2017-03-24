@@ -1,6 +1,9 @@
 exports.run = async (client, msg, params = []) => {
-	const request = await client.channels.get(client.conf.bevalID).send(`${msg.cmd.replace('r', client.conf.botPrefix)} ${params.join(' ')}`);
-	const fetched = (await request.channel.awaitMessages(m => m.author.id === client.conf.botID, { time: 5000, maxMatches: 1 })).first();
+	const request = await client.channels.get(client.conf.bevalID)
+		.send(`${msg.cmd.replace('r', client.conf.botPrefix)} ${params.join(' ')}`);
+	const fetched = (await request.channel
+		.awaitMessages(message => message.author.id === client.conf.botID, { time: 5000, maxMatches: 1 }))
+		.first();
 	if (!fetched) {
 		msg.edit(`${msg.content}\n🕐.`);
 	} else {
@@ -28,7 +31,7 @@ Versuchungszeitraumslänge: \`${stuff[1].split(' `')[1][0]}\`ms`);
 
 exports.conf = {
 	enabled: true,
-	aliases: ['rawait', 'rasync'],
+	aliases: ['rawait', 'rasync']
 };
 
 
@@ -36,5 +39,5 @@ exports.help = {
 	name: 'reval',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };

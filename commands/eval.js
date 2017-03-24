@@ -9,7 +9,7 @@ exports.run = async (client, msg, params = []) => {
 			else evaled = await evaled;
 		}
 		if (msg.cmd === 'sile') return;
-		const response_typeof = typeof evaled;
+		const responseTypeof = typeof evaled;
 		if (typeof evaled !== 'string') {
 			evaled = client.inspect(evaled, false, 0);
 		}
@@ -19,17 +19,17 @@ exports.run = async (client, msg, params = []) => {
 		}
 		await msg.edit(`${msg.content}
 
-\`evaled\\returned:\` \`typeof: ${response_typeof}\`
+\`evaled\\returned:\` \`typeof: ${responseTypeof}\`
 \`\`\`js
 ${evaled}
 \`\`\`
 Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
-	} catch (e) {
+	} catch (error) {
 		msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${e}${e.response && e.response.res && e.response.res.text ? `\n${e.response.res.text}` : ''}
+${error}${error.response && error.response.res && error.response.res.text ? `\n${error.response.res.text}` : ''}
 \`\`\`
 Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
 			.catch(err => client.discard(err));
@@ -39,7 +39,7 @@ Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
 
 exports.conf = {
 	enabled: true,
-	aliases: ['await', 'async', 'sile'],
+	aliases: ['await', 'async', 'sile']
 };
 
 
@@ -47,5 +47,5 @@ exports.help = {
 	name: 'eval',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };

@@ -1,7 +1,6 @@
-exports.run = async (client, msg, params = []) => {
-	if (!params[0]) {
-		return msg.edit(`${msg.content} 👀`);
-	}
+exports.run = async (client, msg, params = []) => { // eslint-disable-line require-await
+	if (!params[0]) return msg.edit(`${msg.content} 👀`);
+
 	try {
 		delete require.cache[require.resolve(`../commands/${params[0]}`)];
 		const cmd = require(`../commands/${params[0]}`);
@@ -14,12 +13,12 @@ exports.run = async (client, msg, params = []) => {
 			client.aliases.set(alias, cmd.help.name);
 		}
 		return msg.delete();
-	} catch (e) {
+	} catch (error) {
 		return msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${e}
+${error}
 \`\`\``);
 	}
 };
@@ -27,7 +26,7 @@ ${e}
 
 exports.conf = {
 	enabled: true,
-	aliases: ['relaod'],
+	aliases: ['relaod']
 };
 
 
@@ -35,5 +34,5 @@ exports.help = {
 	name: 'reload',
 	shortdescription: '-',
 	description: '-',
-	usage: '-',
+	usage: '-'
 };
