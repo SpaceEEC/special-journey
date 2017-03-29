@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/SpaceEEC/special-journey#readme",
   "dependencies": {
-    "discord.js": "git://github.com/hydrabolt/discord.js.git#master",
+    "discord.js": "github:hydrabolt/discord.js",
     "fs-extra-promise": "^0.4.1",
     "moment": "^2.17.1",
     "moment-duration-format": "^1.3.0"
