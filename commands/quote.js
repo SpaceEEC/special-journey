@@ -17,7 +17,7 @@ exports.run = async (client, msg, params = []) => {
 		const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 }))
 			.filter(message => params[0] === message.id).first();
 		if (!fetched) throw String('Nachricht wurde nicht gefunden.');
-		fetched.member = channel.guild ? await channel.guild.fetchMember(fetched.author) : null;
+		fetched.member = channel.guild && await channel.guild.fetchMember(fetched.author);
 
 		const embed = new client.methods.Embed();
 
@@ -26,32 +26,34 @@ exports.run = async (client, msg, params = []) => {
 				? fetched.member.displayName
 				: fetched.author.username} ${getTime(client, fetched.createdAt)}`,
 			fetched.author.displayAvatarURL, client.conf.github)
-			.setColor(color || getColorForPlebsLikeCrawl(fetched.member))
+			.setColor(color || fetched.member ? fetched.member.displayColor : 0)
 			.setDescription(fetched.content);
 
 		if (params[1]) {
 			params = params.slice(1);
-			let breakvar = false;
 
-			for (const i in params) {
-				if (params[i].search(/\D/g) === 0) {
-					response = params.slice(i).join(' ');
+			let breakvar = false;
+			while (params.length) {
+				let id = params[0];
+				if (id.search(/\D/g) === 0) {
+					response = params.join(' ');
 					break;
-				} else if (params[i].search(/\D/g) !== -1) {
-					response = params[i].substr(params[i].search(/\D/g)) + params.slice(i + 1);
-					params[i] = params[i].substr(0, params[i].search(/\D/g));
+				} else if (id.search(/\D/g) !== -1) {
+					response = id.substr(id.search(/\D/g));
+					id = id.substr(0, id.search(/\D/g));
 					breakvar = true;
 				}
 
-				const add = (await channel.fetchMessages({ around: params[i], limit: 1 }))
-					.filter(message => params[i] === message.id).first();
+				const add = (await channel.fetchMessages({ around: id, limit: 1 }))
+					.filter(message => id === message.id).first();
 				if (!add) continue;
-				add.member = channel.guild ? await channel.guild.fetchMember(add.author) : null;
+				add.member = channel.guild && await channel.guild.fetchMember(add.author);
 				embed.addField(`${add.member
 					? add.member.displayName
 					: add.author.username} ${getTime(client, add.createdAt)}`, add.content);
 
 				if (breakvar) break;
+				params.shift();
 			}
 		}
 
@@ -107,13 +109,6 @@ const getTime = (client, time) => {
 	if (time.length === 2) time = `00:${time}`;
 	return `(${time} CET)`;
 };
-
-// thanks and credits for shorter version goes to Gus#0291 and 1Computer#7952
-const getColorForPlebsLikeCrawl = member => {
-	if (!member) return 0;
-	return member.displayColor;
-};
-
 
 exports.conf = {
 	enabled: true,
