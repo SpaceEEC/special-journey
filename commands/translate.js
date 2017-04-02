@@ -16,7 +16,9 @@ exports.run = async (client, msg, params = []) => {
 	obj.query = params.join(' ');
 	const res = await request.post(`https://api.kurisubrooks.com/api/translate`)
 		.send(obj)
-		.set({ 'Content-Type': 'application/json', Authorization: client.conf.sherlock });
+		.set('Authorization', client.conf.sherlock)
+		.set({ 'Content-Type': 'application/json' }).catch(console.error);
+
 	if (res.body.ok) {
 		return msg.edit({
 			embed:
