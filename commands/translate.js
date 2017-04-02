@@ -1,5 +1,5 @@
 // Much thanks to Kurisu (http://kurisubrooks.com/) for the API!
-const request = require('superagent');
+const request = require('snekfetch');
 
 exports.run = async (client, msg, params = []) => {
 	const obj = {};

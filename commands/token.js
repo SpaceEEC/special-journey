@@ -1,4 +1,5 @@
-const { get } = require('superagent');
+const { get } = require('snekfetch');
+
 exports.run = async (client, msg, params = []) => {
 	try {
 		const id = Buffer.from(params[0].split('.')[0], 'base64').toString();
@@ -7,10 +8,11 @@ exports.run = async (client, msg, params = []) => {
 			.set('Authorization', `Bot ${client.conf.botToken}`);
 		msg.edit(`${msg.content}\n\`\`\`js\n${user.username}#${user.discriminator} (${user.id})\`\`\``);
 	} catch (error) {
+		console.log(error);
 		msg.edit(
-`${msg.content}\`\`\`js
-${error}${error.response && error.response.res && error.response.res.text ? `
-${error.response.res.text}` : ''}\`\`\``);
+			`${msg.content}\`\`\`js
+${error.url ? `${error.status} ${error.statusText}\n${error.text}` : error}\`\`\``
+		);
 	}
 };
 

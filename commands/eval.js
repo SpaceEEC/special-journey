@@ -25,11 +25,12 @@ ${evaled}
 \`\`\`
 Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
 	} catch (error) {
+		console.error(error);
 		msg.edit(`${msg.content}
 
 \`E-ROHR\`
 \`\`\`js
-${error}${error.response && error.response.res && error.response.res.text ? `\n${error.response.res.text}` : ''}
+${error.url ? `${error.status} ${error.statusText}\n${error.text}` : error}
 \`\`\`
 Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
 			.catch(err => client.discard(err));

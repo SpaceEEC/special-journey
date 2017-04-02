@@ -1,4 +1,5 @@
-const { post } = require('superagent');
+const { post } = require('snekfetch');
+
 exports.run = async (client, msg, params = []) => { // eslint-disable-line
 	const { body: response } = await post(`https://api.kurisubrooks.com/api/compute/convert`)
 		.send({ query: params.join(' ') })
