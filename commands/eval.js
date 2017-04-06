@@ -33,7 +33,7 @@ Ausführungszeitraumslänge: \`${new Date().getTime() - time}\`ms`);
 ${error.url ? `${error.status} ${error.statusText}\n${error.text}` : error}
 \`\`\`
 Versuchungszeitraumslänge: \`${new Date().getTime() - time}\`ms`)
-			.catch(err => client.discard(err));
+			.catch(() => null);
 	}
 };
 
