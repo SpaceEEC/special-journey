@@ -1,3 +1,5 @@
+const regex = new RegExp(/\D/g);
+
 exports.run = async (client, msg, params = []) => {
 	try {
 		let response = '';
@@ -8,14 +10,14 @@ exports.run = async (client, msg, params = []) => {
 			channel = client.channels.get(params.slice(1).shift());
 			params = params.slice(2);
 		}
-
-		if (params[0].search(/\D/g) !== -1) {
-			response = params[0].substr(params[0].search(/\D/g) + 1);
-			params[0] = params[0].substr(0, params[0].search(/\D/g));
+		if (regex.test(params[0])) {
+			const position = params[0].search(regex);
+			response = params[0].substr(position + 1);
+			params[0] = params[0].substr(0, position);
 		}
 
 		const fetched = (await channel.fetchMessages({ around: params[0], limit: 1 }))
-			.filter(message => params[0] === message.id).first();
+			.get(params[0]);
 		if (!fetched) throw String('Nachricht wurde nicht gefunden.');
 		fetched.member = channel.guild && await channel.guild.fetchMember(fetched.author);
 
@@ -35,17 +37,18 @@ exports.run = async (client, msg, params = []) => {
 			let breakvar = false;
 			while (params.length) {
 				let id = params[0];
-				if (id.search(/\D/g) === 0) {
+				if (id.search(regex) === 0) {
 					response = params.join(' ');
 					break;
-				} else if (id.search(/\D/g) !== -1) {
-					response = id.substr(id.search(/\D/g));
-					id = id.substr(0, id.search(/\D/g));
+				} else if (regex.test(id) !== -1) {
+					const position = id.search(regex);
+					response = id.substr(position);
+					id = id.substr(0, position);
 					breakvar = true;
 				}
 
 				const add = (await channel.fetchMessages({ around: id, limit: 1 }))
-					.filter(message => id === message.id).first();
+					.get(id);
 				if (!add) continue;
 				add.member = channel.guild && await channel.guild.fetchMember(add.author);
 				embed.addField(`${add.member
@@ -58,11 +61,15 @@ exports.run = async (client, msg, params = []) => {
 		}
 
 		if (!embed.fields.length) {
-			if (fetched.embeds[0] && fetched.embeds[0].thumbnail && fetched.embeds[0].thumbnail.url) {
-				embed.setDescription(embed.description.replace(fetched.embeds[0].thumbnail.url, ''));
-				embed.setImage(fetched.embeds[0].thumbnail.url);
-			} else if (fetched.attachments.first() && fetched.attachments.first().width) {
-				embed.setImage(fetched.attachments.first().url);
+			const fetchedEmbed = fetched.embeds[0];
+			if (fetchedEmbed && fetchedEmbed.thumbnail) {
+				embed.setDescription(embed.description.replace(fetchedEmbed.thumbnail.url, ''));
+				embed.setImage(fetchedEmbed.thumbnail.url);
+			} else {
+				const attachment = fetched.attachments.first();
+				if (attachment && attachment.width) {
+					embed.setImage(attachment.url);
+				}
 			}
 		}
 		await msg.edit(response, { embed: embed });
