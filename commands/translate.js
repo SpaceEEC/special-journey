@@ -1,5 +1,5 @@
 // Much thanks to Kurisu (http://kurisubrooks.com/) for the API!
-const request = require('snekfetch');
+const { post } = require('snekfetch');
 
 exports.run = async (client, msg, params = []) => {
 	const obj = {};
@@ -14,24 +14,25 @@ exports.run = async (client, msg, params = []) => {
 	}
 	if (!params[0]) return msg.edit(`${msg.content}\n\nUnvollständig.`);
 	obj.query = params.join(' ');
-	const res = await request.post(`https://api.kurisubrooks.com/api/translate`)
+	console.log(obj);
+	const { body } = await post(`https://api.kurisubrooks.com/api/translate`)
 		.send(obj)
 		.set('Authorization', client.conf.sherlock)
 		.set({ 'Content-Type': 'application/json' });
 
-	if (res.body.ok) {
+	if (body.ok) {
 		return msg.edit({
 			embed:
 			new client.methods.Embed()
 				.setColor(0xb89bf8)
 				.setAuthor(`Translate`, 'http://kurisubrooks.com/favicon.ico', 'http://kurisubrooks.com/')
-				.addField(res.body.from ? `From ${res.body.from.name} (${res.body.from.local})` : '\u200b', res.body.query)
-				.addField(`To ${res.body.to.name} (${res.body.to.local})`, res.body.result)
+				.addField(body.from ? `From ${body.from.name} (${body.from.local})` : '\u200b', body.query)
+				.addField(`To ${body.to.name} (${body.to.local})`, body.result)
 		});
 	} else {
 		return msg.edit(`${msg.content}
 \`\`\`LDIF
-${res.body.error}
+${body.error}
 \`\`\``);
 	}
 };
