@@ -1,4 +1,4 @@
-/** Util class holding all sorts of functions. */
+/** Util class holding all sorts of methods. */
 export default class Util {
 
 	/**
