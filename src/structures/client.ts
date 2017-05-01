@@ -55,17 +55,13 @@ export default class SelfbotClient extends Client {
 
 		/** Register events and logging in */
 		this.on('ready', () => info(`[ready] Logged in as ${this.user.tag} (${this.user.id})`))
-			.once('ready', () => {
-				(this as any).ws.connection.on('close', (event: any) => {
-					warn('disconnect', '', event.code, ': ', event.reason);
-					if (event.code === 1000) process.exit(200);
-				});
-			})
+			.once('ready', () =>
+				(this as any).ws.connection.on('close', (event: any) =>
+					warn('disconnect', '', event.code, ': ', event.reason)
+				)
+			)
 			.on('reconnecting', () => warn('Reconnecting'))
-			.on('disconnect', (event: any) => {
-				warn('disconnect', '', event.code, ': ', event.reason);
-				if (event.code === 1000) process.exit(200);
-			})
+			.on('disconnect', (event: any) => process.exit(200))
 			.on('message', this.handleMessage)
 			.on('messageUpdate', (oldMessage, newMessage) => {
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
