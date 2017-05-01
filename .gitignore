@@ -1,7 +1,16 @@
-#dev stuff
+#node_modules
 node_modules/
-.vscode/
-.eslintrc.json
 
-#config and token 
-var/
+#old files
+old/
+
+#js build
+build/
+
+#config etc
+config.json
+semiStatic.json
+src/notCommands/logit.ts
+
+#WIP
+src/structures/logger.ts
