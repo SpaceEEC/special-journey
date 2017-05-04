@@ -1,7 +1,6 @@
 // tslint:disable:no-eval
 import { stripIndents } from 'common-tags';
 import { Message, Util } from 'discord.js';
-import { join } from 'path';
 import { inspect } from 'util';
 import { error } from 'winston';
 

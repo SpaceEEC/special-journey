@@ -1,6 +1,5 @@
 import { oneLine, stripIndents } from 'common-tags';
 import { Message, SnowflakeUtil } from 'discord.js';
-import { join } from 'path';
 
 import SelfbotClient from '../structures/client';
 import { Command, CommandOptions } from '../structures/command';

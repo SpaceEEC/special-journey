@@ -1,7 +1,6 @@
 import { oneLine } from 'common-tags';
 import { Message } from 'discord.js';
 import { writeFile } from 'fs';
-import { join } from 'path';
 import { error } from 'winston';
 
 import SelfbotClient from '../structures/client';

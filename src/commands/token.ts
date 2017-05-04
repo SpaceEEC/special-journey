@@ -1,6 +1,5 @@
 import { stripIndents } from 'common-tags';
 import { Message, User } from 'discord.js';
-import { join } from 'path';
 
 import SelfbotClient from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
