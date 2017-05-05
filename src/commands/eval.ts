@@ -8,6 +8,8 @@ import SelfbotClient from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
 export default class EvalCommand extends Command {
+	/** The depth to inspect with */
+	private _inspect: number;
 	/** Whether errors should be logged */
 	private _log: boolean;
 	/** Temp value to save between evals */
@@ -18,6 +20,7 @@ export default class EvalCommand extends Command {
 			name: 'EVAL',
 			aliases: ['ASYNC', 'AWAIT', 'SILE']
 		});
+		this._inspect = 0;
 		this._log = false;
 		this._test = null;
 	}
@@ -39,7 +42,7 @@ export default class EvalCommand extends Command {
 
 			const typeofEvaled: string = typeof evaled;
 
-			if (typeof evaled !== 'string') evaled = inspect(evaled, false, 0);
+			if (typeof evaled !== 'string') evaled = inspect(evaled, false, this._inspect);
 			if (evaled.includes(this.client.token)) {
 				return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\n\n¯\\_(ツ)_/¯`);
 			}
