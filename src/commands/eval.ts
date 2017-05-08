@@ -12,6 +12,8 @@ export default class EvalCommand extends Command {
 	private _inspect: number;
 	/** Whether errors should be logged */
 	private _log: boolean;
+	/** Whether an error stack should be output */
+	private _stack: boolean;
 	/** Temp value to save between evals */
 	private _test: any;
 
@@ -22,6 +24,7 @@ export default class EvalCommand extends Command {
 		});
 		this._inspect = 0;
 		this._log = false;
+		this._stack = false;
 		this._test = null;
 	}
 
@@ -37,7 +40,7 @@ export default class EvalCommand extends Command {
 			if (info.alias === 'async') evaled = Promise.resolve(eval(`(async()=>{${code}})();`));
 			else evaled = Promise.resolve(eval(code));
 
-			if (info.alias === 'sile') return;
+			if (info.alias === 'sile') return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}`);
 			if (info.alias !== 'await') evaled = await evaled;
 
 			const typeofEvaled: string = typeof evaled;
@@ -62,9 +65,7 @@ export default class EvalCommand extends Command {
 
 			\`E-ROHR\`
 			\`\`\`js
-			${Util.escapeMarkdown(err.url
-					? `${err.status} ${err.statusText}\n${err.text}`
-					: inspect(err, false, 1), true)}
+			${Util.escapeMarkdown(this._stack ? inspect(err, false, this._inspect) : err.message, true)}
 			\`\`\`
 			Versuchungszeitraumslänge: \`${process.hrtime(startTime)} \`ms`).catch(() => null);
 		}
