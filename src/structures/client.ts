@@ -73,6 +73,12 @@ export default class SelfbotClient extends Client {
 			.login(this.config.token);
 	}
 
+	/**
+	 * Handles incoming messages or message edits and executes commands or not commands if applicable.
+	 * @param {Message} msg The Message or if edited the new message.
+	 * @param {?Message} oldMsg If edited, the old message.
+	 * @returns {Promise<void>}
+	 */
 	public async handleMessage(msg: Message, oldMsg: Message = null): Promise<void> {
 		if (msg.author.id !== this.user.id) return this.handleNotCommand(msg, oldMsg);
 		if (!msg.content.startsWith(this.config.prefix)) return;
@@ -149,6 +155,25 @@ export default class SelfbotClient extends Client {
 	}
 
 	/**
+	 * Loads all NotCommands from their directory.
+	 * @returns {void}
+	 * @private
+	 */
+	private _loadNotCommands() {
+		const files: string[] = readdirSync(join(__dirname, '..', 'notCommands'));
+
+		for (const file of files) {
+			if (extname(file) !== '.js') continue;
+
+			const notCommandClass: typeof NotCommand = require(join(__dirname, '..', 'notCommands', file)).default;
+			const notCommand: NotCommand = new notCommandClass(this);
+
+			this.notCommands.add(notCommand);
+		}
+		info(`${this.notCommands.size} notCommands have been loaded.`);
+	}
+
+	/**
 	 * Validates a command's options, throws an error when invalid.
 	 * @param {Command} command The command to validate
 	 * @returns {void}
@@ -192,24 +217,5 @@ export default class SelfbotClient extends Client {
 					and ${this.aliases.get(alias)} (${this.commands.get(this.aliases.get(alias)).constructor.name})!`);
 			}
 		}
-	}
-
-	/**
-	 * Loads all NotCommands from their directory.
-	 * @returns {void}
-	 * @private
-	 */
-	private _loadNotCommands() {
-		const files: string[] = readdirSync(join(__dirname, '..', 'notCommands'));
-
-		for (const file of files) {
-			if (extname(file) !== '.js') continue;
-
-			const notCommandClass: typeof NotCommand = require(join(__dirname, '..', 'notCommands', file)).default;
-			const notCommand: NotCommand = new notCommandClass(this);
-
-			this.notCommands.add(notCommand);
-		}
-		info(`${this.notCommands.size} notCommands have been loaded.`);
 	}
 }
