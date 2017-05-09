@@ -1,10 +1,9 @@
 import { stripIndents } from 'common-tags';
 import { Message, User } from 'discord.js';
+import { get, Result } from 'snekfetch';
 
 import SelfbotClient from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
-
-const { get }: { get: any } = require('snekfetch');
 
 export default class TokenCommand extends Command {
 	private readonly _regex: RegExp;
@@ -34,8 +33,10 @@ export default class TokenCommand extends Command {
 				auth = `Bot ${this.client.config.botToken}`;
 			}
 
-			const { body: user }: { body: User } = await get(url)
-				.set('Authorization', auth);
+			const user: User = await get(url)
+				.set('Authorization', auth)
+				// not always a buffer
+				.then<User>((result: Result) => result.body as any);
 			return msg.edit(stripIndents`
 			\u200b${msg.content}
 			\`\`\`js

@@ -1,10 +1,9 @@
 import { Message, RichEmbed } from 'discord.js';
+import { post, Result } from 'snekfetch';
 
 import SelfbotClient from '../structures/client';
 import { Command } from '../structures/command';
 import { TranslateResponse } from '../types/sherlockTypes';
-
-const { post }: { post: any } = require('snekfetch');
 
 export default class TranslateCommand extends Command {
 	private readonly _languages: RegExp;
@@ -29,9 +28,11 @@ export default class TranslateCommand extends Command {
 
 		if (!to) return msg.edit(`\u200b${msg.content}\nMissing or invalid language.`);
 
-		const { body }: { body: TranslateResponse } = await post('https://api.kurisubrooks.com/api/translate')
+		const body: TranslateResponse = await post('https://api.kurisubrooks.com/api/translate')
 			.set('Authorization', this.client.config.sherlock)
 			.send({ query, to, from })
+			// body is not always a buffer :c
+			.then<TranslateResponse>((result: Result) => result.body as any)
 			.catch((response: any) => response);
 
 		let embed: RichEmbed;
