@@ -8,6 +8,7 @@ import { Command } from '../structures/command';
 
 export default class AliveCommand extends Command {
 	private readonly _ackMe: Set<string>;
+
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'ACKME',

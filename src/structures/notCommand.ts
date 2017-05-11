@@ -4,7 +4,7 @@ import SelfbotClient from './client';
 /** Needs a better name. */
 export default class NotCommand {
 	/** The Client that instantiated this "NotCommand" */
-	public readonly client: SelfbotClient;
+	protected readonly client: SelfbotClient;
 
 	public constructor(client: SelfbotClient) {
 		this.client = client;
