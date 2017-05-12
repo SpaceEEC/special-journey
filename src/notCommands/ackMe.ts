@@ -1,5 +1,4 @@
 import { Message } from 'discord.js';
-import { join } from 'path';
 
 import SelfbotClient from '../structures/client';
 import NotCommand from '../structures/notCommand';

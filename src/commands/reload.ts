@@ -7,7 +7,7 @@ import { Command } from '../structures/command';
 export default class ReloadCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'RELOAD'
+			name: 'RELOAD',
 		});
 	}
 

@@ -3,11 +3,11 @@ import { join } from 'path';
 
 type SemiStaticKey = 'ackMe' | 'logIt';
 
-interface SemiStatic {
+type SemiStatic = {
 	[index: string]: any;
 	ackMe: string[];
 	logIt: string;
-}
+};
 
 export default class DataProvider {
 	/** Map to cache stuff and keep references accross files */

@@ -4,13 +4,14 @@
 		"target": "es2017",
 		"lib": [
 			"es2017",
-			"es2017.object"
+			"es2017.object",
+			"dom"
 		],
 		"declaration": false,
 		"noImplicitAny": true,
+		"noUnusedLocals": true,
 		"removeComments": true,
-		"sourceMap": true,
-		"allowJs": true
+		"sourceMap": false
 	},
 	"exclude": [
 		"node_modules",

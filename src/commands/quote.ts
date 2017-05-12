@@ -1,11 +1,9 @@
 import { oneLineTrim } from 'common-tags';
 import { Message, RichEmbed, TextChannel } from 'discord.js';
 import { join } from 'path';
-import { error } from 'winston';
 
 import SelfbotClient from '../structures/client';
 import { Command } from '../structures/command';
-import Util from '../util';
 
 const { homepage }: { homepage: string } = require(join(__dirname, '..', '..', 'package.json'));
 
@@ -66,7 +64,7 @@ export default class QuoteCommand extends Command {
 
 			await msg.edit(response, { embed });
 		} catch (err) {
-			if (err.message !== 'Message not found.') error('quote', err);
+			if (err.message !== 'Message not found.') this.client.logger.error('quote', err);
 			return msg.edit(`\u200b${msg.content}\n\n\`E-ROHR\`\n\`\`\`js\n${err}${err.text || ''}\n\`\`\``);
 		}
 	}

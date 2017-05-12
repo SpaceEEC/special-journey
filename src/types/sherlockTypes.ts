@@ -2,16 +2,17 @@
 // #region translate
 
 /** Represents a language */
-export interface Language {
+export type Language = {
 	/** The english name of this language */
 	name: string;
 	/** The local name of this language */
 	local: string;
 	/** The language code of this language (Probably ISO 639) */
 	code: string;
-}
+};
+
 /** Represents a translate endpoint response. */
-export interface TranslateResponse {
+export type TranslateResponse = {
 	/** Whether the request was successful */
 	ok: boolean;
 	/** Error description when the request failed */
@@ -24,24 +25,24 @@ export interface TranslateResponse {
 	query: string;
 	/** The translated text  */
 	result: string;
-}
+};
 
 // #endregion
 
 // #region convert
 
 /** An interface representing a unit as response from sherlock api. */
-export interface Unit {
+export type Unit = {
 	/** The value */
 	value: number;
 	/** The unit */
 	unit: string;
 	/** The displaytext of both of other properties */
 	display: string;
-}
+};
 
 /** Represents a sherlock api convert endpoint response. */
-export interface ConvertResponse {
+export type ConvertResponse = {
 	/** Whether the operation was successful */
 	ok: boolean;
 	/** Error description when the request failed */
@@ -52,6 +53,6 @@ export interface ConvertResponse {
 	input: Unit;
 	/** The sent text */
 	query: string;
-}
+};
 
   // #endregion

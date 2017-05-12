@@ -11,7 +11,7 @@ export default class TokenCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'TOKEN',
-			aliases: ['ID']
+			aliases: ['ID'],
 		});
 		this._regex = new RegExp(/\D/, 'g');
 	}

@@ -3,6 +3,7 @@ node_modules/
 
 #old files
 old/
+_tslint.json
 
 #js build
 build/
@@ -11,6 +12,3 @@ build/
 config.json
 semiStatic.json
 src/notCommands/logit.ts
-
-#WIP
-src/structures/logger.ts

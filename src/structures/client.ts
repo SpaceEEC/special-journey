@@ -1,16 +1,15 @@
 import { oneLine } from 'common-tags';
-import { Client, ClientOptions, Collection, GuildMember, Message } from 'discord.js';
+import { Client, ClientOptions, Collection, Message } from 'discord.js';
 import { readdirSync } from 'fs';
 import { extname, join } from 'path';
-import { debug, error, info, warn } from 'winston';
 
-import { Command, CommandInformations, CommandOptions } from './command';
+import { Command } from './command';
 import DataProvider from './dataProvider';
 import EventCounter from './EventCounter';
-//import Logger from './logger';
+import Logger from './logger';
 import NotCommand from './notCommand';
 
-interface Config {
+type Config = {
 	botToken: string;
 	prefix: string;
 	token: string;
@@ -18,7 +17,7 @@ interface Config {
 	botID: string;
 	botPrefix: string;
 	botChannelID: string;
-}
+};
 
 /** Represents a regular discord client with some stuff added to it. */
 export default class SelfbotClient extends Client {
@@ -28,8 +27,8 @@ export default class SelfbotClient extends Client {
 	public readonly data: DataProvider;
 	/** The EventCounter of the client */
 	public readonly eventCounter: EventCounter;
-	/* The logger of the client
-	public readonly logger: Logger;*/
+	/* The logger of the client */
+	public readonly logger: Logger;
 	/** Collection of all registered aliases, mapped by alias to their command names */
 	public readonly aliases: Collection<string, string>;
 	/** Collection of all registered commands, mapped by their names */
@@ -40,13 +39,13 @@ export default class SelfbotClient extends Client {
 	public constructor(options?: ClientOptions) {
 		super(options);
 
-		//loading config and data before everything else
+		// loading config and data before everything else
 		// is blocking
 		this.config = require(join(__dirname, '..', '..', 'config'));
 		this.data = new DataProvider();
 
 		this.eventCounter = new EventCounter();
-		//this.logger = new Logger();
+		this.logger = Logger.instance();
 		this.aliases = new Collection<string, string>();
 		this.commands = new Collection<string, Command>();
 		this.notCommands = new Set<NotCommand>();
@@ -54,23 +53,22 @@ export default class SelfbotClient extends Client {
 		this._loadNotCommands();
 
 		/** Register events and logging in */
-		this.on('ready', () => info(`[ready] Logged in as ${this.user.tag} (${this.user.id})`))
+		this.on('ready', () => this.logger.info(`[ready] Logged in as ${this.user.tag} (${this.user.id})`))
 			.once('ready', () =>
 				(this as any).ws.connection.on('close', (event: any) =>
-					warn('disconnect', '', event.code, ': ', event.reason)
+					this.logger.warn('disconnect', '', event.code, ': ', event.reason)
 				)
 			)
-			.on('reconnecting', () => warn('Reconnecting'))
+			.on('reconnecting', () => this.logger.warn('Reconnecting'))
 			.on('disconnect', (event: any) => process.exit(200))
 			.on('message', this.handleMessage)
 			.on('messageUpdate', (oldMessage, newMessage) => {
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
 			})
-			.on('warn', warn)
-			.on('error', error)
-			.on('resume', (replayed: number) => info('Resumed. Replayed events:', replayed))
-			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t))
-			.login(this.config.token);
+			.on('warn', this.logger.warn)
+			.on('error', this.logger.error)
+			.on('resume', (replayed: number) => this.logger.info('Resumed. Replayed events:', replayed))
+			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t));
 	}
 
 	/**
@@ -92,7 +90,8 @@ export default class SelfbotClient extends Client {
 		try {
 			await command.run(msg, params, { alias: name });
 		} catch (err) {
-			error('The following error occured while running', name, '\n', err);
+			this.logger
+				.error(`The following error occured while running ${name} - (${command.constructor.name})\n`, err);
 		}
 	}
 
@@ -128,7 +127,7 @@ export default class SelfbotClient extends Client {
 		for (const alias of command.aliases) this.aliases.set(alias, command.name);
 		this.commands.set(command.name, command);
 
-		info(`${command.name} (${command.constructor.name}) has been reloaded.`);
+		this.logger.info(`${command.name} (${command.constructor.name}) has been reloaded.`);
 		return `${command.name} (${command.constructor.name}) has been reloaded.`;
 	}
 
@@ -151,7 +150,7 @@ export default class SelfbotClient extends Client {
 			for (const alias of command.aliases) this.aliases.set(alias, command.name);
 			this.commands.set(command.name, command);
 		}
-		info(`${this.commands.size} commands have been loaded.`);
+		this.logger.info(`${this.commands.size} commands have been loaded.`);
 	}
 
 	/**
@@ -170,7 +169,7 @@ export default class SelfbotClient extends Client {
 
 			this.notCommands.add(notCommand);
 		}
-		info(`${this.notCommands.size} notCommands have been loaded.`);
+		this.logger.info(`${this.notCommands.size} notCommands have been loaded.`);
 	}
 
 	/**

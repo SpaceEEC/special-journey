@@ -1,7 +1,5 @@
 import { oneLine } from 'common-tags';
 import { Message } from 'discord.js';
-import { writeFile } from 'fs';
-import { error } from 'winston';
 
 import SelfbotClient from '../structures/client';
 import { Command } from '../structures/command';
@@ -12,7 +10,7 @@ export default class AliveCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'ACKME',
-			aliases: ['ACK']
+			aliases: ['ACK'],
 		});
 		this._ackMe = client.data.get<Set<string>>('ackMe');
 	}

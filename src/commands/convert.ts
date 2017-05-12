@@ -9,7 +9,7 @@ export default class ConvertCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'CONVERT',
-			aliases: ['C']
+			aliases: ['C'],
 		});
 	}
 

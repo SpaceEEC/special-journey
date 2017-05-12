@@ -6,7 +6,7 @@ import { Command } from '../structures/command';
 export default class AliveCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'ALIVE'
+			name: 'ALIVE',
 		});
 	}
 

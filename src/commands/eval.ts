@@ -2,7 +2,6 @@
 import { stripIndents } from 'common-tags';
 import { Message, Util } from 'discord.js';
 import { inspect } from 'util';
-import { error } from 'winston';
 
 import SelfbotClient from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
@@ -20,7 +19,7 @@ export default class EvalCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'EVAL',
-			aliases: ['ASYNC', 'AWAIT', 'SILE']
+			aliases: ['ASYNC', 'AWAIT', 'SILE'],
 		});
 		this._inspect = 0;
 		this._log = false;
@@ -59,7 +58,7 @@ export default class EvalCommand extends Command {
 		} catch (err) {
 			if (!err) return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\nE-Rohr, but no error.`)
 				.catch(() => null);
-			if (this._log) error('evaled', err);
+			if (this._log) this.client.logger.error('evaled', err);
 			msg.edit(stripIndents`
 			\u200b${this.client.config.prefix + info.alias} ${code}
 

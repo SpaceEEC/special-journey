@@ -6,6 +6,7 @@
     "start": "cd build && node index.js",
     "build:gulp": "gulp build",
     "lint:gulp": "gulp lint",
+    "prebuild":"npm run lint:gulp",
     "build": "npm run build:gulp",
     "lint": "npm run lint:gulp",
     "build-start": "npm run build && cd build && node index.js"
@@ -22,20 +23,18 @@
   "license": "ISC",
   "devDependencies": {
     "@types/common-tags": "^1.2.5",
-    "@types/node": "^7.0.14",
+    "@types/node": "^7.0.18",
     "@types/snekfetch": "^3.1.0",
-    "@types/winston": "^2.3.1",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-tslint": "^8.0.0",
     "gulp-typescript": "^3.1.6",
-    "tslint": "^5.1.0",
+    "tslint": "^5.2.0",
     "tslint-eslint-rules": "^4.0.0",
     "typescript": "^2.3.2"
   },
   "dependencies": {
     "common-tags": "^1.4.0",
-    "discord.js": "github:hydrabolt/discord.js",
-    "winston": "^2.3.1"
+    "discord.js": "^11.1.0"
   }
 }

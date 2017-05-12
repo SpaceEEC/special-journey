@@ -2,18 +2,18 @@ import { Message } from 'discord.js';
 import SelfbotClient from './client';
 
 /** Options for this command. */
-export interface CommandOptions {
+export type CommandOptions = {
 	/** The name of this command */
 	name: string;
 	/** The aliases of this command, if any */
 	aliases?: string[];
-}
+};
 
 /** Informations to pass to a command's execution. */
-export interface CommandInformations {
+export type CommandInformations = {
 	/** The command, or alias, which triggered this command's execution */
 	alias: string;
-}
+};
 
 /** Represents a command. */
 export class Command {

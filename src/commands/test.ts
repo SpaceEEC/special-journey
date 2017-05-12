@@ -1,12 +1,12 @@
-import { ClientOAuth2Application, Message } from 'discord.js';
+import { Message } from 'discord.js';
 
 import SelfbotClient from '../structures/client';
-import { Command, CommandOptions } from '../structures/command';
+import { Command } from '../structures/command';
 
 export default class TestCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'TEST'
+			name: 'TEST',
 		});
 	}
 

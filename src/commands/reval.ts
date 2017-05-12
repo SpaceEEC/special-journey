@@ -8,7 +8,7 @@ export default class RevalCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'REVAL',
-			aliases: ['RAWAIT', 'RASYNC']
+			aliases: ['RAWAIT', 'RASYNC'],
 		});
 	}
 
@@ -18,8 +18,8 @@ export default class RevalCommand extends Command {
 		await channel.send(`${info.alias.replace('r', this.client.config.botPrefix)} ${args.join(' ')}`);
 
 		const fetched: Message = await channel.awaitMessages(
-			message => message.author.id === this.client.config.botID,
-			{ time: 5000, maxMatches: 1 }
+			(message: Message) => message.author.id === this.client.config.botID,
+			{ time: 5000, maxMatches: 1 },
 		).then((awaited: Collection<string, Message>) => awaited.first());
 
 		if (!fetched) return msg.edit(`\u200b${msg.content}\n🕐.`);

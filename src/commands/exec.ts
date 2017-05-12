@@ -5,17 +5,17 @@ import { Message } from 'discord.js';
 import SelfbotClient from '../structures/client';
 import { Command } from '../structures/command';
 
-interface Execution {
+type Execution = {
 	/** Full error typings are overrated */
 	error: any;
 	stdout: string;
 	stderr: string;
-}
+};
 
 export default class ExecuteCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'EXEC'
+			name: 'EXEC',
 		});
 	}
 

@@ -7,7 +7,7 @@ import { Command } from '../structures/command';
 export default class AliveCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'EMOJI'
+			name: 'EMOJI',
 		});
 	}
 
@@ -22,7 +22,7 @@ export default class AliveCommand extends Command {
 		return msg.edit(oneLine`
 		Emoji \`${emoji.toString()}\` found in
 		\`${emoji.guild.name}\` - <#${emoji.guild.id}>`,
-			{ embed: { description: emoji.toString() } }
+			{ embed: { description: emoji.toString() } },
 		);
 	}
 }
