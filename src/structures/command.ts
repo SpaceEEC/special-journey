@@ -17,12 +17,12 @@ export type CommandInformations = {
 
 /** Represents a command. */
 export class Command {
-	/** The Client that instantiated this command */
-	public readonly client: SelfbotClient;
 	/** The name of this command */
 	public readonly name: string;
 	/** The aliases for this command, if any */
 	public readonly aliases: string[];
+	/** The Client that instantiated this command */
+	protected readonly client: SelfbotClient;
 
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
 		if (!(client instanceof SelfbotClient)) throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
