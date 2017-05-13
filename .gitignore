@@ -12,3 +12,9 @@ build/
 config.json
 semiStatic.json
 src/notCommands/logit.ts
+
+#misc
+*.jpg
+*.gif
+*.png
+*.json
