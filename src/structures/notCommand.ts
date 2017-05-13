@@ -7,6 +7,7 @@ export default class NotCommand {
 	protected readonly client: SelfbotClient;
 
 	public constructor(client: SelfbotClient) {
+		if (!(client instanceof SelfbotClient)) throw new Error(`${this.constructor.name}'s client is not a SelfbotClient!`);
 		this.client = client;
 	}
 

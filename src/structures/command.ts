@@ -25,6 +25,7 @@ export class Command {
 	public readonly aliases: string[];
 
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
+		if (!(client instanceof SelfbotClient)) throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
 		this.client = client;
 		this.name = options.name;
 		this.aliases = options.aliases || [];
