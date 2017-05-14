@@ -47,6 +47,7 @@
 		"no-trailing-whitespace": true,
 		"quotemark": [true, "single", "avoid-escape"],
 		"no-use-before-declare": true,
+		"ordered-imports": [true],
 		"whitespace": [true,
 			"check-branch",
 			"check-decl",
