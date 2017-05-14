@@ -27,14 +27,14 @@ export default class SelfbotClient extends Client {
 	public readonly data: DataProvider;
 	/** The EventCounter of the client */
 	public readonly eventCounter: EventCounter;
-	/* The logger of the client */
-	public readonly logger: Logger;
 	/** Collection of all registered aliases, mapped by alias to their command names */
 	public readonly aliases: Collection<string, string>;
 	/** Collection of all registered commands, mapped by their names */
 	public readonly commands: Collection<string, Command>;
 	/** Set of "NotCommand"s */
 	public readonly notCommands: Set<NotCommand>;
+	/* The logger of the client */
+	private readonly logger: Logger;
 
 	public constructor(options?: ClientOptions) {
 		super(options);

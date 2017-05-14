@@ -58,7 +58,7 @@ export default class EvalCommand extends Command {
 		} catch (err) {
 			if (!err) return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\nE-Rohr, but no error.`)
 				.catch(() => null);
-			if (this._log) this.client.logger.error('evaled', err);
+			if (this._log) this.logger.error('evaled', err);
 			msg.edit(stripIndents`
 			\u200b${this.client.config.prefix + info.alias} ${code}
 

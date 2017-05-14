@@ -64,7 +64,7 @@ export default class QuoteCommand extends Command {
 
 			await msg.edit(response, { embed });
 		} catch (err) {
-			if (err.message !== 'Message not found.') this.client.logger.error('quote', err);
+			if (err.message !== 'Message not found.') this.logger.error('quote', err);
 			return msg.edit(`\u200b${msg.content}\n\n\`E-ROHR\`\n\`\`\`js\n${err}${err.text || ''}\n\`\`\``);
 		}
 	}

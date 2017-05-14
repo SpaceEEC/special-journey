@@ -1,5 +1,7 @@
 import { Message } from 'discord.js';
+
 import SelfbotClient from './client';
+import Logger from './logger';
 
 /** Options for this command. */
 export type CommandOptions = {
@@ -23,10 +25,13 @@ export class Command {
 	public readonly aliases: string[];
 	/** The Client that instantiated this command */
 	protected readonly client: SelfbotClient;
+	/** The logger for this command */
+	protected readonly logger: Logger;
 
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
 		if (!(client instanceof SelfbotClient)) throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
 		this.client = client;
+		this.logger = Logger.instance();
 		this.name = options.name;
 		this.aliases = options.aliases || [];
 	}
