@@ -107,14 +107,14 @@ export default class QuoteCommand extends Command {
 	 */
 	private _maybeSetTitle(msg: Message, fetched: Message): RichEmbed {
 		const embed: RichEmbed = new RichEmbed();
-		if (!fetched.guild) {
+		if (!(fetched.channel instanceof TextChannel)) {
 			if (msg.channel.id === fetched.channel.id) return embed;
 			else return embed.setTitle('#DM');
 		} else if (!msg.guild || msg.guild.id !== fetched.guild.id) {
-			return embed.setTitle(`${fetched.guild.name}) #${(fetched.channel as TextChannel).name}`);
+			return embed.setTitle(`${fetched.guild.name} #${fetched.channel.name}`);
 		} else {
 			if (msg.channel.id === fetched.channel.id) return embed;
-			else return embed.setTitle(`#${(fetched.channel as TextChannel).name}`);
+			else return embed.setTitle(`#${fetched.channel.name}`);
 		}
 	}
 
