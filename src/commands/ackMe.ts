@@ -29,6 +29,8 @@ export default class AliveCommand extends Command {
 			}
 
 			this._ackMe.add(args[1]);
+
+			return msg.edit(`Added \`${this.client.guilds.get(args[1]).name}\` to the ack list.`);
 		} else if (args[0] === 'remove') {
 			if (!this.client.guilds.has(args[1])) {
 				return msg.edit(`\u200b${this.client.config.prefix + alias}\nNo such guild.`);
@@ -39,6 +41,8 @@ export default class AliveCommand extends Command {
 			}
 
 			this._ackMe.delete(args[1]);
+
+			return msg.edit(`Removed \`${this.client.guilds.get(args[1]).name}\` from the ack list.`);
 		} else if (args[0] === 'show') {
 			const guilds: string[] = [];
 
