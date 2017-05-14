@@ -23,7 +23,7 @@ export default class QuoteCommand extends Command {
 
 			const fetched: Message = await channel.fetchMessage(args.shift());
 
-			fetched.member = channel.guild && await channel.guild.fetchMember(fetched.author);
+			fetched.member = channel.guild && await channel.guild.fetchMember(fetched.author).catch(() => null);
 			if (!color && fetched.member) color = fetched.member.displayColor;
 
 			const embed: RichEmbed = this._maybeSetTitle(msg, fetched)
@@ -42,7 +42,7 @@ export default class QuoteCommand extends Command {
 				}
 
 				const add = await channel.fetchMessage(id);
-				add.member = channel.guild && await channel.guild.fetchMember(add.author);
+				add.member = channel.guild && await channel.guild.fetchMember(add.author).catch(() => null);
 				embed.addField(`${add.member
 					? add.member.displayName
 					: add.author.username} ${this._timeString(msg.createdTimestamp - fetched.createdTimestamp)}`,
