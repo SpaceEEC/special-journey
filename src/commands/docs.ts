@@ -211,7 +211,7 @@ export default class DocsCommand extends Command {
 		if (!property) return null;
 
 		const title: string = linkProp
-			? `__[${main.name}.${property.name}](${this._getLink(main.name, property.name)})__`
+			? `__[${main.name}.${property.name}](${this._getLink(main.name, (property.scope ? `s-` : '') + property.name)})__`
 			: `__[${main.name}.${property.name}](${this._getLink(main.name)})__`;
 
 		const embed: RichEmbed = this._embedSample
@@ -244,7 +244,7 @@ export default class DocsCommand extends Command {
 		if (!method) return null;
 
 		const title: string = link
-			? `__[${main.name}.${method.name}](${this._getLink(main.name, method.name)})__`
+			? `__[${main.name}.${method.name}](${this._getLink(main.name, (method.scope ? `s-` : '') + method.name)})__`
 			: `__${main.name}.${method.name}__`;
 
 		const embed: RichEmbed = this._embedSample
