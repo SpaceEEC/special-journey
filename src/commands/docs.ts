@@ -116,9 +116,14 @@ export default class DocsCommand extends Command {
 			if (found) return found;
 		}
 
+		let classSuffix: string = (_class.extends ? ` extends **[${_class.extends[0]}](${this._getLink(_class.extends[0], '')})**` : '')
+			+ (_class.implements ? ` implements **${_class.implements[0]}**` : '')
+			+ (_class.abstract ? ' (Abstract) ' : '');
+
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
-			__[${_class.name}](${this._getLink(_class.name, '')})__${_class.abstract ? '(Abstract) ' : ''}
+			**[${_class.name}](${this._getLink(_class.name, '')})**${classSuffix}
+
 			${this._formatDescription(_class.description)}
 
 			** Constructor:** ${this._formatParams(_class.construct && _class.construct.params, Format.constructor)}
@@ -154,7 +159,8 @@ export default class DocsCommand extends Command {
 
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
-			__${_interface.name}__
+			**${_interface.name}**
+
 			${this._formatDescription(_interface.description)}
 
 			** Properties:** ${this._formatProps(_interface.props)}
@@ -185,7 +191,8 @@ export default class DocsCommand extends Command {
 
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
-			__[${typedef.name}](${this._getLink(typedef.name)})__
+			**[${typedef.name}](${this._getLink(typedef.name)})**
+
 			${this._formatDescription(typedef.description)}
 
 			** Properties:** ${this._formatProps(typedef.props)}
@@ -211,13 +218,13 @@ export default class DocsCommand extends Command {
 		if (!property) return null;
 
 		const title: string = linkProp
-			? `__[${main.name}.${property.name}](${this._getLink(main.name, (property.scope ? `s-` : '') + property.name)})__`
-			: `__[${main.name}.${property.name}](${this._getLink(main.name)})__`;
+			? `[${main.name}.${property.name}](${this._getLink(main.name, (property.scope ? `s-` : '') + property.name)})`
+			: `[${main.name}.${property.name}](${this._getLink(main.name)})`;
 
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
-			${property.deprecated ? '**This property is deprecated!**' : ''}
-			${property.scope ? ` (Static) ` : ''}${title}
+			${property.scope ? ` (Static) ` : ''}**${title}**
+			${property.deprecated ? 'This property is deprecated!' : ''}
 
 			${this._formatDescription(property.description)}
 
@@ -244,15 +251,15 @@ export default class DocsCommand extends Command {
 		if (!method) return null;
 
 		const title: string = link
-			? `__[${main.name}.${method.name}](${this._getLink(main.name, (method.scope ? `s-` : '') + method.name)})__`
-			: `__${main.name}.${method.name}__`;
-
+			? `[${main.name}.${method.name}](${this._getLink(main.name, (method.scope ? `s-` : '') + method.name)})`
+			: `${main.name}.${method.name}`;
+		this.logger.info(method.deprecated);
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
-			${method.deprecated ? '**This method is deprecated!**' : ''}
-			${title}(${this._formatParams(method.params, Format.title)})${method.scope ? ` (Static) ` : ''}${this._formatParams(method.params, Format.method)}
-
+			${method.scope ? ` (Static) ` : ''}**${title}**(${this._formatParams(method.params, Format.title)})
+			${method.deprecated ? 'This method is deprecated!\n' : ''}
 			${this._formatDescription(method.description)}${method.examples && method.examples[0] ? `\n\n**Example:**\`\`\`js\n${method.examples[0]}\`\`\`` : ''}
+			${this._formatParams(method.params, Format.method)}
 
 			**Returns:** ${this._formatType(method.returns)}
 			`);
@@ -277,8 +284,9 @@ export default class DocsCommand extends Command {
 
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
+			**[${main.name}.${event.name}](${this._getLink(main.name, event.name)})**
 			${event.deprecated ? '**This event is deprecated!**' : ''}
-			[__${main.name}.${event.name}__](${this._getLink(main.name, event.name)})
+
 			${this._formatDescription(event.description)}
 
 			**Params:** ${this._formatParams(event.params, Format.event)}
@@ -393,9 +401,12 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _formatDescription(description: string): string {
-		const object: { [index: string]: string } = { warn: '⚠ ', info: 'ℹ ', '\/warn': ' ⚠', '\/info': ' ℹ' };
+		const object: { [index: string]: string } = { '<warn>': '⚠ ', '<info>': 'ℹ ', '<\/warn>': ' ⚠', '<\/info>': ' ℹ', '\n': '\u200b' };
 
-		return description.replace(/<(\/?warn|\/?info)>|{@link (.+)}/g, (substring: string, ...match: string[]) => object[match[0]] || this._formatLink(...match));
+		return description.replace(/(<\/?warn>|<\/?info>|\n)|{@link (.+)}/g, (substring: string, ...match: string[]) => {
+			this.logger.warn('match: ', match[0] || match, ' /match', object[match[0]] || [match[0]]);
+			return object[match[0]] || this._formatLink(...match);
+		});
 	}
 
 	/**
@@ -431,7 +442,7 @@ export default class DocsCommand extends Command {
 	 */
 	private get _embedSample(): RichEmbed {
 		return new RichEmbed()
-			.setFooter(`v${this._version} docs`, 'https://discord.js.org/static/favicon.ico')
+			.setFooter(`discord.js' ${this._version} docs`, 'https://discord.js.org/static/favicon.ico')
 			.setColor(2201331);
 	}
 

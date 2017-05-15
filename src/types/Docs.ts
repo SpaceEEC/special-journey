@@ -60,6 +60,8 @@ export type _Class = {
 	abstract: boolean;
 	/** Class name of extending class(es) */
 	extends: string[];
+	/** Name of the interface this class implements */
+	implements: string[];
 	/** Informations about the constructor */
 	construct: Constructor;
 	/** Properties of this class */
