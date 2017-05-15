@@ -128,8 +128,7 @@ export default class DocsCommand extends Command {
 			** Methods:** ${this._formatProps(_class.methods)}
 
 			** Events:** ${this._formatProps(_class.events)}
-
-				`);
+			`);
 
 		return msg.edit({ embed });
 	}
@@ -161,7 +160,8 @@ export default class DocsCommand extends Command {
 			** Properties:** ${this._formatProps(_interface.props)}
 
 			** Methods:** ${this._formatProps(_interface.methods)}
-				`);
+			`);
+
 		return msg.edit({ embed });
 	}
 
@@ -282,7 +282,7 @@ export default class DocsCommand extends Command {
 			${this._formatDescription(event.description)}
 
 			**Params:** ${this._formatParams(event.params, Format.event)}
-		`);
+			`);
 
 		if (event.deprecated) embed.setColor(0xff0000);
 
