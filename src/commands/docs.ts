@@ -224,8 +224,7 @@ export default class DocsCommand extends Command {
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
 			${property.scope ? ` (Static) ` : ''}**${title}**
-			${property.deprecated ? 'This property is deprecated!' : ''}
-
+			${property.deprecated ? 'This property is deprecated!\n' : ''}
 			${this._formatDescription(property.description)}
 
 			** Type:** ${this._formatType(property.type)}
@@ -285,8 +284,7 @@ export default class DocsCommand extends Command {
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
 			**[${main.name}.${event.name}](${this._getLink(main.name, event.name)})**
-			${event.deprecated ? '**This event is deprecated!**' : ''}
-
+			${event.deprecated ? '**This event is deprecated!**\n' : ''}
 			${this._formatDescription(event.description)}
 
 			**Params:** ${this._formatParams(event.params, Format.event)}
