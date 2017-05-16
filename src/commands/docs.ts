@@ -252,13 +252,13 @@ export default class DocsCommand extends Command {
 		const title: string = link
 			? `[${main.name}.${method.name}](${this._getLink(main.name, (method.scope ? `s-` : '') + method.name)})`
 			: `${main.name}.${method.name}`;
-		this.logger.info(method.deprecated);
+
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
 			${method.scope ? ` (Static) ` : ''}**${title}**(${this._formatParams(method.params, Format.title)})
 			${method.deprecated ? 'This method is deprecated!\n' : ''}
-			${this._formatDescription(method.description)}${method.examples && method.examples[0] ? `\n\n**Example:**\`\`\`js\n${method.examples[0]}\`\`\`` : ''}
 			${this._formatParams(method.params, Format.method)}
+			${this._formatDescription(method.description)}${method.examples && method.examples[0] ? `\n\n**Example:**\`\`\`js\n${method.examples[0]}\`\`\`` : ''}
 
 			**Returns:** ${this._formatType(method.returns)}
 			`);
@@ -364,8 +364,6 @@ export default class DocsCommand extends Command {
 				if (format === Format.method && param.default) formatted += `\nDefault value: ${param.default}`;
 				formatted += `\n${param.description}\n\n`;
 			}
-
-			if (format === Format.method) formatted = `\n\n${formatted}`;
 
 			return formatted.slice(0, -2);
 		}
