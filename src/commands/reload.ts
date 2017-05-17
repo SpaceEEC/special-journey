@@ -8,6 +8,7 @@ export default class ReloadCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
 			name: 'RELOAD',
+			aliases: ['RELAOD'],
 		});
 	}
 
