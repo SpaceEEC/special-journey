@@ -3,7 +3,7 @@ import { post, Result } from 'snekfetch';
 
 import SelfbotClient from '../structures/client';
 import { Command } from '../structures/command';
-import { ConvertResponse } from '../types/sherlockTypes';
+import { ConvertResponse } from '../types/SherlockTypes';
 
 export default class ConvertCommand extends Command {
 	public constructor(client: SelfbotClient) {
