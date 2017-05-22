@@ -3,7 +3,7 @@ import { stripIndents } from 'common-tags';
 import { Message, Util } from 'discord.js';
 import { inspect } from 'util';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
 export default class EvalCommand extends Command {

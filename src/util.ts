@@ -1,7 +1,7 @@
 import { oneLine } from 'common-tags';
 
 /** Util class holding all sorts of methods. */
-export default class Util {
+export class Util {
 
 	/**
 	 * Forces a 0 at the beginning of numbers smaller than 9.

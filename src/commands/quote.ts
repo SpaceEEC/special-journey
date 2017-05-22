@@ -2,7 +2,7 @@ import { oneLineTrim } from 'common-tags';
 import { Message, RichEmbed, TextChannel } from 'discord.js';
 import { join } from 'path';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 
 const { homepage }: { homepage: string } = require(join(__dirname, '..', '..', 'package.json'));

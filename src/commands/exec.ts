@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import { stripIndents } from 'common-tags';
 import { Message } from 'discord.js';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 
 type Execution = {

@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 
-import SelfbotClient from './client';
-import Logger from './logger';
+import { SelfbotClient } from './client';
+import { Logger } from './logger';
 
 /** Options for this command. */
 export type CommandOptions = {

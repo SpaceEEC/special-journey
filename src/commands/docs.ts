@@ -1,7 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Message, RichEmbed } from 'discord.js';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 import { _Class, _Interface, Docs, Event, Method, Parameter, Prop, Typedef, Types } from '../types/Docs';
 

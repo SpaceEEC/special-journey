@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 
-import SelfbotClient from '../structures/client';
-import NotCommand from '../structures/notCommand';
+import { SelfbotClient } from '../structures/client';
+import { NotCommand } from '../structures/notCommand';
 
 export default class AckMe extends NotCommand {
 	private readonly _ackMe: Set<string>;

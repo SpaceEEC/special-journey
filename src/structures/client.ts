@@ -4,10 +4,10 @@ import { readdirSync } from 'fs';
 import { extname, join } from 'path';
 
 import { Command } from './command';
-import DataProvider from './dataProvider';
-import EventCounter from './EventCounter';
-import Logger from './logger';
-import NotCommand from './notCommand';
+import { DataProvider } from './dataProvider';
+import { EventCounter } from './EventCounter';
+import { Logger } from './logger';
+import { NotCommand } from './notCommand';
 
 type Config = {
 	botToken: string;
@@ -20,7 +20,7 @@ type Config = {
 };
 
 /** Represents a regular discord client with some stuff added to it. */
-export default class SelfbotClient extends Client {
+export class SelfbotClient extends Client {
 	/** The config of the client */
 	public readonly config: Config;
 	/** The Dataprovider of the client */
@@ -45,7 +45,7 @@ export default class SelfbotClient extends Client {
 		this.data = new DataProvider();
 
 		this.eventCounter = new EventCounter();
-		this.logger = Logger.instance();
+		this.logger = Logger.instance;
 		this.aliases = new Collection<string, string>();
 		this.commands = new Collection<string, Command>();
 		this.notCommands = new Set<NotCommand>();

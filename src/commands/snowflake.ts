@@ -1,9 +1,9 @@
 import { stripIndents } from 'common-tags';
 import { Message, SnowflakeUtil } from 'discord.js';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
-import Util from '../util';
+import { Util } from '../util';
 
 export default class SnowflakeCommand extends Command {
 	public constructor(client: SelfbotClient) {

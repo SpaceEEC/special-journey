@@ -2,7 +2,7 @@ import { stripIndents } from 'common-tags';
 import { Message, User } from 'discord.js';
 import { get, Result } from 'snekfetch';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
 export default class TokenCommand extends Command {

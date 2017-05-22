@@ -9,7 +9,7 @@ type SemiStatic = {
 	logIt: string;
 };
 
-export default class DataProvider {
+export class DataProvider {
 	/** Map to cache stuff and keep references accross files */
 	private readonly _db: Map<string, any>;
 

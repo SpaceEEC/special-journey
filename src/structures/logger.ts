@@ -6,12 +6,12 @@
 import { inspect } from 'util';
 
 import { colors, LogLevel } from '../types/LogLevel';
-import Util from '../util';
+import { Util } from '../util';
 
 /**
  * The singleton logger
  */
-export default class Logger {
+export class Logger {
 	/**
 	 * Shortcut to the enum type
 	 * @static
@@ -59,7 +59,7 @@ export default class Logger {
 	 * @returns {Logger}
 	 * @static
 	 */
-	public static instance(): Logger {
+	public static get instance(): Logger {
 		return Logger._instance || new Logger();
 	}
 

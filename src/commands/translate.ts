@@ -1,7 +1,7 @@
 import { Message, RichEmbed } from 'discord.js';
 import { post, Result } from 'snekfetch';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 import { TranslateResponse } from '../types/SherlockTypes';
 

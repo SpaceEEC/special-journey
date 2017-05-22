@@ -1,6 +1,6 @@
 // copy pasted from gus' EventCount and added type notations
 // TODO: custom inspector
-export default class EventCounter {
+export class EventCounter {
 	public events: { [type: string]: number };
 	public frequency: number;
 	public total: number;

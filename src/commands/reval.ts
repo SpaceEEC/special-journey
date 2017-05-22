@@ -1,7 +1,7 @@
 import { stripIndents } from 'common-tags';
 import { Collection, Message, TextChannel } from 'discord.js';
 
-import SelfbotClient from '../structures/client';
+import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
 export default class RevalCommand extends Command {

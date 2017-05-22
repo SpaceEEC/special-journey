@@ -1,10 +1,10 @@
 import { Message } from 'discord.js';
 
-import SelfbotClient from './client';
-import Logger from './logger';
+import { SelfbotClient } from './client';
+import { Logger } from './logger';
 
 /** Needs a better name. */
-export default class NotCommand {
+export class NotCommand {
 	/** The Client that instantiated this "NotCommand" */
 	protected readonly client: SelfbotClient;
 	/** Logger of this "NotCommand" */
