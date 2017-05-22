@@ -5,7 +5,9 @@ import { inspect } from 'util';
 
 import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
+import { logger } from '../structures/LoggerDecorator';
 
+@logger
 export default class EvalCommand extends Command {
 	/** The depth to inspect with */
 	private _inspect: number;

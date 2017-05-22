@@ -399,10 +399,9 @@ export default class DocsCommand extends Command {
 	private _formatDescription(description: string): string {
 		const object: { [index: string]: string } = { '<warn>': '⚠ ', '<info>': 'ℹ ', '<\/warn>': ' ⚠', '<\/info>': ' ℹ', '\n': '\u200b' };
 
-		return description.replace(/(<\/?warn>|<\/?info>|\n)|{@link (.+)}/g, (substring: string, ...match: string[]) => {
-			this.logger.warn('match: ', match[0] || match, ' /match', object[match[0]] || [match[0]]);
-			return object[match[0]] || this._formatLink(...match);
-		});
+		return description.replace(/(<\/?warn>|<\/?info>|\n)|{@link (.+)}/g, (substring: string, ...match: string[]) =>
+			object[match[0]] || this._formatLink(...match)
+		);
 	}
 
 	/**

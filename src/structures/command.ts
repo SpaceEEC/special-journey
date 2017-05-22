@@ -31,7 +31,6 @@ export class Command {
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
 		if (!(client instanceof SelfbotClient)) throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
 		this.client = client;
-		this.logger = Logger.instance();
 		this.name = options.name;
 		this.aliases = options.aliases || [];
 	}

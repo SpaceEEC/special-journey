@@ -4,9 +4,11 @@ import { join } from 'path';
 
 import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
+import { logger } from '../structures/LoggerDecorator';
 
 const { homepage }: { homepage: string } = require(join(__dirname, '..', '..', 'package.json'));
 
+@logger
 export default class QuoteCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {

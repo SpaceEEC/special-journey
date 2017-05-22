@@ -13,7 +13,6 @@ export class NotCommand {
 	public constructor(client: SelfbotClient) {
 		if (!(client instanceof SelfbotClient)) throw new Error(`${this.constructor.name}'s client is not a SelfbotClient!`);
 		this.client = client;
-		this.logger = Logger.instance();
 	}
 
 	/**
