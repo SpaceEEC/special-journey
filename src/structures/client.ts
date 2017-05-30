@@ -52,23 +52,32 @@ export class SelfbotClient extends Client {
 		this._loadCommands();
 		this._loadNotCommands();
 
+		this.logger.setLogLevel(Logger.DEBUG);
+
 		/** Register events and logging in */
 		this.on('ready', () => this.logger.info(`[ready] Logged in as ${this.user.tag} (${this.user.id})`))
 			.once('ready', () =>
 				(this as any).ws.connection.on('close', (event: any) =>
-					this.logger.warn('disconnect', '', event.code, ': ', event.reason)
-				)
+					this.logger.warn('disconnect', '', event.code, ': ', event.reason),
+				),
 			)
 			.on('reconnecting', () => this.logger.warn('Reconnecting'))
 			.on('disconnect', (event: any) => process.exit(200))
 			.on('message', this.handleMessage)
-			.on('messageUpdate', (oldMessage, newMessage) => {
+			.on('messageUpdate', (oldMessage: Message, newMessage: Message) => {
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
 			})
 			.on('warn', this.logger.warn)
 			.on('error', this.logger.error)
 			.on('resume', (replayed: number) => this.logger.info('Resumed. Replayed events:', replayed))
-			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t));
+			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t))
+			.on('debug', (message: string) => {
+				if (message.startsWith('[ws] [connection] Heartbeat acknowledged,')
+					|| message === '[ws] [connection] Sending a heartbeat') {
+					return;
+				}
+				this.logger.debug(message);
+			});
 	}
 
 	/**
@@ -158,7 +167,7 @@ export class SelfbotClient extends Client {
 	 * @returns {void}
 	 * @private
 	 */
-	private _loadNotCommands() {
+	private _loadNotCommands(): void {
 		const files: string[] = readdirSync(join(__dirname, '..', 'notCommands'));
 
 		for (const file of files) {

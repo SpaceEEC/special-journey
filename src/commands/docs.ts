@@ -30,8 +30,8 @@ export default class DocsCommand extends Command {
 
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'DOCS',
 			aliases: ['DOC', 'DOSC'],
+			name: 'DOCS',
 		});
 
 		this._versions = ['11.1.0', '11.1-dev', 'master'];
@@ -75,12 +75,12 @@ export default class DocsCommand extends Command {
 		if (!second) return msg.edit(`Version of docs to display currently is ${this._version}.`);
 
 		const versions: { [index: string]: string } = {
-			stable: '11.1.0',
-			'11.1': '11.1.0',
-			indev: '11.1-dev',
-			'12': 'master',
+			11.1: '11.1.0',
+			12: 'master',
 			'12.0.0': 'master',
+			indev: '11.1-dev',
 			master: 'master',
+			stable: '11.1.0',
 		};
 
 		if (versions[second] || this._versions.includes(second)) {
@@ -105,7 +105,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _findClass(msg: Message, name: string, prop: string): Promise<Message | Message[]> {
-		const _class: _Class = this._classes[this._version].find((_tmpClass: _Class) => _tmpClass.name.toUpperCase() === name);
+		const _class: _Class = this._classes[this._version]
+			.find((_tmpClass: _Class) => _tmpClass.name.toUpperCase() === name);
 
 		if (!_class) return null;
 
@@ -116,7 +117,8 @@ export default class DocsCommand extends Command {
 			if (found) return found;
 		}
 
-		let classSuffix: string = (_class.extends ? ` extends **[${_class.extends[0]}](${this._getLink(_class.extends[0], '')})**` : '')
+		const classSuffix: string =
+			(_class.extends ? ` extends **[${_class.extends[0]}](${this._getLink(_class.extends[0], '')})**` : '')
 			+ (_class.implements ? ` implements **${_class.implements[0]}**` : '')
 			+ (_class.abstract ? ' (Abstract) ' : '');
 
@@ -147,7 +149,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _findInterface(msg: Message, name: string, prop?: string): Promise<Message | Message[]> {
-		const _interface = this._interfaces[this._version].find((_tempInterface: _Interface) => _tempInterface.name.toUpperCase() === name);
+		const _interface: _Interface = this._interfaces[this._version]
+			.find((_tempInterface: _Interface) => _tempInterface.name.toUpperCase() === name);
 
 		if (!_interface) return null;
 
@@ -180,7 +183,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _findTypedef(msg: Message, name: string, prop: string): Promise<Message | Message[]> {
-		const typedef = this._typedefs[this._version].find((_typedef: Typedef) => _typedef.name.toUpperCase() === name);
+		const typedef: Typedef = this._typedefs[this._version]
+			.find((_typedef: Typedef) => _typedef.name.toUpperCase() === name);
 
 		if (!typedef) return null;
 
@@ -212,6 +216,7 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
+	// tslint:disable-next-line:max-line-length
 	private _findProp(msg: Message, prop: string, main: _Class | _Interface | Typedef, linkProp: boolean): Promise<Message | Message[]> {
 		const property: Prop = main.props && main.props.find((_prop: Prop) => _prop.name.toUpperCase() === prop);
 
@@ -244,6 +249,7 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
+	// tslint:disable-next-line:max-line-length
 	private _findMethod(msg: Message, prop: string, main: _Class | _Interface, link: boolean = true): Promise<Message | Message[]> {
 		const method: Method = main.methods && main.methods.find((_method: Method) => _method.name.toUpperCase() === prop);
 
@@ -253,12 +259,16 @@ export default class DocsCommand extends Command {
 			? `[${main.name}.${method.name}](${this._getLink(main.name, (method.scope ? `s-` : '') + method.name)})`
 			: `${main.name}.${method.name}`;
 
+		const example: string = method.examples && method.examples[0]
+			? `\n\n**Example:**\`\`\`js\n${method.examples[0]}\`\`\``
+			: '';
+
 		const embed: RichEmbed = this._embedSample
 			.setDescription(stripIndents`
 			${method.scope ? ` (Static) ` : ''}**${title}**(${this._formatParams(method.params, Format.title)})
 			${method.deprecated ? 'This method is deprecated!\n' : ''}
 			${this._formatParams(method.params, Format.method)}
-			${this._formatDescription(method.description)}${method.examples && method.examples[0] ? `\n\n**Example:**\`\`\`js\n${method.examples[0]}\`\`\`` : ''}
+			${this._formatDescription(method.description)}${example}
 
 			**Returns:** ${this._formatType(method.returns)}
 			`);
@@ -331,8 +341,10 @@ export default class DocsCommand extends Command {
 		}
 
 		for (const type of types) {
-			for (const typePart of type) for (const typeSnippet of typePart) {
-				formatted += typeSnippet;
+			for (const typePart of type) {
+				for (const typeSnippet of typePart) {
+					formatted += typeSnippet;
+				}
 			}
 			formatted += ' | ';
 		}
@@ -359,7 +371,8 @@ export default class DocsCommand extends Command {
 		if ([Format.event, Format.method].includes(format)) {
 			if (format === Format.event && params.length - 1) formatted = '\n';
 			for (const param of params) {
-				formatted += `\`${param.name}${format === Format.method && param.optional ? '?' : ''}: ${this._formatType(param.type).slice(1)}`;
+				const optionalMarker: string = format === Format.method && param.optional ? '?' : '';
+				formatted += `\`${param.name}${optionalMarker}: ${this._formatType(param.type).slice(1)}`;
 
 				if (format === Format.method && param.default) formatted += `\nDefault value: ${param.default}`;
 				formatted += `\n${param.description}\n\n`;
@@ -397,10 +410,16 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _formatDescription(description: string): string {
-		const object: { [index: string]: string } = { '<warn>': '⚠ ', '<info>': 'ℹ ', '<\/warn>': ' ⚠', '<\/info>': ' ℹ', '\n': '\u200b' };
+		const object: { [index: string]: string } = {
+			'\n': '\u200b',
+			'<\/info>': ' ℹ',
+			'<\/warn>': ' ⚠',
+			'<info>': 'ℹ ',
+			'<warn>': '⚠ ',
+		};
 
 		return description.replace(/(<\/?warn>|<\/?info>|\n)|{@link (.+)}/g, (substring: string, ...match: string[]) =>
-			object[match[0]] || this._formatLink(...match)
+			object[match[0]] || this._formatLink(...match),
 		);
 	}
 
@@ -411,6 +430,7 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _formatLink(...input: string[]): string {
+		// tslint:disable-next-line:prefer-const tslint pls
 		let [_class, _prop = '']: string[] = (input[0] || input[1]).split('#');
 		if (this._typedefs[this._version].some((typedef: Typedef) => typedef.name === _class)) _prop = undefined;
 
@@ -425,7 +445,9 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	private _getLink(_class: string, prop?: string): string {
-		return `https://discord.js.org/#/docs/main/${this._version}/${typeof prop === 'undefined' ? 'typedef' : 'class'}/${_class + (prop ? `?scrollTo=${prop}` : '')}`;
+		const type: string = typeof prop === 'undefined' ? 'typedef' : 'class';
+		const maybeScrollTo: string = prop ? `?scrollTo=${prop}` : '';
+		return `https://discord.js.org/#/docs/main/${this._version}/${type}/${_class + maybeScrollTo}`;
 	}
 
 	/**

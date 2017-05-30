@@ -10,8 +10,8 @@ export default class TranslateCommand extends Command {
 
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'TRANSLATE',
 			aliases: ['T'],
+			name: 'TRANSLATE',
 		});
 		this._languages = new RegExp(`-(${[
 			'af', 'ar', 'bn', 'bg', 'zh', 'zh\\-cn', 'zh\\-tw',

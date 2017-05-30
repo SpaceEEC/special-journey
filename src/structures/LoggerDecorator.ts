@@ -3,6 +3,6 @@
 
 import { Logger } from './Logger';
 
-export function logger<T extends { new (...args: any[]): {} }>(constructor: T) {
+export function logger<T extends { new (...args: any[]): {} }>(constructor: T): void {
 	Object.defineProperty(constructor.prototype, 'logger', { value: Logger.instance });
 }

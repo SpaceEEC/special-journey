@@ -8,8 +8,8 @@ import { Util } from '../util';
 export default class SnowflakeCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'SNOWFLAKE',
 			aliases: ['SNOW'],
+			name: 'SNOWFLAKE',
 		});
 	}
 

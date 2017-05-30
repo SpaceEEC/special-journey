@@ -29,7 +29,9 @@ export class Command {
 	protected readonly logger: Logger;
 
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
-		if (!(client instanceof SelfbotClient)) throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
+		if (!(client instanceof SelfbotClient)) {
+			throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
+		}
 		this.client = client;
 		this.name = options.name;
 		this.aliases = options.aliases || [];
@@ -43,7 +45,7 @@ export class Command {
 	 * @returns {Promise<Message | Message[]>}
 	 */
 	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]> {
-		// tslint:disable-next-line:ter-max-len
+		// tslint:disable-next-line:max-line-length
 		throw new Error(`${this.name} (${this.constructor.name}) somehow failed to implement a run() method, what a great achievement!`);
 	}
 }

@@ -20,8 +20,8 @@ export default class EvalCommand extends Command {
 
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'EVAL',
 			aliases: ['ASYNC', 'AWAIT', 'SILE'],
+			name: 'EVAL',
 		});
 		this._inspect = 0;
 		this._log = false;
@@ -30,7 +30,7 @@ export default class EvalCommand extends Command {
 	}
 
 	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]> {
-		const startTime = process.hrtime();
+		const startTime: [number, number] = process.hrtime();
 
 		let code: string = args.join(' ');
 		if (code.includes('`E-ROHR`')) code = code.slice(0, code.indexOf('`E-ROHR`')).trim();
@@ -38,8 +38,10 @@ export default class EvalCommand extends Command {
 
 		try {
 			let evaled: any;
-			if (info.alias === 'async') evaled = Promise.resolve(eval(`(async()=>{${code}})();`));
-			else evaled = Promise.resolve(eval(code));
+
+			evaled = info.alias === 'async'
+				? Promise.resolve(eval(`(async()=>{${code}})();`))
+				: evaled = Promise.resolve(eval(code));
 
 			if (info.alias === 'sile') return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}`);
 			if (info.alias !== 'await') evaled = await evaled;
@@ -58,9 +60,13 @@ export default class EvalCommand extends Command {
 			\`\`\`js\n${Util.escapeMarkdown(evaled, true)}\n\`\`\`
 			Ausführungszeitraumslänge: \`${process.hrtime(startTime)} \`ms`);
 		} catch (err) {
-			if (!err) return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\nE-Rohr, but no error.`)
-				.catch(() => null);
+			if (!err) {
+				return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\nE-Rohr, but no error.`)
+					.catch(() => null);
+			}
+
 			if (this._log) this.logger.error('evaled', err);
+
 			msg.edit(stripIndents`
 			\u200b${this.client.config.prefix + info.alias} ${code}
 

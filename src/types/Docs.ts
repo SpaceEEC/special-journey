@@ -39,9 +39,9 @@ export type Custom = {
 				content: string;
 				/** Relative file path to the page */
 				path: string;
-			}
-		}
-	}
+			};
+		};
+	};
 };
 
 /** Represents a class of discord.js */

@@ -10,14 +10,14 @@ export class EventCounter {
 		this.reset();
 	}
 
-	public reset() {
+	public reset(): void {
 		this.events = {};
 		this.frequency = 0;
 		this.total = 0;
 		this.start = null;
 	}
 
-	public trigger(event: string) {
+	public trigger(event: string): void {
 		if (!this.events[event]) this.events[event] = 0;
 		this.events[event]++;
 

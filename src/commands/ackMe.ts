@@ -1,5 +1,5 @@
 import { oneLine } from 'common-tags';
-import { Message } from 'discord.js';
+import { Guild, Message } from 'discord.js';
 
 import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
@@ -9,8 +9,8 @@ export default class AliveCommand extends Command {
 
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'ACKME',
 			aliases: ['ACK'],
+			name: 'ACKME',
 		});
 		this._ackMe = client.data.get<Set<string>>('ackMe');
 	}
@@ -47,7 +47,7 @@ export default class AliveCommand extends Command {
 			const guilds: string[] = [];
 
 			for (const id of this._ackMe.values()) {
-				const guild = this.client.guilds.get(id);
+				const guild: Guild = this.client.guilds.get(id);
 
 				if (!guild) {
 					this._ackMe.delete(id);
@@ -59,7 +59,7 @@ export default class AliveCommand extends Command {
 
 			return msg.edit(`Guilds to ack:\n${guilds.join('\n')}`);
 		} else if (this.client.guilds.has(args[0])) {
-			const guild = this.client.guilds.get(args[0]);
+			const guild: Guild = this.client.guilds.get(args[0]);
 
 			return msg.edit(oneLine`
 			\u200b${this.client.config.prefix + alias}

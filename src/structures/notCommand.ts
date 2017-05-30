@@ -22,7 +22,7 @@ export class NotCommand {
 	 * @returns {Promise<void>}
 	 */
 	public async run(msg: Message, oldMsg: Message): Promise<void> {
-		// tslint:disable-next-line:ter-max-len
+		// tslint:disable-next-line:max-line-length
 		throw new Error(`${__filename} (${this.constructor.name}) somehow failed to implement a run() method, what a great achievement!`);
 	}
 }

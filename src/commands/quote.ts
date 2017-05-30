@@ -1,5 +1,5 @@
 import { oneLineTrim } from 'common-tags';
-import { Message, RichEmbed, TextChannel } from 'discord.js';
+import { Channel, Message, MessageAttachment, MessageEmbed, RichEmbed, TextChannel } from 'discord.js';
 import { join } from 'path';
 
 import { SelfbotClient } from '../structures/client';
@@ -12,8 +12,8 @@ const { homepage }: { homepage: string } = require(join(__dirname, '..', '..', '
 export default class QuoteCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'QUOTE',
 			aliases: ['Q'],
+			name: 'QUOTE',
 		});
 	}
 
@@ -43,7 +43,7 @@ export default class QuoteCommand extends Command {
 					break;
 				}
 
-				const add = await channel.fetchMessage(id);
+				const add: Message = await channel.fetchMessage(id);
 				add.member = channel.guild && await channel.guild.fetchMember(add.author).catch(() => null);
 				embed.addField(`${add.member
 					? add.member.displayName
@@ -52,12 +52,12 @@ export default class QuoteCommand extends Command {
 			}
 
 			if (!embed.fields.length) {
-				const fetchedEmbed = fetched.embeds[0];
+				const fetchedEmbed: MessageEmbed = fetched.embeds[0];
 				if (fetchedEmbed && fetchedEmbed.thumbnail) {
 					embed.setDescription(embed.description.replace(fetchedEmbed.thumbnail.url, ''));
 					embed.setImage(fetchedEmbed.thumbnail.url);
 				} else {
-					const attachment = fetched.attachments.first();
+					const attachment: MessageAttachment = fetched.attachments.first();
 					if (attachment && attachment.width) {
 						embed.setImage(attachment.url);
 					}
@@ -78,7 +78,7 @@ export default class QuoteCommand extends Command {
 	 * @private
 	 */
 	private _getColor(args: string[]): number {
-		let color;
+		let color: number;
 		try {
 			color = (this.client as any).resolver.resolveColor(args[0].toUpperCase());
 			args.shift();
@@ -94,7 +94,7 @@ export default class QuoteCommand extends Command {
 	 */
 	private _getChannel(args: string[]): TextChannel {
 		if (args[0] === '-c') {
-			const channel = this.client.channels.get(args[1]);
+			const channel: Channel = this.client.channels.get(args[1]);
 			args = args.splice(0, 2);
 			return channel as TextChannel;
 		} else { return null; }

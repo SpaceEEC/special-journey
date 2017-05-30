@@ -10,8 +10,8 @@ export default class TokenCommand extends Command {
 
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'TOKEN',
 			aliases: ['ID'],
+			name: 'TOKEN',
 		});
 		this._regex = new RegExp(/\D/, 'g');
 	}
@@ -24,7 +24,7 @@ export default class TokenCommand extends Command {
 				url = 'https://discordapp.com/api/v6/users/@me';
 				auth = args.join(' ');
 			} else {
-				let id = Buffer.from(args[0].split('.')[0], 'base64').toString();
+				let id: string = Buffer.from(args[0].split('.')[0], 'base64').toString();
 				if (this._regex.test(id)) {
 					if (this._regex.test(args[0])) throw String('Not even remotely a snowflake.');
 					else id = args[0];

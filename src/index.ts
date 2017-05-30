@@ -5,5 +5,5 @@ const client: SelfbotClient = new SelfbotClient();
 client.login(client.config.token);
 
 process.on('unhandledRejection', (err: any) =>
-	Logger.instance.error('unhandledRejection:', err)
+	Logger.instance.error('unhandledRejection:', err),
 );

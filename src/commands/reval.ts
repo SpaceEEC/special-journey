@@ -7,8 +7,8 @@ import { Command, CommandInformations } from '../structures/command';
 export default class RevalCommand extends Command {
 	public constructor(client: SelfbotClient) {
 		super(client, {
-			name: 'REVAL',
 			aliases: ['RAWAIT', 'RASYNC'],
+			name: 'REVAL',
 		});
 	}
 
