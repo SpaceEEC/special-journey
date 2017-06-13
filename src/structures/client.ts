@@ -127,8 +127,8 @@ export class SelfbotClient extends Client {
 		delete require.cache[require.resolve(join(__dirname, '..', 'commands', filename))];
 		const commandClass: typeof Command = require(join(__dirname, '..', 'commands', filename)).default;
 
-		if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
-		if (!(commandClass.prototype instanceof Command)) throw new Error(`${file} is not instanceof Command!`);
+		if (!commandClass) throw new Error(`${filename}'s default export is falsy!`);
+		if (!(commandClass.prototype instanceof Command)) throw new Error(`${filename} is not instanceof Command!`);
 
 		const command: Command = new commandClass(this);
 
@@ -183,8 +183,8 @@ export class SelfbotClient extends Client {
 
 			const notCommandClass: typeof NotCommand = require(join(__dirname, '..', 'notCommands', file)).default;
 
-			if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
-			if (!(commandClass.prototype instanceof NotCommand)) throw new Error(`${file} is not instanceof NotCommand!`);
+			if (!notCommandClass) throw new Error(`${file}'s default export is falsy!`);
+			if (!(notCommandClass.prototype instanceof NotCommand)) throw new Error(`${file} is not instanceof NotCommand!`);
 
 			const notCommand: NotCommand = new notCommandClass(this);
 
