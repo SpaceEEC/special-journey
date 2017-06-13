@@ -60,7 +60,7 @@ export class SelfbotClient extends Client {
 				(this as any).ws.connection.on('close', (event: any) =>
 					this.logger.warn('disconnect', '', event.code, ': ', event.reason),
 				),
-			)
+		)
 			.on('reconnecting', () => this.logger.warn('Reconnecting'))
 			.on('disconnect', (event: any) => process.exit(200))
 			.on('message', this.handleMessage)
@@ -126,6 +126,10 @@ export class SelfbotClient extends Client {
 		// aliases however should be working fine
 		delete require.cache[require.resolve(join(__dirname, '..', 'commands', filename))];
 		const commandClass: typeof Command = require(join(__dirname, '..', 'commands', filename)).default;
+
+		if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
+		if (!(commandClass.prototype instanceof Command)) throw new Error(`${file} is not instanceof Command!`);
+
 		const command: Command = new commandClass(this);
 
 		if (this.commands.has(command.name)) this.commands.delete(command.name);
@@ -152,6 +156,10 @@ export class SelfbotClient extends Client {
 			if (extname(file) !== '.js') continue;
 
 			const commandClass: typeof Command = require(join(__dirname, '..', 'commands', file)).default;
+
+			if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
+			if (!(commandClass.prototype instanceof Command)) throw new Error(`${file} is not instanceof Command!`);
+
 			const command: Command = new commandClass(this);
 
 			this._validateCommandOptions(command);
@@ -174,6 +182,10 @@ export class SelfbotClient extends Client {
 			if (extname(file) !== '.js') continue;
 
 			const notCommandClass: typeof NotCommand = require(join(__dirname, '..', 'notCommands', file)).default;
+
+			if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
+			if (!(commandClass.prototype instanceof NotCommand)) throw new Error(`${file} is not instanceof NotCommand!`);
+
 			const notCommand: NotCommand = new notCommandClass(this);
 
 			this.notCommands.add(notCommand);
