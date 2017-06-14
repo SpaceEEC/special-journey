@@ -70,7 +70,7 @@ export class SelfbotClient extends Client {
 			.on('warn', this.logger.warn)
 			.on('error', this.logger.error)
 			.on('resume', (replayed: number) => this.logger.info('Resumed. Replayed events:', replayed))
-			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t))
+			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t || packet.op))
 			.on('debug', (message: string) => {
 				if (message.startsWith('[ws] [connection] Heartbeat acknowledged,')
 					|| message === '[ws] [connection] Sending a heartbeat') {
