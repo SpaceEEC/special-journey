@@ -3,13 +3,24 @@ import { Message } from 'discord.js';
 import { SelfbotClient } from './client';
 import { Logger } from './logger';
 
-/** Needs a better name. */
+/**
+ * NotCommand, will be run on every message that is not a command.
+ * Needs a better name.
+ */
 export class NotCommand {
-	/** The Client that instantiated this "NotCommand" */
+	/**
+	 * The Client that instantiated this "NotCommand"
+	 */
 	protected readonly client: SelfbotClient;
-	/** Logger of this "NotCommand" */
+	/**
+	 * Logger of this "NotCommand"
+	 */
 	protected readonly logger: Logger;
 
+	/**
+	 * Instantiates a new NotCommand
+	 * @param {SelfbotClient} client
+	 */
 	public constructor(client: SelfbotClient) {
 		if (!(client instanceof SelfbotClient)) throw new Error(`${this.constructor.name}'s client is not a SelfbotClient!`);
 		this.client = client;
