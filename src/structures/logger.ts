@@ -78,6 +78,7 @@ export class Logger {
 
 	/**
 	 * Instantiates a new logger
+	 * @private
 	 */
 	private constructor() {
 		if (Logger._instance) {
