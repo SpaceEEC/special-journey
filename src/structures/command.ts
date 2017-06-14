@@ -3,31 +3,58 @@ import { Message } from 'discord.js';
 import { SelfbotClient } from './client';
 import { Logger } from './logger';
 
-/** Options for this command. */
+/**
+ * Options for this command.
+ */
 export type CommandOptions = {
-	/** The name of this command */
+	/**
+	 * The name of this command
+	 */
 	name: string;
-	/** The aliases of this command, if any */
+	/**
+	 * The aliases of this command, if any
+	 */
 	aliases?: string[];
 };
 
-/** Informations to pass to a command's execution. */
+/**
+ * Informations to pass to a command's execution.
+ */
 export type CommandInformations = {
-	/** The command, or alias, which triggered this command's execution */
+	/**
+	 * The command, or alias, which triggered this command's execution
+	 */
 	alias: string;
 };
 
-/** Represents a command. */
+/**
+ * Represents a command.
+ */
 export class Command {
-	/** The name of this command */
+	/**
+	 * Name of this command
+	 */
 	public readonly name: string;
-	/** The aliases for this command, if any */
+	/**
+	 * Aliases for this command, if any
+	 */
 	public readonly aliases: string[];
-	/** The Client that instantiated this command */
+	/**
+	 * Client that instantiated this command
+	 */
 	protected readonly client: SelfbotClient;
-	/** The logger for this command */
+	/**
+	 * Logger singleton instance.
+	 * Only present when using the @logger decorator.
+	 */
 	protected readonly logger: Logger;
 
+	/**
+	 * Intended to be used while deriving.
+	 * Paremterless constructing is only to be used while (re)loading commands internally.
+	 * @param {SelfbotClient} client
+	 * @param {CommandOptions} options
+	 */
 	public constructor(client: SelfbotClient, options?: CommandOptions) {
 		if (!(client instanceof SelfbotClient)) {
 			throw new Error(`${options.name} (${this.constructor.name})'s client is not a SelfbotClient!`);
