@@ -7,6 +7,7 @@ import { Command } from './command';
 import { DataProvider } from './dataProvider';
 import { EventCounter } from './EventCounter';
 import { Logger } from './logger';
+import { logger } from './LoggerDecorator';
 import { NotCommand } from './notCommand';
 
 type Config = {
@@ -19,21 +20,38 @@ type Config = {
 	botChannelID: string;
 };
 
-/** Represents a regular discord client with some stuff added to it. */
+/**
+ * Represents a regular discord client with some stuff added to it.
+ */
+@logger
 export class SelfbotClient extends Client {
-	/** The config of the client */
+	/**
+	 * The config of the client
+	 */
 	public readonly config: Config;
-	/** The Dataprovider of the client */
+	/**
+	 * The Dataprovider of the client
+	 */
 	public readonly data: DataProvider;
-	/** The EventCounter of the client */
+	/**
+	 * The EventCounter of the client
+	 */
 	public readonly eventCounter: EventCounter;
-	/** Collection of all registered aliases, mapped by alias to their command names */
+	/**
+	 * Collection of all registered aliases, mapped by alias to their command names
+	 */
 	public readonly aliases: Collection<string, string>;
-	/** Collection of all registered commands, mapped by their names */
+	/**
+	 * Collection of all registered commands, mapped by their names
+	 */
 	public readonly commands: Collection<string, Command>;
-	/** Set of "NotCommand"s */
+	/**
+	 * Set of "NotCommand"s
+	 */
 	public readonly notCommands: Set<NotCommand>;
-	/* The logger of the client */
+	/**
+	 * Logger singleton instance
+	 */
 	private readonly logger: Logger;
 
 	public constructor(options?: ClientOptions) {
@@ -45,32 +63,42 @@ export class SelfbotClient extends Client {
 		this.data = new DataProvider();
 
 		this.eventCounter = new EventCounter();
-		this.logger = Logger.instance;
 		this.aliases = new Collection<string, string>();
 		this.commands = new Collection<string, Command>();
 		this.notCommands = new Set<NotCommand>();
+
 		this._loadCommands();
 		this._loadNotCommands();
 
 		this.logger.setLogLevel(Logger.DEBUG);
 
-		/** Register events and logging in */
+		/* Register events */
 		this.on('ready', () => this.logger.info(`[ready] Logged in as ${this.user.tag} (${this.user.id})`))
+
 			.once('ready', () =>
 				(this as any).ws.connection.on('close', (event: any) =>
 					this.logger.warn('disconnect', '', event.code, ': ', event.reason),
 				),
 		)
+
 			.on('reconnecting', () => this.logger.warn('Reconnecting'))
+
 			.on('disconnect', (event: any) => process.exit(200))
+
 			.on('message', this.handleMessage)
+
 			.on('messageUpdate', (oldMessage: Message, newMessage: Message) => {
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
 			})
+
 			.on('warn', this.logger.warn.bind(this.logger))
+
 			.on('error', this.logger.error.bind(this.logger))
+
 			.on('resume', (replayed: number) => this.logger.info('Resumed. Replayed events:', replayed))
+
 			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t || packet.op))
+
 			.on('debug', (message: string) => {
 				if (message.startsWith('[ws] [connection] Heartbeat acknowledged,')
 					|| message === '[ws] [connection] Sending a heartbeat') {
@@ -99,8 +127,7 @@ export class SelfbotClient extends Client {
 		try {
 			await command.run(msg, params, { alias: name });
 		} catch (err) {
-			this.logger
-				.error(`The following error occured while running ${name} - (${command.constructor.name})\n`, err);
+			this.logger.error(`The following error occured while running ${name} - (${command.constructor.name})\n`, err);
 		}
 	}
 
