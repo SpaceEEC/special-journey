@@ -9,10 +9,19 @@ type SemiStatic = {
 	logIt: string;
 };
 
+/**
+ * Data provider to be able to access data from everywhere.
+ */
 export class DataProvider {
-	/** Map to cache stuff and keep references accross files */
+	/**
+	 * Map to cache stuff and keep references accross files
+	 */
 	private readonly _db: Map<string, any>;
 
+	/**
+	 * Instantiates a new DataProvider
+	 * (More than one is not necessary)
+	 */
 	public constructor() {
 		this._db = new Map<string, any>();
 		const db: SemiStatic = require(join(__dirname, '..', '..', 'semiStatic'));
@@ -39,5 +48,4 @@ export class DataProvider {
 	public set(key: SemiStaticKey, value: any): void {
 		this._db.set(key, value);
 	}
-
 }
