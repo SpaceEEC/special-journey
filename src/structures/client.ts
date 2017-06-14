@@ -67,8 +67,8 @@ export class SelfbotClient extends Client {
 			.on('messageUpdate', (oldMessage: Message, newMessage: Message) => {
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
 			})
-			.on('warn', this.logger.warn)
-			.on('error', this.logger.error)
+			.on('warn', this.logger.warn.bind(this.logger))
+			.on('error', this.logger.error.bind(this.logger))
 			.on('resume', (replayed: number) => this.logger.info('Resumed. Replayed events:', replayed))
 			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t || packet.op))
 			.on('debug', (message: string) => {
