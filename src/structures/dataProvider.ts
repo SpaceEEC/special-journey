@@ -1,6 +1,4 @@
 // TODO: Make that whole thing better.
-import { join } from 'path';
-
 type SemiStaticKey = 'ackMe' | 'logIt';
 
 type SemiStatic = {
@@ -24,7 +22,7 @@ export class DataProvider {
 	 */
 	public constructor() {
 		this._db = new Map<string, any>();
-		const db: SemiStatic = require(join(__dirname, '..', '..', 'semiStatic'));
+		const db: SemiStatic = require('../../semiStatic');
 
 		this.set('ackMe', new Set(db.ackMe));
 		this.set('logIt', db.logIt);

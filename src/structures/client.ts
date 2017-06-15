@@ -1,6 +1,6 @@
 import { oneLine } from 'common-tags';
 import { Client, ClientOptions, Collection, Message } from 'discord.js';
-import { readdirSync } from 'fs';
+import { readdir } from 'fs';
 import { extname, join } from 'path';
 
 import { Command } from './command';
@@ -54,12 +54,14 @@ export class SelfbotClient extends Client {
 	 */
 	private readonly logger: Logger;
 
+	/**
+	 * Instantiates a new SelfbotClient.
+	 * @param {ClientOptions} options Options for a client.
+	 */
 	public constructor(options?: ClientOptions) {
 		super(options);
 
-		// loading config and data before everything else
-		// is blocking
-		this.config = require(join(__dirname, '..', '..', 'config'));
+		this.config = require('../../config');
 		this.data = new DataProvider();
 
 		this.eventCounter = new EventCounter();
@@ -100,7 +102,8 @@ export class SelfbotClient extends Client {
 			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t || packet.op))
 
 			.on('debug', (message: string) => {
-				if (message.startsWith('[ws] [connection] Heartbeat acknowledged,')
+				if (message.startsWith('Authenticated using token')
+					|| message.startsWith('[ws] [connection] Heartbeat acknowledged,')
 					|| message === '[ws] [connection] Sending a heartbeat') {
 					return;
 				}
@@ -135,11 +138,11 @@ export class SelfbotClient extends Client {
 	 * Handles a not command, e.g. every message that is not a command.
 	 * @param {Message} msg The incomming message
 	 * @param {boolean} edit Whether the message was edited
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
-	public async handleNotCommand(msg: Message, oldMsg: Message): Promise<void> {
+	public handleNotCommand(msg: Message, oldMsg: Message): void {
 		for (const notCommand of this.notCommands) {
-			await notCommand.run(msg, oldMsg);
+			notCommand.run(msg, oldMsg);
 		}
 	}
 
@@ -173,11 +176,17 @@ export class SelfbotClient extends Client {
 
 	/**
 	 * Loads all commands from the command dir.
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 * @private
 	 */
-	private _loadCommands(): void {
-		const files: string[] = readdirSync(join(__dirname, '..', 'commands'));
+	private async _loadCommands(): Promise<void> {
+		const files: string[] = await
+			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) => {
+				readdir(join(__dirname, '..', 'commands'), ((err: NodeJS.ErrnoException, read: string[]) => {
+					if (err) reject(err);
+					else resolve(read);
+				}));
+			});
 
 		for (const file of files) {
 			if (extname(file) !== '.js') continue;
@@ -199,11 +208,17 @@ export class SelfbotClient extends Client {
 
 	/**
 	 * Loads all NotCommands from their directory.
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 * @private
 	 */
-	private _loadNotCommands(): void {
-		const files: string[] = readdirSync(join(__dirname, '..', 'notCommands'));
+	private async _loadNotCommands(): Promise<void> {
+		const files: string[] = await
+			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) => {
+				readdir(join(__dirname, '..', 'notCommands'), ((err: NodeJS.ErrnoException, read: string[]) => {
+					if (err) reject(err);
+					else resolve(read);
+				}));
+			});
 
 		for (const file of files) {
 			if (extname(file) !== '.js') continue;
