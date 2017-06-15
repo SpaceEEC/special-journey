@@ -19,7 +19,7 @@ export default class SnowflakeCommand extends Command {
 		return msg.edit(stripIndents`
 		\u200b${msg.content}
 		\`\`\`LDIF
-		Schneeflöckchenkreierungsdatum: ${date} [(CET)]
+		Schneeflöckchenkreierungsdatum: ${date} [CET]
 		\`\`\`
 		`);
 	}
