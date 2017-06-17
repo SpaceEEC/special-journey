@@ -37,6 +37,6 @@
     "common-tags": "^1.4.0"
   },
   "peerDependencies": {
-        "discord.js": "github:hydrabolt/discord.js || github:hydrabolt/discord.js#11.1-dev"
+    "discord.js": "github:hydrabolt/discord.js || github:hydrabolt/discord.js#11.1-dev"
   }
 }
