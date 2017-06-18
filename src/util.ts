@@ -1,6 +1,6 @@
-import { oneLine } from 'common-tags';
-
-/** Util class holding all sorts of methods. */
+/**
+ * Util class holding all sorts of useful methods.
+ */
 export class Util {
 
 	/**
@@ -19,9 +19,16 @@ export class Util {
 	 * @returns {string} Timestring in the format DD.MM.YYYY HH:mm:ss
 	 */
 	public static timeString(date?: Date | string): string {
+		// `new Date(undefined)` <- Invalid Date, but `new Date()` <- fine
+		// javascript, you are strange
 		const d: Date = date ? date instanceof Date ? date : new Date(date) : new Date();
-		return oneLine`
-		${Util.forceLength(d.getDate())}.${Util.forceLength(d.getMonth() + 1)}.${Util.forceLength(d.getFullYear())}
-		${Util.forceLength(d.getHours())}:${Util.forceLength(d.getMinutes())}:${Util.forceLength(d.getSeconds())}`;
+		return [
+			Util.forceLength(d.getDate()),
+			'.', Util.forceLength(d.getMonth() + 1),
+			'.', Util.forceLength(d.getFullYear()),
+			' ', Util.forceLength(d.getHours()),
+			':', Util.forceLength(d.getMinutes()),
+			':', Util.forceLength(d.getSeconds()),
+		].join('');
 	}
 }
