@@ -21,7 +21,7 @@ export default class TokenCommand extends Command {
 		let auth: string;
 		try {
 			if (info.alias === 'token') {
-				url = 'https://discordapp.com/api/v6/users/@me';
+				url = 'https://discordapp.com/api/v7/users/@me';
 				auth = args.join(' ');
 			} else {
 				let id: string = Buffer.from(args[0].split('.')[0], 'base64').toString();
@@ -29,7 +29,7 @@ export default class TokenCommand extends Command {
 					if (this._regex.test(args[0])) throw String('Not even remotely a snowflake.');
 					else id = args[0];
 				}
-				url = `https://discordapp.com/api/v6/users/${id}`;
+				url = `https://discordapp.com/api/v7/users/${id}`;
 				auth = `Bot ${this.client.config.botToken}`;
 			}
 
