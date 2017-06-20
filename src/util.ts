@@ -25,7 +25,7 @@ export class Util {
 		return [
 			Util.forceLength(d.getDate()),
 			'.', Util.forceLength(d.getMonth() + 1),
-			'.', Util.forceLength(d.getFullYear()),
+			'.', d.getFullYear(),
 			' ', Util.forceLength(d.getHours()),
 			':', Util.forceLength(d.getMinutes()),
 			':', Util.forceLength(d.getSeconds()),
