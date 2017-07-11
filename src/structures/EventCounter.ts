@@ -4,7 +4,8 @@ import { stripIndents } from 'common-tags';
 /**
  * EventCounter class for the statisticsTM.
  */
-export class EventCounter {
+export class EventCounter
+{
 	/**
 	 * Stored event names with a count
 	 */
@@ -29,7 +30,8 @@ export class EventCounter {
 	/**
 	 * Instantiates a new EventCounter
 	 */
-	public constructor() {
+	public constructor()
+	{
 		this.reset();
 	}
 
@@ -37,7 +39,8 @@ export class EventCounter {
 	 * Resets the EventCounter's stats
 	 * @returns {void}
 	 */
-	public reset(): void {
+	public reset(): void
+	{
 		this.events = {};
 		this.ops = {};
 		this.frequency = 0;
@@ -50,11 +53,14 @@ export class EventCounter {
 	 * @param {string|number} event The event name or OP code
 	 * @return {void}
 	 */
-	public trigger(event: string | number): void {
-		if (typeof event === 'string') {
+	public trigger(event: string | number): void
+	{
+		if (typeof event === 'string')
+		{
 			if (!this.events[event]) this.events[event] = 0;
 			++this.events[event];
-		} else {
+		} else
+		{
 			if (!this.ops[event]) this.ops[event] = 0;
 			++this.ops[event];
 		}
@@ -67,7 +73,8 @@ export class EventCounter {
 	 * Custom inspector for a nicer display.
 	 * @returns {string}
 	 */
-	public inspect(): string {
+	public inspect(): string
+	{
 		if (Object.keys(this.events).length <= 1) return `EventCounter ${this.events}`;
 		return stripIndents`
 		EventCounter {

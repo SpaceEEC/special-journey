@@ -4,14 +4,19 @@ import { Emoji, Message } from 'discord.js';
 import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 
-export default class AliveCommand extends Command {
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			name: 'EMOJI',
-		});
+export default class AliveCommand extends Command
+{
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				name: 'EMOJI',
+			},
+		);
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
 		const emoji: Emoji = this.client.emojis.get(args[0])
 			|| this.client.emojis.find('name', args[0])
 			|| this.client.emojis.find((value: Emoji) => value.name.toUpperCase() === args[0].toUpperCase());

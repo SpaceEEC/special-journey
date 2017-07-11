@@ -7,7 +7,8 @@ import { Logger } from './logger';
  * NotCommand, will be run on every message that is not a command.
  * Needs a better name.
  */
-export class NotCommand {
+export class NotCommand
+{
 	/**
 	 * The Client that instantiated this "NotCommand"
 	 */
@@ -21,7 +22,8 @@ export class NotCommand {
 	 * Instantiates a new NotCommand
 	 * @param {SelfbotClient} client
 	 */
-	public constructor(client: SelfbotClient) {
+	public constructor(client: SelfbotClient)
+	{
 		if (!(client instanceof SelfbotClient)) throw new Error(`${this.constructor.name}'s client is not a SelfbotClient!`);
 		this.client = client;
 	}
@@ -32,7 +34,8 @@ export class NotCommand {
 	 * @param {Message} oldMsg The old message if updated / edited
 	 * @returns {Promise<void>}
 	 */
-	public async run(msg: Message, oldMsg: Message): Promise<void> {
+	public async run(msg: Message, oldMsg: Message): Promise<void>
+	{
 		// tslint:disable-next-line:max-line-length
 		throw new Error(`${__filename} (${this.constructor.name}) somehow failed to implement a run() method, what a great achievement!`);
 	}

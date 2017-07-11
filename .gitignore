@@ -6,7 +6,7 @@ old/
 _tslint.json
 
 #js build
-build/
+bin/
 
 #config etc
 config.json

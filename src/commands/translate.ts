@@ -5,14 +5,19 @@ import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 import { TranslateResponse } from '../types/SherlockTypes';
 
-export default class TranslateCommand extends Command {
+export default class TranslateCommand extends Command
+{
 	private readonly _languages: RegExp;
 
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['T'],
-			name: 'TRANSLATE',
-		});
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['T'],
+				name: 'TRANSLATE',
+			},
+		);
+
 		this._languages = new RegExp(`-(${[
 			'af', 'ar', 'bn', 'bg', 'zh', 'zh\\-cn', 'zh\\-tw',
 			'cs', 'da', 'nl', 'en', 'tl', 'fi', 'fr', 'de',
@@ -21,7 +26,8 @@ export default class TranslateCommand extends Command {
 			'es', 'sv', 'th', 'tr', 'uk', 'vi', 'cy'].join('|')})\\s`, 'g');
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
 		const [, to]: string[] = this._languages.exec(args.join(' ')) || [];
 		const [, from]: string[] = this._languages.exec(args.join(' ')) || [];
 		const query: string = args.slice(from ? 2 : 1).join(' ');
@@ -36,12 +42,15 @@ export default class TranslateCommand extends Command {
 			.catch((response: any) => response);
 
 		let embed: RichEmbed;
-		if (body.ok) {
+		if (body.ok)
+		{
 			embed = new RichEmbed()
 				.setColor(0xb89bf8)
 				.addField(`From ${body.from.name} (${body.from.local})`, body.query)
 				.addField(`To ${body.to.name} (${body.to.local})`, body.result);
-		} else {
+		}
+		else
+		{
 			embed = new RichEmbed()
 				.setColor(0xff0000)
 				.addField(`Error`, body.error);

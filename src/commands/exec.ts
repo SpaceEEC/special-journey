@@ -12,18 +12,24 @@ type Execution = {
 	stderr: string;
 };
 
-export default class ExecuteCommand extends Command {
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			name: 'EXEC',
-		});
+export default class ExecuteCommand extends Command
+{
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				name: 'EXEC',
+			},
+		);
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
 		await msg.edit(`\u200b${msg.content}\n...`);
 
 		const { error, stdout, stderr }: Execution = await new Promise<Execution>(
-			(resolve: (value: Execution) => void) => {
+			(resolve: (value: Execution) => void) =>
+			{
 				// tslint:disable-next-line:no-shadowed-variable
 				exec(args.join(' '), (error: any, stdout: string, stderr: string) =>
 					resolve({ error, stdout, stderr }));
@@ -33,7 +39,7 @@ export default class ExecuteCommand extends Command {
 				\`EXEC\`${error && error.code ? `\`Error Code: ${error.code}\`` : ''}
 				\`\`\`xl\n${args.join(' ')}\`\`\`${error && error.signal ? `\nSignal received: ${error.signal}` : ''}
 				${stdout ? `\`STDOUT\`\n\`\`\`xl\n${stdout}\`\`\`` : ''}
-				${stderr ? `\`STERR\`\n\`\`\`xl\n${stderr}\`\`\`` : ''}
+				${stderr ? `\`STDERR\`\n\`\`\`xl\n${stderr}\`\`\`` : ''}
 				`);
 	}
 }

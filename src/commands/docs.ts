@@ -5,18 +5,21 @@ import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 import { _Class, _Interface, Docs, Event, Method, Parameter, Prop, Typedef, Types } from '../types/Docs';
 
-enum Format {
+enum Format
+{
 	constructor,
 	title,
 	method,
 	event,
 }
 
-type VersionedObject<T> = {
-	[version: string]: T;
-};
+type VersionedObject<T> =
+	{
+		[version: string]: T;
+	};
 
-export default class DocsCommand extends Command {
+export default class DocsCommand extends Command
+{
 	/** Classes of different versions */
 	private readonly _classes: VersionedObject<_Class[]>;
 	/** Interfaces of different versions */
@@ -28,18 +31,23 @@ export default class DocsCommand extends Command {
 	/** Current selected version of docs to use */
 	private _version: string;
 
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['DOC', 'DOSC'],
-			name: 'DOCS',
-		});
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['DOC', 'DOSC'],
+				name: 'DOCS',
+			},
+		);
 
 		this._versions = ['11.1.0', '11.1-dev', 'master'];
 		this._classes = {};
 		this._interfaces = {};
 		this._typedefs = {};
 
-		for (const version of this._versions) {
+		for (const version of this._versions)
+		{
+			delete require.cache[require.resolve(`../../docs/${version}.json`)];
 			const docs: Docs = require(`../../docs/${version}.json`) as Docs;
 			this._classes[version] = docs.classes;
 			this._interfaces[version] = docs.interfaces;
@@ -49,7 +57,8 @@ export default class DocsCommand extends Command {
 		this._version = '11.1-dev';
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
 		if (!args[0]) return;
 		const [first, second]: string[] = args[0].toUpperCase().split(/\#|\.|\,/g);
 
@@ -68,7 +77,8 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
-	private _changeVersion(msg: Message, first: string, second: string): Promise<Message | Message[]> {
+	private _changeVersion(msg: Message, first: string, second: string): Promise<Message | Message[]>
+	{
 		if (['MASTER', 'STABLE', 'INDEV'].includes(first)) second = first.toLowerCase();
 		else if (!['VERSION', 'VERSIONS'].includes(first)) return null;
 
@@ -83,13 +93,15 @@ export default class DocsCommand extends Command {
 			stable: '11.1.0',
 		};
 
-		if (versions[second] || this._versions.includes(second)) {
+		if (versions[second] || this._versions.includes(second))
+		{
 			this._version = versions[second] || second;
 
 			return msg.edit(`The version of docs to display has been changed to ${this._version}.`);
 		}
 
-		if (second === 'all') {
+		if (second === 'all')
+		{
 			return msg.edit(`Available versions are v\`${this._versions.join('`, `')}\`.`);
 		}
 
@@ -104,13 +116,15 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
-	private _findClass(msg: Message, name: string, prop: string): Promise<Message | Message[]> {
+	private _findClass(msg: Message, name: string, prop: string): Promise<Message | Message[]>
+	{
 		const _class: _Class = this._classes[this._version]
 			.find((_tmpClass: _Class) => _tmpClass.name.toUpperCase() === name);
 
 		if (!_class) return null;
 
-		if (prop) {
+		if (prop)
+		{
 			const found: Promise<Message | Message[]> = this._findProp(msg, prop, _class, true)
 				|| this._findMethod(msg, prop, _class)
 				|| this._findEvent(msg, prop, _class);
@@ -148,13 +162,15 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
-	private _findInterface(msg: Message, name: string, prop?: string): Promise<Message | Message[]> {
+	private _findInterface(msg: Message, name: string, prop?: string): Promise<Message | Message[]>
+	{
 		const _interface: _Interface = this._interfaces[this._version]
 			.find((_tempInterface: _Interface) => _tempInterface.name.toUpperCase() === name);
 
 		if (!_interface) return null;
 
-		if (prop) {
+		if (prop)
+		{
 			const found: Promise<Message | Message[]> = this._findProp(msg, prop, _interface, false)
 				|| this._findMethod(msg, prop, _interface, false);
 			if (found) return found;
@@ -182,13 +198,15 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<Message|Message[]>}
 	 * @private
 	 */
-	private _findTypedef(msg: Message, name: string, prop: string): Promise<Message | Message[]> {
+	private _findTypedef(msg: Message, name: string, prop: string): Promise<Message | Message[]>
+	{
 		const typedef: Typedef = this._typedefs[this._version]
 			.find((_typedef: Typedef) => _typedef.name.toUpperCase() === name);
 
 		if (!typedef) return null;
 
-		if (prop && typedef.props && typedef.props.length) {
+		if (prop && typedef.props && typedef.props.length)
+		{
 			const found: Promise<Message | Message[]> = this._findProp(msg, prop, typedef, undefined);
 			if (found) return found;
 		}
@@ -217,7 +235,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	// tslint:disable-next-line:max-line-length
-	private _findProp(msg: Message, prop: string, main: _Class | _Interface | Typedef, linkProp: boolean): Promise<Message | Message[]> {
+	private _findProp(msg: Message, prop: string, main: _Class | _Interface | Typedef, linkProp: boolean): Promise<Message | Message[]>
+	{
 		const property: Prop = main.props && main.props.find((_prop: Prop) => _prop.name.toUpperCase() === prop);
 
 		if (!property) return null;
@@ -250,7 +269,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 */
 	// tslint:disable-next-line:max-line-length
-	private _findMethod(msg: Message, prop: string, main: _Class | _Interface, link: boolean = true): Promise<Message | Message[]> {
+	private _findMethod(msg: Message, prop: string, main: _Class | _Interface, link: boolean = true): Promise<Message | Message[]>
+	{
 		const method: Method = main.methods && main.methods.find((_method: Method) => _method.name.toUpperCase() === prop);
 
 		if (!method) return null;
@@ -286,7 +306,8 @@ export default class DocsCommand extends Command {
 	 * @returns {?Promise<message|Message[]>}
 	 * @private
 	 */
-	private _findEvent(msg: Message, second: string, main: _Class): Promise<Message | Message[]> {
+	private _findEvent(msg: Message, second: string, main: _Class): Promise<Message | Message[]>
+	{
 		const event: Event = main.events && main.events.find((_event: Event) => _event.name.toUpperCase() === second);
 
 		if (!event) return null;
@@ -311,11 +332,13 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Formattet string
 	 * @private
 	 */
-	private _formatProps(props: Prop[] | Method[] | Event[]): string {
+	private _formatProps(props: Prop[] | Method[] | Event[]): string
+	{
 		if (!props || !props.length) return 'None';
 
 		let formatted: string = '';
-		for (const prop of props) {
+		for (const prop of props)
+		{
 			if (prop.access === 'private') continue;
 			formatted += `\`${prop.scope ? `(S) ` : ''}${prop.deprecated ? '(D)' : ''}${prop.name}\`, `;
 		}
@@ -329,20 +352,25 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Formatted string
 	 * @private
 	 */
-	private _formatType(types: Types): string {
+	private _formatType(types: Types): string
+	{
 		if (!types) return 'void';
 
 		let formatted: string = '`';
 		let suffix: string = '`';
-		if (!(types instanceof Array)) {
+		if (!(types instanceof Array))
+		{
 			if (types.nullable) formatted += '?';
 			if (types.description) suffix += `\n${types.description}`;
 			types = types.types;
 		}
 
-		for (const type of types) {
-			for (const typePart of type) {
-				for (const typeSnippet of typePart) {
+		for (const type of types)
+		{
+			for (const typePart of type)
+			{
+				for (const typeSnippet of typePart)
+				{
 					formatted += typeSnippet;
 				}
 			}
@@ -359,8 +387,10 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Formatted string
 	 * @private
 	 */
-	private _formatParams(params: Parameter[], format: Format): string {
-		if (!params || !params.length) {
+	private _formatParams(params: Parameter[], format: Format): string
+	{
+		if (!params || !params.length)
+		{
 			if ([Format.title, Format.method].includes(format)) return '';
 			return 'None';
 		}
@@ -368,9 +398,11 @@ export default class DocsCommand extends Command {
 		let formatted: string = '';
 
 		// events and methods
-		if ([Format.event, Format.method].includes(format)) {
+		if ([Format.event, Format.method].includes(format))
+		{
 			if (format === Format.event && params.length - 1) formatted = '\n';
-			for (const param of params) {
+			for (const param of params)
+			{
 				const optionalMarker: string = format === Format.method && param.optional ? '?' : '';
 				formatted += `\`${param.name}${optionalMarker}: ${this._formatType(param.type).slice(1)}`;
 
@@ -382,14 +414,16 @@ export default class DocsCommand extends Command {
 		}
 
 		// constructor and title
-		for (const param of params) {
+		for (const param of params)
+		{
 			formatted += param.optional
 				? format === Format.constructor
 					? `${param.name}?`
 					: `[${param.name}]`
 				: param.name;
 
-			if (format === Format.constructor) {
+			if (format === Format.constructor)
+			{
 				const length: number = (param.type instanceof Array ? param.type.length : param.type.types.length) - 1;
 				const formattedParams: string = this._formatType(param.type).slice(1, -1);
 				formatted += `: ${length ? `(${formattedParams})` : formattedParams}`;
@@ -409,9 +443,12 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Formatted description
 	 * @private
 	 */
-	private _formatDescription(description: string): string {
+	private _formatDescription(description: string): string
+	{
+		if (!description) return 'No description';
+
 		const object: { [index: string]: string } = {
-			'\n': '\u200b',
+			'\n': '\n',
 			'<\/info>': ' ℹ',
 			'<\/warn>': ' ⚠',
 			'<info>': 'ℹ ',
@@ -429,7 +466,8 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Formatted URL
 	 * @private
 	 */
-	private _formatLink(...input: string[]): string {
+	private _formatLink(...input: string[]): string
+	{
 		// tslint:disable-next-line:prefer-const tslint pls
 		let [_class, _prop = '']: string[] = (input[0] || input[1]).split('#');
 		if (this._typedefs[this._version].some((typedef: Typedef) => typedef.name === _class)) _prop = undefined;
@@ -444,7 +482,8 @@ export default class DocsCommand extends Command {
 	 * @returns {string} Link to the docs
 	 * @private
 	 */
-	private _getLink(_class: string, prop?: string): string {
+	private _getLink(_class: string, prop?: string): string
+	{
 		const type: string = typeof prop === 'undefined' ? 'typedef' : 'class';
 		const maybeScrollTo: string = prop ? `?scrollTo=${prop}` : '';
 		return `https://discord.js.org/#/docs/main/${this._version}/${type}/${_class + maybeScrollTo}`;
@@ -457,7 +496,8 @@ export default class DocsCommand extends Command {
 	 * @private
 	 * @readonly
 	 */
-	private get _embedSample(): RichEmbed {
+	private get _embedSample(): RichEmbed
+	{
 		return new RichEmbed()
 			.setFooter(`discord.js' ${this._version} docs`, 'https://discord.js.org/static/favicon.ico')
 			.setColor(2201331);

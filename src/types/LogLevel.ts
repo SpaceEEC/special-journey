@@ -1,4 +1,5 @@
-export enum LogLevel {
+export enum LogLevel
+{
 	ERROR,
 	WARN,
 	INFO,
@@ -8,14 +9,18 @@ export enum LogLevel {
 	NONE,
 }
 
-export const colors: Color = {
-	0: 31,
-	1: 33,
-	2: 32,
-	3: 36,
-	4: 34,
-	5: 35,
-	6: 0,
-};
+export const colors: Color =
+	{
+		0: 31,
+		1: 33,
+		2: 32,
+		3: 36,
+		4: 34,
+		5: 35,
+		6: 0,
+	};
 
-type Color = { [index: number]: number; };
+type Color =
+	{
+		[index: number]: number,
+	};

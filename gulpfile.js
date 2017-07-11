@@ -18,16 +18,16 @@ gulp.task('lint', () => {
 })
 
 gulp.task('build', () => {
-	del.sync(['./build/**/*.*']);
+	del.sync(['./bin/**/*.*']);
 	gulp.src('./src/**/*.ts')
 		.pipe(project())
-		.pipe(gulp.dest('build/'));
+		.pipe(gulp.dest('bin/'));
 	gulp.src('./src/**/*.js')
-		.pipe(gulp.dest('build/'));
+		.pipe(gulp.dest('bin/'));
 	gulp.src('./src/**/*.json')
-		.pipe(gulp.dest('build/'));
+		.pipe(gulp.dest('bin/'));
 	gulp.src('./src/**/*.png')
-		.pipe(gulp.dest('build/'));
+		.pipe(gulp.dest('bin/'));
 	gulp.src('./src/**/*.ttf')
-		.pipe(gulp.dest('build/'));
+		.pipe(gulp.dest('bin/'));
 });

@@ -5,17 +5,18 @@
 		"lib": [
 			"es2017",
 			"es2017.object",
-			"dom"
+			"dom",
+			"dom.iterable"
 		],
+		"experimentalDecorators": true,
 		"declaration": false,
 		"noImplicitAny": true,
 		"noUnusedLocals": true,
 		"removeComments": true,
-		"sourceMap": false,
-		"experimentalDecorators": true
+		"sourceMap": false
 	},
 	"exclude": [
 		"node_modules",
-		"build"
+		"bin"
 	]
 }

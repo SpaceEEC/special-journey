@@ -1,7 +1,8 @@
 /**
  * Util class holding all sorts of useful methods.
  */
-export class Util {
+export class Util
+{
 
 	/**
 	 * Forces a 0 at the beginning of numbers smaller than 9.
@@ -9,7 +10,8 @@ export class Util {
 	 * @returns {string}
 	 * @static
 	 */
-	public static forceLength(someNumber: number): string {
+	public static forceLength(someNumber: number): string
+	{
 		return someNumber > 9 ? `${someNumber}` : `0${someNumber}`;
 	}
 
@@ -18,7 +20,8 @@ export class Util {
 	 * @param {?Date|string} date The date object or timestamp, defaults to now
 	 * @returns {string} Timestring in the format DD.MM.YYYY HH:mm:ss
 	 */
-	public static timeString(date?: Date | string): string {
+	public static timeString(date?: Date | string): string
+	{
 		// `new Date(undefined)` <- Invalid Date, but `new Date()` <- fine
 		// javascript, you are strange
 		const d: Date = date ? date instanceof Date ? date : new Date(date) : new Date();

@@ -11,7 +11,8 @@ import { Util } from '../util';
 /**
  * The singleton logger
  */
-export class Logger {
+export class Logger
+{
 	/**
 	 * Shortcut to the enum type
 	 * @static
@@ -59,7 +60,8 @@ export class Logger {
 	 * @returns {Logger}
 	 * @static
 	 */
-	public static get instance(): Logger {
+	public static get instance(): Logger
+	{
 		return Logger._instance || new Logger();
 	}
 
@@ -80,8 +82,10 @@ export class Logger {
 	 * Instantiates a new logger
 	 * @private
 	 */
-	private constructor() {
-		if (Logger._instance) {
+	private constructor()
+	{
+		if (Logger._instance)
+		{
 			throw new Error('Cannot create multiple instances of Logger singleton');
 		}
 		Logger._instance = this;
@@ -93,7 +97,8 @@ export class Logger {
 	 * @param {LogLevel} level The logging level to set
 	 * @returns {void}
 	 */
-	public setLogLevel(level: LogLevel): void {
+	public setLogLevel(level: LogLevel): void
+	{
 		this._logLevel = level;
 	}
 
@@ -102,7 +107,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async silly(...input: any[]): Promise<void> {
+	public async silly(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.SILLY, 'silly', input);
 	}
 
@@ -111,7 +117,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async debug(...input: any[]): Promise<void> {
+	public async debug(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.DEBUG, 'debug', input);
 	}
 
@@ -120,7 +127,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async verbose(...input: any[]): Promise<void> {
+	public async verbose(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.VERBOSE, 'verbose', input);
 	}
 
@@ -129,7 +137,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async info(...input: any[]): Promise<void> {
+	public async info(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.INFO, 'info', input);
 	}
 
@@ -138,7 +147,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async warn(...input: any[]): Promise<void> {
+	public async warn(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.WARN, 'warn', input);
 	}
 
@@ -147,7 +157,8 @@ export class Logger {
 	 * @param {...any} input Whatever to write
 	 * @returns {Promise<void>}
 	 */
-	public async error(...input: any[]): Promise<void> {
+	public async error(...input: any[]): Promise<void>
+	{
 		this._write(LogLevel.ERROR, 'error', input);
 	}
 
@@ -157,9 +168,11 @@ export class Logger {
 	 * @returns {string} Cleaned string
 	 * @private
 	 */
-	private _prepareText(args: any[]): string {
+	private _prepareText(args: any[]): string
+	{
 		const cleanedArgs: string[] = [];
-		for (const arg of args) {
+		for (const arg of args)
+		{
 			cleanedArgs.push(this._clean(arg));
 		}
 
@@ -172,7 +185,8 @@ export class Logger {
 	 * @returns {string} The cleaned item
 	 * @private
 	 */
-	private _clean(item: any): string {
+	private _clean(item: any): string
+	{
 		if (typeof item === 'string') return item;
 		return inspect(item, { depth: Infinity });
 	}
@@ -184,7 +198,8 @@ export class Logger {
 	 * @returns {void}
 	 * @private
 	 */
-	private _write(level: LogLevel, tag: string, input: any[]): void {
+	private _write(level: LogLevel, tag: string, input: any[]): void
+	{
 		if (this._logLevel < level) return;
 		const out: NodeJS.Socket = level === LogLevel.ERROR ? process.stderr : process.stdout;
 		const output: string = this._prepareText(input);

@@ -5,27 +5,37 @@ import { get, Result } from 'snekfetch';
 import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
-export default class TokenCommand extends Command {
+export default class TokenCommand extends Command
+{
 	private readonly _regex: RegExp;
 
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['ID'],
-			name: 'TOKEN',
-		});
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['ID'],
+				name: 'TOKEN',
+			},
+		);
+
 		this._regex = new RegExp(/\D/, 'g');
 	}
 
-	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]>
+	{
 		let url: string;
 		let auth: string;
-		try {
-			if (info.alias === 'token') {
+		try
+		{
+			if (info.alias === 'token')
+			{
 				url = 'https://discordapp.com/api/v7/users/@me';
 				auth = args.join(' ');
-			} else {
+			} else
+			{
 				let id: string = Buffer.from(args[0].split('.')[0], 'base64').toString();
-				if (this._regex.test(id)) {
+				if (this._regex.test(id))
+				{
 					if (this._regex.test(args[0])) throw String('Not even remotely a snowflake.');
 					else id = args[0];
 				}
@@ -43,7 +53,9 @@ export default class TokenCommand extends Command {
 			${user.username}#${user.discriminator} (${user.id})
 			\`\`\`
 			`);
-		} catch (err) {
+		}
+		catch (err)
+		{
 			return msg.edit(stripIndents`
 			\u200b${msg.content}
 			\`\`\`js

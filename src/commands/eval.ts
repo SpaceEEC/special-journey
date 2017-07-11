@@ -8,7 +8,8 @@ import { Command, CommandInformations } from '../structures/command';
 import { logger } from '../structures/LoggerDecorator';
 
 @logger
-export default class EvalCommand extends Command {
+export default class EvalCommand extends Command
+{
 	/** The depth to inspect with */
 	private _inspect: number;
 	/** Whether errors should be logged */
@@ -18,25 +19,30 @@ export default class EvalCommand extends Command {
 	/** Temp value to save between evals */
 	private _test: any;
 
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['ASYNC', 'AWAIT', 'SILE'],
-			name: 'EVAL',
-		});
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['ASYNC', 'AWAIT', 'SILE'],
+				name: 'EVAL',
+			},
+		);
 		this._inspect = 0;
 		this._log = false;
 		this._stack = false;
 		this._test = null;
 	}
 
-	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]>
+	{
 		const startTime: [number, number] = process.hrtime();
 
 		let code: string = args.join(' ');
 		if (code.includes('`E-ROHR`')) code = code.slice(0, code.indexOf('`E-ROHR`')).trim();
 		if (code.includes('`evaled\\returned:`')) code = code.slice(0, code.indexOf('`evaled\\returned:`')).trim();
 
-		try {
+		try
+		{
 			let evaled: any;
 
 			evaled = info.alias === 'async'
@@ -49,7 +55,8 @@ export default class EvalCommand extends Command {
 			const typeofEvaled: string = typeof evaled;
 
 			if (typeof evaled !== 'string') evaled = inspect(evaled, false, this._inspect);
-			if (evaled.includes(this.client.token)) {
+			if (evaled.includes(this.client.token))
+			{
 				return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\n\n¯\\_(ツ)_/¯`);
 			}
 
@@ -59,8 +66,10 @@ export default class EvalCommand extends Command {
 			\`evaled\\returned:\` \`typeof: ${typeofEvaled}\`
 			\`\`\`js\n${Util.escapeMarkdown(evaled, true)}\n\`\`\`
 			Ausführungszeitraumslänge: \`${process.hrtime(startTime)} \`ms`);
-		} catch (err) {
-			if (!err) {
+		} catch (err)
+		{
+			if (!err)
+			{
 				return msg.edit(`\u200b${this.client.config.prefix + info.alias} ${code}\nE-Rohr, but no error.`)
 					.catch(() => null);
 			}

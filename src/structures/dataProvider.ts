@@ -1,16 +1,18 @@
 // TODO: Make that whole thing better.
 type SemiStaticKey = 'ackMe' | 'logIt';
 
-type SemiStatic = {
-	[index: string]: any;
-	ackMe: string[];
-	logIt: string;
-};
+type SemiStatic =
+	{
+		[index: string]: any;
+		ackMe: string[];
+		logIt: string;
+	};
 
 /**
  * Data provider to be able to access data from everywhere.
  */
-export class DataProvider {
+export class DataProvider
+{
 	/**
 	 * Map to cache stuff and keep references accross files
 	 */
@@ -20,7 +22,8 @@ export class DataProvider {
 	 * Instantiates a new DataProvider
 	 * (More than one is not necessary)
 	 */
-	public constructor() {
+	public constructor()
+	{
 		this._db = new Map<string, any>();
 		const db: SemiStatic = require('../../semiStatic');
 
@@ -33,7 +36,8 @@ export class DataProvider {
 	 * @param {SemiStaticKey} key The key to get it's value from
 	 * @returns {T}
 	 */
-	public get<T>(key: SemiStaticKey): T {
+	public get<T>(key: SemiStaticKey): T
+	{
 		return this._db.get(key) as T;
 	}
 
@@ -43,7 +47,8 @@ export class DataProvider {
 	 * @param {any} value The value to store
 	 * @returns {void}
 	 */
-	public set(key: SemiStaticKey, value: any): void {
+	public set(key: SemiStaticKey, value: any): void
+	{
 		this._db.set(key, value);
 	}
 }

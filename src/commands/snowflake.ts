@@ -5,15 +5,20 @@ import { SelfbotClient } from '../structures/client';
 import { Command } from '../structures/command';
 import { Util } from '../util';
 
-export default class SnowflakeCommand extends Command {
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['SNOW'],
-			name: 'SNOWFLAKE',
-		});
+export default class SnowflakeCommand extends Command
+{
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['SNOW'],
+				name: 'SNOWFLAKE',
+			},
+		);
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
 		if (!args[0]) return msg.edit(`\u200b${msg.content} ${SnowflakeUtil.generate()}`);
 		const date: string = Util.timeString(SnowflakeUtil.deconstruct(args[0]).date);
 		return msg.edit(stripIndents`

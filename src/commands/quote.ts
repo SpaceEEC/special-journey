@@ -9,16 +9,22 @@ import { logger } from '../structures/LoggerDecorator';
 const { homepage }: { homepage: string } = require(join(__dirname, '..', '..', 'package.json'));
 
 @logger
-export default class QuoteCommand extends Command {
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['Q'],
-			name: 'QUOTE',
-		});
+export default class QuoteCommand extends Command
+{
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['Q'],
+				name: 'QUOTE',
+			},
+		);
 	}
 
-	public async run(msg: Message, args: string[]): Promise<Message | Message[]> {
-		try {
+	public async run(msg: Message, args: string[]): Promise<Message | Message[]>
+	{
+		try
+		{
 			let color: number = this._getColor(args);
 			const channel: TextChannel = this._getChannel(args) || msg.channel as TextChannel;
 			let response: string = '\u200b';
@@ -37,8 +43,10 @@ export default class QuoteCommand extends Command {
 				.setColor(color)
 				.setDescription(fetched.content);
 
-			for (const id of args) {
-				if (!parseInt(id)) {
+			for (const id of args)
+			{
+				if (!parseInt(id))
+				{
 					response += args.slice(args.indexOf(id)).join(' ');
 					break;
 				}
@@ -51,21 +59,26 @@ export default class QuoteCommand extends Command {
 					add.content);
 			}
 
-			if (!embed.fields.length) {
+			if (!embed.fields.length)
+			{
 				const fetchedEmbed: MessageEmbed = fetched.embeds[0];
-				if (fetchedEmbed && fetchedEmbed.thumbnail) {
+				if (fetchedEmbed && fetchedEmbed.thumbnail)
+				{
 					embed.setDescription(embed.description.replace(fetchedEmbed.thumbnail.url, ''));
 					embed.setImage(fetchedEmbed.thumbnail.url);
-				} else {
+				} else
+				{
 					const attachment: MessageAttachment = fetched.attachments.first();
-					if (attachment && attachment.width) {
+					if (attachment && attachment.width)
+					{
 						embed.setImage(attachment.url);
 					}
 				}
 			}
 
 			await msg.edit(response, { embed });
-		} catch (err) {
+		} catch (err)
+		{
 			if (err.message !== 'Message not found.') this.logger.error('quote', err);
 			return msg.edit(`\u200b${msg.content}\n\n\`E-ROHR\`\n\`\`\`js\n${err}${err.text || ''}\n\`\`\``);
 		}
@@ -77,9 +90,11 @@ export default class QuoteCommand extends Command {
 	 * @returns {number}
 	 * @private
 	 */
-	private _getColor(args: string[]): number {
+	private _getColor(args: string[]): number
+	{
 		let color: number;
-		try {
+		try
+		{
 			color = (this.client as any).resolver.resolveColor(args[0].toUpperCase());
 			args.shift();
 		} catch (e) { color = 0; }
@@ -92,8 +107,10 @@ export default class QuoteCommand extends Command {
 	 * @returns {?TextChannel}
 	 * @private
 	 */
-	private _getChannel(args: string[]): TextChannel {
-		if (args[0] === '-c') {
+	private _getChannel(args: string[]): TextChannel
+	{
+		if (args[0] === '-c')
+		{
 			const channel: Channel = this.client.channels.get(args[1]);
 			args = args.splice(0, 2);
 			return channel as TextChannel;
@@ -107,14 +124,18 @@ export default class QuoteCommand extends Command {
 	 * @returns {RichEmbed}
 	 * @private
 	 */
-	private _maybeSetTitle(msg: Message, fetched: Message): RichEmbed {
+	private _maybeSetTitle(msg: Message, fetched: Message): RichEmbed
+	{
 		const embed: RichEmbed = new RichEmbed();
-		if (!(fetched.channel instanceof TextChannel)) {
+		if (!(fetched.channel instanceof TextChannel))
+		{
 			if (msg.channel.id === fetched.channel.id) return embed;
 			else return embed.setTitle('#DM');
-		} else if (!msg.guild || msg.guild.id !== fetched.guild.id) {
+		} else if (!msg.guild || msg.guild.id !== fetched.guild.id)
+		{
 			return embed.setTitle(`${fetched.guild.name} #${fetched.channel.name}`);
-		} else {
+		} else
+		{
 			if (msg.channel.id === fetched.channel.id) return embed;
 			else return embed.setTitle(`#${fetched.channel.name}`);
 		}
@@ -126,7 +147,8 @@ export default class QuoteCommand extends Command {
 	 * @returns {string} The final time string
 	 * @private
 	 */
-	private _timeString(ms: number): string {
+	private _timeString(ms: number): string
+	{
 		const seconds: number = ms / 1000;
 		const days: number = Math.floor(seconds / 86400);
 		const hours: number = Math.floor(seconds % 86400 / 3600);

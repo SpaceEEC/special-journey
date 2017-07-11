@@ -24,7 +24,8 @@ type Config = {
  * Represents a regular discord client with some stuff added to it.
  */
 @logger
-export class SelfbotClient extends Client {
+export class SelfbotClient extends Client
+{
 	/**
 	 * The config of the client
 	 */
@@ -58,7 +59,8 @@ export class SelfbotClient extends Client {
 	 * Instantiates a new SelfbotClient.
 	 * @param {ClientOptions} options Options for a client.
 	 */
-	public constructor(options?: ClientOptions) {
+	public constructor(options?: ClientOptions)
+	{
 		super(options);
 
 		this.config = require('../../config');
@@ -89,7 +91,8 @@ export class SelfbotClient extends Client {
 
 			.on('message', this.handleMessage)
 
-			.on('messageUpdate', (oldMessage: Message, newMessage: Message) => {
+			.on('messageUpdate', (oldMessage: Message, newMessage: Message) =>
+			{
 				if (oldMessage.content !== newMessage.content) this.handleMessage(newMessage, oldMessage);
 			})
 
@@ -101,10 +104,12 @@ export class SelfbotClient extends Client {
 
 			.on('raw', (packet: any) => this.eventCounter.trigger(packet.t || packet.op))
 
-			.on('debug', (message: string) => {
+			.on('debug', (message: string) =>
+			{
 				if (message.startsWith('Authenticated using token')
 					|| message.startsWith('[ws] [connection] Heartbeat acknowledged,')
-					|| message === '[ws] [connection] Sending a heartbeat') {
+					|| message === '[ws] [connection] Sending a heartbeat')
+				{
 					return;
 				}
 				this.logger.debug(message);
@@ -112,12 +117,13 @@ export class SelfbotClient extends Client {
 	}
 
 	/**
-	 * Handles incoming messages or message edits and executes commands or not commands if applicable.
+	 * Handles incoming messages or message edits and executes commands or not commnds if applicable.
 	 * @param {Message} msg The Message or if edited the new message.
 	 * @param {?Message} oldMsg If edited, the old message.
 	 * @returns {Promise<void>}
 	 */
-	public async handleMessage(msg: Message, oldMsg: Message = null): Promise<void> {
+	public async handleMessage(msg: Message, oldMsg: Message = null): Promise<void>
+	{
 		if (msg.author.id !== this.user.id) return this.handleNotCommand(msg, oldMsg);
 		if (!msg.content.startsWith(this.config.prefix)) return;
 		const [name, ...params]: string[] = msg.content.slice(this.config.prefix.length).split(/ +/);
@@ -127,9 +133,11 @@ export class SelfbotClient extends Client {
 
 		if (!command) return;
 
-		try {
+		try
+		{
 			await command.run(msg, params, { alias: name });
-		} catch (err) {
+		} catch (err)
+		{
 			this.logger.error(`The following error occured while running ${name} - (${command.constructor.name})\n`, err);
 		}
 	}
@@ -140,8 +148,10 @@ export class SelfbotClient extends Client {
 	 * @param {boolean} edit Whether the message was edited
 	 * @returns {void}
 	 */
-	public handleNotCommand(msg: Message, oldMsg: Message): void {
-		for (const notCommand of this.notCommands) {
+	public handleNotCommand(msg: Message, oldMsg: Message): void
+	{
+		for (const notCommand of this.notCommands)
+		{
 			notCommand.run(msg, oldMsg);
 		}
 	}
@@ -151,7 +161,8 @@ export class SelfbotClient extends Client {
 	 * @param {string} filename The name of the file in the command directory
 	 * @returns {string}
 	 */
-	public reloadCommand(filename: string): string {
+	public reloadCommand(filename: string): string
+	{
 		// TODO: Changing a command name breakes stuff, not intending to do so, but better be prepared.
 		// aliases however should be working fine
 		delete require.cache[require.resolve(join(__dirname, '..', 'commands', filename))];
@@ -174,26 +185,30 @@ export class SelfbotClient extends Client {
 		return `${command.name} (${command.constructor.name}) has been reloaded.`;
 	}
 
-	/**
+	/**y
 	 * Loads all commands from the command dir.
 	 * @returns {Promise<void>}
 	 * @private
 	 */
-	private async _loadCommands(): Promise<void> {
+	private async _loadCommands(): Promise<void>
+	{
 		const files: string[] = await
-			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) => {
-				readdir(join(__dirname, '..', 'commands'), ((err: NodeJS.ErrnoException, read: string[]) => {
+			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) =>
+			{
+				readdir(join(__dirname, '..', 'commands'), ((err: NodeJS.ErrnoException, read: string[]) =>
+				{
 					if (err) reject(err);
 					else resolve(read);
 				}));
 			});
 
-		for (const file of files) {
+		for (const file of files)
+		{
 			if (extname(file) !== '.js') continue;
 
 			const commandClass: typeof Command = require(join(__dirname, '..', 'commands', file)).default;
 
-			if (!commandClass) throw new Error(`${file}'s default export is falsy!`);
+			if (!commandClass) throw new Error(`${file} 's default export is falsy!`);
 			if (!(commandClass.prototype instanceof Command)) throw new Error(`${file} is not instanceof Command!`);
 
 			const command: Command = new commandClass(this);
@@ -203,7 +218,9 @@ export class SelfbotClient extends Client {
 			for (const alias of command.aliases) this.aliases.set(alias, command.name);
 			this.commands.set(command.name, command);
 		}
+
 		this.logger.info(`${this.commands.size} commands have been loaded.`);
+
 	}
 
 	/**
@@ -211,16 +228,20 @@ export class SelfbotClient extends Client {
 	 * @returns {Promise<void>}
 	 * @private
 	 */
-	private async _loadNotCommands(): Promise<void> {
+	private async _loadNotCommands(): Promise<void>
+	{
 		const files: string[] = await
-			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) => {
-				readdir(join(__dirname, '..', 'notCommands'), ((err: NodeJS.ErrnoException, read: string[]) => {
+			new Promise<string[]>((resolve: (value: string[]) => void, reject: (error: NodeJS.ErrnoException) => void) =>
+			{
+				readdir(join(__dirname, '..', 'notCommands'), ((err: NodeJS.ErrnoException, read: string[]) =>
+				{
 					if (err) reject(err);
 					else resolve(read);
 				}));
 			});
 
-		for (const file of files) {
+		for (const file of files)
+		{
 			if (extname(file) !== '.js') continue;
 
 			const notCommandClass: typeof NotCommand = require(join(__dirname, '..', 'notCommands', file)).default;
@@ -241,39 +262,47 @@ export class SelfbotClient extends Client {
 	 * @returns {void}
 	 * @private
 	 */
-	private _validateCommandOptions(command: Command): void {
-		if (command.name.toUpperCase() !== command.name) {
+	private _validateCommandOptions(command: Command): void
+	{
+		if (command.name.toUpperCase() !== command.name)
+		{
 			throw new Error(oneLine`Command ${command.name} (${command.constructor.name})'s
 				name is not in all uppercase!`);
 		}
 
-		if (this.commands.has(command.name)) {
+		if (this.commands.has(command.name))
+		{
 			throw new Error(oneLine`
 				Duplicate command name: ${command.name} from ${command.constructor.name}
 				and ${this.commands.get(command.name).constructor.name}!`);
 		}
 
-		if (this.aliases.has(command.name)) {
+		if (this.aliases.has(command.name))
+		{
 			throw new Error(oneLine`
 				Command name ${command.name} already registered as alias to
 				${this.aliases.get(command.name)} (${this.aliases.get(command.name).constructor.name})!`);
 		}
 
-		for (const alias of command.aliases) {
-			if (alias.toUpperCase() !== alias) {
+		for (const alias of command.aliases)
+		{
+			if (alias.toUpperCase() !== alias)
+			{
 				throw new Error(oneLine`
 					Alias ${alias} from command ${command.name}
 					(${command.constructor.name}) is not in all uppercase.`);
 			}
 
-			if (this.commands.has(alias)) {
+			if (this.commands.has(alias))
+			{
 				throw new Error(oneLine`
 					Alias ${alias} from command ${command.name} (${command.constructor.name}) is
 					 already registered as a command name from ${alias}
 					 (${this.commands.get(alias).constructor.name})!`);
 			}
 
-			if (this.aliases.has(alias)) {
+			if (this.aliases.has(alias))
+			{
 				throw new Error(oneLine`
 					Duplicate aliases ${alias} from ${command.name} (${command.constructor.name})
 					and ${this.aliases.get(alias)} (${this.commands.get(this.aliases.get(alias)).constructor.name})!`);

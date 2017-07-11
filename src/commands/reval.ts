@@ -4,15 +4,20 @@ import { Collection, Message, TextChannel } from 'discord.js';
 import { SelfbotClient } from '../structures/client';
 import { Command, CommandInformations } from '../structures/command';
 
-export default class RevalCommand extends Command {
-	public constructor(client: SelfbotClient) {
-		super(client, {
-			aliases: ['RAWAIT', 'RASYNC'],
-			name: 'REVAL',
-		});
+export default class RevalCommand extends Command
+{
+	public constructor(client: SelfbotClient)
+	{
+		super(client,
+			{
+				aliases: ['RAWAIT', 'RASYNC'],
+				name: 'REVAL',
+			},
+		);
 	}
 
-	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]> {
+	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]>
+	{
 		const channel: TextChannel = this.client.channels.get(this.client.config.botChannelID) as TextChannel;
 
 		await channel.send(`${info.alias.replace('r', this.client.config.botPrefix)} ${args.join(' ')}`);
@@ -27,7 +32,8 @@ export default class RevalCommand extends Command {
 		// magic
 		const stuff: string[] = fetched.content.split('```js');
 
-		if (stuff[2]) {
+		if (stuff[2])
+		{
 			return msg.edit(stripIndents`
 			\u200b${msg.content}
 
