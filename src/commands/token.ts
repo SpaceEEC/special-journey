@@ -1,5 +1,5 @@
 import { stripIndents } from 'common-tags';
-import { Message, User } from 'discord.js';
+import { DiscordAPIError, Message, User } from 'discord.js';
 import { get, Result } from 'snekfetch';
 
 import { SelfbotClient } from '../structures/client';
@@ -18,50 +18,70 @@ export default class TokenCommand extends Command
 			},
 		);
 
-		this._regex = new RegExp(/\D/, 'g');
+		this._regex = new RegExp(/^\d{16,19}$/);
 	}
 
 	public async run(msg: Message, args: string[], info: CommandInformations): Promise<Message | Message[]>
 	{
-		let url: string;
-		let auth: string;
+		const results: string[] = [];
+
 		try
 		{
+			const user: User = await this._fetchUser(args[0].split('.')[0]);
+
+			results.push(`${user.username}#${user.discriminator} (${user.id}) ${user.bot ? '(Bot)' : '(User)'}`);
+
 			if (info.alias === 'token')
 			{
-				url = 'https://discordapp.com/api/v7/users/@me';
-				auth = args.join(' ');
-			} else
-			{
-				let id: string = Buffer.from(args[0].split('.')[0], 'base64').toString();
-				if (this._regex.test(id))
-				{
-					if (this._regex.test(args[0])) throw String('Not even remotely a snowflake.');
-					else id = args[0];
-				}
-				url = `https://discordapp.com/api/v7/users/${id}`;
-				auth = `Bot ${this.client.config.botToken}`;
+				results.push(await this._validateToken(args[0], user));
 			}
 
-			const user: User = await get(url)
-				.set('Authorization', auth)
-				// not always a buffer
-				.then<User>((result: Result) => result.body as any);
 			return msg.edit(stripIndents`
 			\u200b${msg.content}
 			\`\`\`js
-			${user.username}#${user.discriminator} (${user.id})
+			${results.join('\n')}
 			\`\`\`
 			`);
+
 		}
-		catch (err)
+		catch (error)
 		{
 			return msg.edit(stripIndents`
 			\u200b${msg.content}
 			\`\`\`js
-			${err.url ? `${err.status} ${err.statusText}\n${err.text}` : err}
+			${results.join('\n')}
+			${error instanceof DiscordAPIError ? `${error.code}${error.message}\n${(error as any).path}` : error}
 			\`\`\`
 			`);
 		}
+	}
+
+	private _fetchUser(input: string): Promise<User>
+	{
+		let id: string = Buffer.from(input.split('.')[0], 'base64').toString();
+		if (!this._regex.test(id))
+		{
+			if (!this._regex.test(input))
+			{
+				throw new Error(`"${input}" -> "${id}" does not look like a valid snowflake.`);
+			}
+			else
+			{
+				id = input;
+			}
+		}
+
+		return get(`https://discordapp.com/api/v7/users/${id}`)
+			.set('Authorization', `Bot ${this.client.config.botToken}`)
+			.then<any>((result: Result) => result.body);
+	}
+
+	private async _validateToken(token: string, { bot, id }: User): Promise<string>
+	{
+		const valid: Result = await get(`https://discordapp.com/api/v7/users/${id}`)
+			.set('Authorization', `${bot ? 'Bot ' : ''}${token}`)
+			.catch(() => null);
+
+		return valid ? 'Valid token' : 'Error: Invalid token';
 	}
 }
