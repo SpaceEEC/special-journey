@@ -1,19 +1,14 @@
 #node_modules
 node_modules/
 
-#old files
-old/
-_tslint.json
-
 #js build
 bin/
 
-#config etc
-config.json
-semiStatic.json
-src/notCommands/logit.ts
+#test command
+src/Commands/Test.ts
 
 #misc
+src/NotCommands/LogIt.ts
 *.jpg
 *.gif
 *.png
