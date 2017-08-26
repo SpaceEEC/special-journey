@@ -76,9 +76,12 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 			const { ext, name }: ParsedPath = parse(file);
 
 			if (this instanceof CommandGroup
-				// can't access _protected_ property :^)
+				// Can't access _protected_ class property outside of class :^)
 				&& ((this as any).basePath + sep + file) === this._filename
-			) { continue; }
+			)
+			{
+				continue;
+			}
 
 			if (ext === '.js')
 			{
@@ -155,7 +158,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 
 			await previous.loadCommandGroup(this.filename);
 
-			// Can't access _protected_ class prop :^)
+			// Can't access _protected_ class property outside of class :^)
 			(this as any).logger.info(`Reloaded command group ${this.name}`);
 
 			return;
