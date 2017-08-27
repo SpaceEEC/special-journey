@@ -1,8 +1,9 @@
-import { Message, Util } from 'discord.js';
+import * as Discord from 'discord.js';
 import { inspect } from 'util';
 
 import { Aliases, Command, CommandInformations } from '../Structures/Command';
 import { Loggable } from '../Structures/Logger';
+import { Client } from '../Structures/Client';
 
 const { PREFIX }: { [key: string]: string } = process.env;
 
@@ -26,14 +27,17 @@ export class EvalCommand extends Command
 	 */
 	private _stack: boolean = false;
 	/**
-	 * Temp value to save betweene vals
+	 * Temp value to save betweene evals
 	 * @private
 	 */
 	// tslint:disable-next:line:it-is-okay
 	private _test: any = null;
 
-	public async run(msg: Message, args: string[], { alias }: CommandInformations): Promise<Message | Message[]>
+	public async run(msg: Discord.Message, args: string[], { alias }: CommandInformations): Promise<Discord.Message>
 	{
+		const client: Client = this.client;
+		const message: Discord.Message = msg;
+
 		const startTime: [number, number] = process.hrtime();
 
 		let code: string = args.join(' ');
@@ -77,7 +81,7 @@ export class EvalCommand extends Command
 					'',
 					`\`evaled\\returned:\` \`typeof: ${typeofEvaled}\``,
 					'```js',
-					Util.escapeMarkdown(evaled, true),
+					Discord.Util.escapeMarkdown(evaled, true),
 					'```',
 					`Ausführungszeitraumslänge: ${diffString}`,
 				],
@@ -103,7 +107,7 @@ export class EvalCommand extends Command
 					'',
 					'`E-ROHR`',
 					'```js',
-					Util.escapeMarkdown(error, true),
+					Discord.Util.escapeMarkdown(error, true),
 					'```',
 					`Ausführungszeitraumslänge: ${diffString}`,
 				],
