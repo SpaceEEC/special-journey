@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js';
 import { inspect } from 'util';
 
+import { Client } from '../Structures/Client';
 import { Aliases, Command, CommandInformations } from '../Structures/Command';
 import { Loggable } from '../Structures/Logger';
-import { Client } from '../Structures/Client';
 
 const { PREFIX }: { [key: string]: string } = process.env;
 
