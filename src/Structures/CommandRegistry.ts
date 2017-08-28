@@ -18,7 +18,7 @@ const readdirAsync: (path: string) => Promise<string[]> = promisify(readdir);
  * Command registry, handling _commands and the like.
  */
 @Loggable('[REGISTRY]')
-export class CommandRegistry<T extends (Command | CommandGroup<any>)>
+export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 {
 	/**
 	 * Reference to the logger singleton
@@ -85,7 +85,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 
 			if (ext === '.js')
 			{
-				const command: Command = this.loadCommand(name);
+				const command: Command<any> = this.loadCommand(name);
 				this.logger.info('Loaded command:', command.name);
 			}
 			else if (ext === '')
@@ -126,7 +126,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 	 * @param {string} name
 	 * @returns {?Command|CommandGroup}
 	 */
-	public getCommand<U extends Command | CommandGroup<any>>(name: string): U
+	public getCommand<U extends Command<any> | CommandGroup<any>>(name: string): U
 	{
 		if (!name) return null;
 
@@ -169,7 +169,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 			return;
 		}
 
-		const command: Command<any> | CommandGroup<any> = this._commands.get(chain[0].toUpperCase()) as any
+		const command: Command | CommandGroup<any> = this._commands.get(chain[0].toUpperCase()) as any
 			|| this._commands.get(this._aliases.get(chain[0].toUpperCase()));
 
 		if (command instanceof CommandGroup)
@@ -198,7 +198,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 	 * @param {string} file
 	 * @returns {Command}
 	 */
-	public loadCommand(file: string): Command
+	public loadCommand(file: string): Command<any>
 	{
 		const commandClass: typeof Command = require(`${this.basePath}/${file}`)[`${file}Command`];
 
@@ -209,7 +209,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 			throw new Error(`${file}'s export's prototype is not instanceof Command!`);
 		}
 
-		const command: Command = new commandClass(this.client,
+		const command: Command<any> = new commandClass(this.client,
 			this instanceof CommandGroup ? this as any : undefined,
 		) as Command;
 
@@ -255,7 +255,7 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 	 * @returns {void}
 	 * @private
 	 */
-	private _validateCommandOptions(command: Command | CommandGroup<any>): void
+	private _validateCommandOptions(command: Command<any> | CommandGroup<any>): void
 	{
 		if (command.name.toUpperCase() !== command.name)
 		{

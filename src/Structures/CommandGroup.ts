@@ -1,6 +1,7 @@
 import { join } from 'path';
 
 import { Client } from './Client';
+import { Command } from './Command';
 import { CommandRegistry } from './CommandRegistry';
 export { Aliases } from '../Types/CommandDecorators';
 
@@ -8,7 +9,7 @@ export { Aliases } from '../Types/CommandDecorators';
  * Represents a group of commands (sub commands)
  * @abstract
  */
-export class CommandGroup<T extends CommandGroup<T>> extends CommandRegistry<CommandGroup<T>>
+export class CommandGroup<T extends CommandGroup<T>> extends CommandRegistry<Command<T>>
 {
 	/**
 	 * Name for this command group

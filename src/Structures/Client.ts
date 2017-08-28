@@ -80,7 +80,7 @@ export class Client extends DJSClient
 
 		if (!msg.content.startsWith(PREFIX)) return;
 
-		const [command, name, args]: [Command<any>, string, string[]] =
+		const [command, name, args]: [Command, string, string[]] =
 			this.registry.resolveCommand(msg, msg.content.slice(PREFIX.length).split(/ +/)) || [] as any;
 
 		if (!command) return;
