@@ -9,6 +9,10 @@ import { Command } from './Command';
 import { CommandGroup } from './CommandGroup';
 import { Logger } from './Logger';
 
+// JavaScript and its circular references <.<
+// tslint:disable-next-line:variable-name
+let commandGroup: typeof CommandGroup;
+
 /**
  * Promisifed readdir
  */
@@ -59,8 +63,9 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 	 */
 	public constructor(client: Client, basePath?: string)
 	{
+		if (!commandGroup) commandGroup = require('./CommandGroup').CommandGroup;
 		this.client = client;
-		this.basePath = this instanceof CommandGroup ? this._dirname : basePath;
+		this.basePath = this instanceof commandGroup ? this._dirname : basePath;
 	}
 
 	/**
@@ -75,7 +80,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		{
 			const { ext, name }: ParsedPath = parse(file);
 
-			if (this instanceof CommandGroup
+			if (this instanceof commandGroup
 				// Can't access _protected_ class property outside of class :^)
 				&& ((this as any).basePath + sep + file) === this._filename
 			)
@@ -90,9 +95,9 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 			}
 			else if (ext === '')
 			{
-				const commandGroup: CommandGroup<any> = await this.loadCommandGroup(name);
+				const commandGroupInstance: CommandGroup<any> = await this.loadCommandGroup(name);
 
-				this.logger.info('Loaded command group:', commandGroup.name);
+				this.logger.info('Loaded command group:', commandGroupInstance.name);
 			}
 			else
 			{
@@ -118,7 +123,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 			|| null;
 
 		if (!command) return null;
-		if (command instanceof CommandGroup) return command.resolveCommand(msg, args);
+		if (command instanceof commandGroup) return command.resolveCommand(msg, args);
 
 		return [command, name, args];
 	}
@@ -151,7 +156,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 	{
 		if (!chain.length)
 		{
-			if (!(this instanceof CommandGroup) || !previous) throw new Error('Missing name to reload!');
+			if (!(this instanceof commandGroup) || !previous) throw new Error('Missing name to reload!');
 
 			// Can't access _protected_ class properties outside of class :^)
 			// ts at its finest
@@ -176,7 +181,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		const command: Command | CommandGroup<any> = this._commands.get(chain[0].toUpperCase()) as any
 			|| this._commands.get(this._aliases.get(chain[0].toUpperCase()));
 
-		if (command instanceof CommandGroup)
+		if (command instanceof commandGroup)
 		{
 			return command.reload(chain.slice(1), this);
 		}
@@ -214,7 +219,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		}
 
 		const command: Command<any> = new commandClass(this.client,
-			this instanceof CommandGroup ? this as any : undefined,
+			this instanceof commandGroup ? this as any : undefined,
 		) as Command;
 
 		this._validateCommandOptions(command);
@@ -236,21 +241,21 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 
 		if (!commandGroupClass) throw new Error(`${file}/${file}'s export is falsy!`);
 
-		if (!(commandGroupClass.prototype instanceof CommandGroup))
+		if (!(commandGroupClass.prototype instanceof commandGroup))
 		{
 			throw new Error(`${file}/${file}'s export's prototype is not instanceof CommandGroup`);
 		}
 
-		const commandGroup: CommandGroup<U> = new commandGroupClass<U>(this.client);
+		const commandGroupInstance: CommandGroup<U> = new commandGroupClass<U>(this.client);
 
-		await commandGroup.init();
+		await commandGroupInstance.init();
 
-		this._validateCommandOptions(commandGroup);
+		this._validateCommandOptions(commandGroupInstance);
 
-		for (const alias of commandGroup.aliases) this._aliases.set(alias, commandGroup.name);
-		this._commands.set(commandGroup.name, commandGroup as T);
+		for (const alias of commandGroupInstance.aliases) this._aliases.set(alias, commandGroup.name);
+		this._commands.set(commandGroup.name, commandGroupInstance as T);
 
-		return commandGroup;
+		return commandGroupInstance;
 	}
 
 	/**
