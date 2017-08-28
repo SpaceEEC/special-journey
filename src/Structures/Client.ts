@@ -80,16 +80,8 @@ export class Client extends DJSClient
 
 		if (!msg.content.startsWith(PREFIX)) return;
 
-		// tslint:disable-next-line:prefer-const I can't half const half let it here
-		let [name, ...args]: string[] = msg.content.slice(PREFIX.length).split(/ +/);
-
-		let command: Command<any> | CommandGroup<any> = this.registry.resolveCommand(msg, name, args);
-
-		if (command instanceof CommandGroup)
-		{
-			command = command.resolveCommand(msg, name, args);
-			name = args.shift();
-		}
+		const [command, name, args]: [Command<any>, string, string[]] =
+			this.registry.resolveCommand(msg, msg.content.slice(PREFIX.length).split(/ +/)) || [] as any;
 
 		if (!command) return;
 

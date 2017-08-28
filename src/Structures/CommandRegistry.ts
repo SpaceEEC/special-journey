@@ -104,28 +104,27 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 	/**
 	 * Resolves a command name or alias to the command of this group.
 	 * @param {Message} msg
-	 * @param {string} name Name this group triggered, may be an alias
-	 * @param {string[]} args First element is the sub commands name, following are the args
-	 * @returns {?Command<U>}
+	 * @param {string[]} args First element being the command name, following are the args
+	 * @returns {?[Command<U>, string, string[]]}
 	 * @virtual
 	 */
-	public resolveCommand<U extends CommandGroup<any> = never>(msg: Message, name: string, args: string[])
-		: Command<U>
+	public resolveCommand<U extends CommandGroup<any> = never>(msg: Message, [name, ...args]: string[])
+		: [Command<U>, string, string[]]
 	{
 		if (!name) return null;
 
 		const command: Command<U> | CommandGroup<any> = this._commands.get(name.toUpperCase()) as any
 			|| this._commands.get(this._aliases.get(name.toUpperCase()));
 
-		if (command instanceof CommandGroup) return command.resolveCommand(msg, args.shift(), args);
+		if (command instanceof CommandGroup) return command.resolveCommand(msg, args);
 
-		return command || null;
+		return [command, name, args] || null;
 	}
 
 	/**
 	 * Gets a command or command group by name or alias, returns null when nothing was found.
 	 * @param {string} name
-	 * @returns {Command|CommandGroup}
+	 * @returns {?Command|CommandGroup}
 	 */
 	public getCommand<U extends Command | CommandGroup<any>>(name: string): U
 	{
