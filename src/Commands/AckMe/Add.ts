@@ -1,4 +1,4 @@
-import { Guild, Message } from 'discord.js';
+import { Guild, Message, Util } from 'discord.js';
 
 import { Command } from '../../Structures/Command';
 import { AckMeCommandGroup } from './AckMe';
@@ -13,14 +13,17 @@ export class AddCommand extends Command<AckMeCommandGroup>
 
 		if (!guild)
 		{
-			if (id !== 'this') return msg.edit('No such guild found.');
+			if (id !== 'this') return msg.edit('No guild with that id found.');
 
 			guild = msg.guild;
 			id = msg.guild.id;
 		}
 
-		if (!await this.group.add(id)) return msg.edit(`${guild.name} is already on the acking list.`);
+		if (!await this.group.add(id))
+		{
+			return msg.edit(`\`${Util.escapeMarkdown(guild.name, true)}\` is already on the acking list.`);
+		}
 
-		return msg.edit(`Added ${guild.name} to the acking list`);
+		return msg.edit(`Added \`${Util.escapeMarkdown(guild.name, true)}\` to the acking list.`);
 	}
 }

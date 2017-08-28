@@ -1,4 +1,4 @@
-import { Guild, Message } from 'discord.js';
+import { Guild, Message, Util } from 'discord.js';
 
 import { Aliases, Command } from '../../Structures/Command';
 import { AckMeCommandGroup } from './AckMe';
@@ -22,7 +22,7 @@ export class ShowCommand extends Command<AckMeCommandGroup>
 			mappedGuilds += `${guild.id} || ${guild.name}\n`;
 		}
 
-		mappedGuilds = `${mappedGuilds.slice(0, -1).slice(0, 1997)}\`\`\``;
+		mappedGuilds = `${Util.escapeMarkdown(mappedGuilds.slice(0, -1).slice(0, 1997), false, true)}\`\`\``;
 
 		return msg.edit(mappedGuilds);
 	}
