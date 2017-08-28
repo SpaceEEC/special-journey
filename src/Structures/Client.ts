@@ -141,10 +141,11 @@ export class Client extends DJSClient
 		this.logger.error('[DJS][ERROR]', ...args);
 	}
 
-	@on('resume')
+	@on('resumed') // 12
+	@on('resume') // 11.2
 	protected onResume(replayed: number): void
 	{
-		this.logger.info('[DJS][RESUME]', `Replayed ${replayed} events.`);
+		this.logger.info('[DJS][RESUMED]', `Replayed ${replayed} events.`);
 	}
 
 	@on('raw')
