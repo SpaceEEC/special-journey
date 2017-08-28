@@ -114,11 +114,13 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		if (!name) return null;
 
 		const command: Command<U> | CommandGroup<any> = this._commands.get(name.toUpperCase()) as any
-			|| this._commands.get(this._aliases.get(name.toUpperCase()));
+			|| this._commands.get(this._aliases.get(name.toUpperCase()))
+			|| null;
 
+		if (!command) return null;
 		if (command instanceof CommandGroup) return command.resolveCommand(msg, args);
 
-		return [command, name, args] || null;
+		return [command, name, args];
 	}
 
 	/**
@@ -126,14 +128,16 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 	 * @param {string} name
 	 * @returns {?Command|CommandGroup}
 	 */
-	public getCommand<U extends Command<any> | CommandGroup<any>>(name: string): U
+	public getCommand<U extends T>(name: string): U
 	{
 		if (!name) return null;
 
-		const command: Command<any> | CommandGroup<any> = this._commands.get(name.toUpperCase()) as any
-			|| this._commands.get(this._aliases.get(name.toUpperCase()));
+		const command: T = this._commands.get(name.toUpperCase())
+			|| this._commands.get(this._aliases.get(name.toUpperCase()))
+			|| null;
 
-		return command || null as any;
+		// T is not necessarily assignable to U, but we "know what we are doing here", don't we?
+		return command as any;
 	}
 
 	/**
