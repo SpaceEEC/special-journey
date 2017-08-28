@@ -27,7 +27,8 @@ export abstract class Database
 
 	private static readonly database: Sequelize = new Sequelize({
 		dialect: 'postgres',
-		logging: (thing: any[]) => Database.logger.silly(inspect(thing)),
+		// not much I can do about that error here :c
+		logging: (...ouptput: any[]) => Database.logger.silly(...ouptput.map((thing: any) => inspect(thing))),
 		modelPaths: [join(__dirname, 'Models')],
 		name: DB_NAME,
 		password: DB_PASSWORD,
