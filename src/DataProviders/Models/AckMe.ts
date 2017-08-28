@@ -5,5 +5,5 @@ export class AckMe extends Model<AckMe>
 {
 	@PrimaryKey
 	@Column(DataType.STRING({ length: 20 }))
-	public guildId: string;
+	public readonly guildId: string;
 }
