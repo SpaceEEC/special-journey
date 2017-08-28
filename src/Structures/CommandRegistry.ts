@@ -152,9 +152,9 @@ export class CommandRegistry<T extends (Command | CommandGroup<any>)>
 
 			// Can't access _protected_ class properties outside of class :^)
 			// ts at its finest
-			for (const _command of this._commands.values())
+			for (const _command of (this as any)._commands.values())
 			{
-				delete require.cache[require.resolve(this.basePath + sep + _command.filename)];
+				delete require.cache[require.resolve((this as any).basePath + sep + _command.filename)];
 			}
 
 			previous._commands.delete(this.name);
