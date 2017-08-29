@@ -1,5 +1,5 @@
 import { Collection, Message } from 'discord.js';
-import { readdir } from 'fs';
+import { PathLike, readdir, stat, Stats } from 'fs';
 import { parse, ParsedPath, sep } from 'path';
 import { promisify } from 'util';
 
@@ -17,6 +17,11 @@ let commandGroup: typeof CommandGroup;
  * Promisifed readdir
  */
 const readdirAsync: (path: string) => Promise<string[]> = promisify(readdir);
+
+/**
+ * Promisified stat
+ */
+const statAsync: (path: PathLike) => Promise<Stats> = promisify(stat);
 
 /**
  * Command registry, handling _commands and the like.
@@ -196,6 +201,16 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 			}
 
 			delete require.cache[require.resolve(this.basePath + sep + command.filename)];
+		}
+		else
+		{
+			// tslint:disable-next-line:max-line-length
+			const stats: Stats = await statAsync(`${this.basePath + sep + chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase()}.js`);
+			if (stats.isDirectory())
+			{
+				await this.loadCommandGroup(chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase());
+				return;
+			}
 		}
 
 		this.loadCommand(command ? command.filename : (chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase()));
