@@ -158,6 +158,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		{
 			if (!(this instanceof commandGroup) || !previous) throw new Error('Missing name to reload!');
 
+			delete require.cache[require.resolve((this as any)._filename)];
 			// Can't access _protected_ class properties outside of class :^)
 			// ts at its finest
 			for (const _command of (this as any)._commands.values())
@@ -252,8 +253,8 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 
 		this._validateCommandOptions(commandGroupInstance);
 
-		for (const alias of commandGroupInstance.aliases) this._aliases.set(alias, commandGroup.name);
-		this._commands.set(commandGroup.name, commandGroupInstance as T);
+		for (const alias of commandGroupInstance.aliases) this._aliases.set(alias, commandGroupInstance.name);
+		this._commands.set(commandGroupInstance.name, commandGroupInstance as T);
 
 		return commandGroupInstance;
 	}
