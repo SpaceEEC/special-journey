@@ -10,13 +10,13 @@ export enum LogLevel
 }
 
 export const colors: Color = {
-	0: 31,
-	1: 33,
-	2: 32,
-	3: 36,
-	4: 34,
-	5: 35,
-	6: 0,
+	[LogLevel.ERROR]: 31,
+	[LogLevel.WARN]: 33,
+	[LogLevel.INFO]: 32,
+	[LogLevel.VERBOSE]: 36,
+	[LogLevel.DEBUG]: 34,
+	[LogLevel.SILLY]: 35,
+	[LogLevel.NONE]: 0,
 };
 
 export type Color = { [index: number]: number; };
