@@ -3,8 +3,8 @@ import { Guild, Message, Util } from 'discord.js';
 import { Aliases, Command } from '../../Structures/Command';
 import { AckMeCommandGroup } from './AckMe';
 
-@Aliases('LIST')
-export class ShowCommand extends Command<AckMeCommandGroup>
+@Aliases('SHOW', 'LIST')
+export class ShowAckCommand extends Command<AckMeCommandGroup>
 {
 	public async run(msg: Message): Promise<Message>
 	{

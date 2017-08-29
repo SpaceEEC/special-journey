@@ -3,8 +3,8 @@ import { Guild, Message, Util } from 'discord.js';
 import { Aliases, Command } from '../../Structures/Command';
 import { AckMeCommandGroup } from './AckMe';
 
-@Aliases('DELETE')
-export class RemoveCommand extends Command<AckMeCommandGroup>
+@Aliases('ADD')
+export class AddAckCommand extends Command<AckMeCommandGroup>
 {
 	public async run(msg: Message, [id]: [string]): Promise<Message>
 	{
@@ -20,11 +20,11 @@ export class RemoveCommand extends Command<AckMeCommandGroup>
 			id = msg.guild.id;
 		}
 
-		if (!await this.group.remove(id))
+		if (!await this.group.add(id))
 		{
-			return msg.edit(`\`${Util.escapeMarkdown(guild.name, true)}\` was not on the acking list in the first place.`);
+			return msg.edit(`\`${Util.escapeMarkdown(guild.name, true)}\` is already on the acking list.`);
 		}
 
-		return msg.edit(`Removed \`${Util.escapeMarkdown(guild.name, true)}\` from the acking list.`);
+		return msg.edit(`Added \`${Util.escapeMarkdown(guild.name, true)}\` to the acking list.`);
 	}
 }
