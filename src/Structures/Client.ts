@@ -118,7 +118,7 @@ export class Client extends DJSClient
 	@on('reconnecting')
 	protected onReconnecting(): void
 	{
-		this.logger.warn('[DJS][RECONNECTINIG]');
+		this.logger.warn('[DJS][RECONNECTING]');
 	}
 
 	@on('warn')
