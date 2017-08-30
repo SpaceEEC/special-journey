@@ -14,7 +14,7 @@ export class ShowTagsCommand extends Command<TagCommandGroup>
 		let content: string = '';
 		for (const tag of tags)
 		{
-			content += `${tag.name} :: ${tag.content ? `${tag.content} ` : ''}${tag.image ? `(${tag.image})` : ''}\n`;
+			content += `${tag.name} :: ${tag.image ? `(Image) ` : ''}${tag.content ? `${tag.content}` : ''}\n`;
 		}
 
 		return msg.edit(content, { code: 'ldif' });
