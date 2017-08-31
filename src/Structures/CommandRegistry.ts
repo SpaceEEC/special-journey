@@ -123,7 +123,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 	{
 		if (!name) return null;
 
-		const command: Command<U> | CommandGroup<any> = this._commands.get(name.toUpperCase()) as any
+		const command: Command<U> | CommandGroup<any> = this._commands.get(name.toUpperCase())
 			|| this._commands.get(this._aliases.get(name.toUpperCase()))
 			|| null;
 
