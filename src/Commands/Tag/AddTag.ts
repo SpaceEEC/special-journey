@@ -1,13 +1,13 @@
 import { Message, MessageReaction } from 'discord.js';
 
 import { Tag } from '../../DataProviders/Models/Tag';
-import { Aliases, Command, CommandInformations } from '../../Structures/Command';
+import { Aliases, Command, CommandInformation } from '../../Structures/Command';
 import { TagCommandGroup } from './Tag';
 
 @Aliases('ADD', 'ADDI', 'ADDIMAGE')
 export class AddTagCommand extends Command<TagCommandGroup>
 {
-	public async run(msg: Message, [name, ...args]: string[], { alias }: CommandInformations): Promise<MessageReaction>
+	public async run(msg: Message, [name, ...args]: string[], { alias }: CommandInformation): Promise<MessageReaction>
 	{
 		if (!name || !args.length) return msg.react('❌');
 

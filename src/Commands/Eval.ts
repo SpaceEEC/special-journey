@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import { inspect } from 'util';
 
 import { Client } from '../Structures/Client';
-import { Aliases, Command, CommandInformations } from '../Structures/Command';
+import { Aliases, Command, CommandInformation } from '../Structures/Command';
 import { Loggable } from '../Structures/Logger';
 
 const { PREFIX }: { [key: string]: string } = process.env;
@@ -33,7 +33,7 @@ export class EvalCommand extends Command
 	// tslint:disable-next:line:it-is-okay
 	private _test: any = null;
 
-	public async run(msg: Discord.Message, args: string[], { alias }: CommandInformations): Promise<Discord.Message>
+	public async run(msg: Discord.Message, args: string[], { alias }: CommandInformation): Promise<Discord.Message>
 	{
 		const client: Client = this.client;
 		const message: Discord.Message = msg;

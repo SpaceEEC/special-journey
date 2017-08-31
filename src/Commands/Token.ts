@@ -1,7 +1,7 @@
 import { DiscordAPIError, Message, User } from 'discord.js';
 import { get, Result } from 'snekfetch';
 
-import { Aliases, Command, CommandInformations } from '../Structures/Command';
+import { Aliases, Command, CommandInformation } from '../Structures/Command';
 
 const { BOT }: { [key: string]: string } = process.env;
 
@@ -10,7 +10,7 @@ export class TokenCommand extends Command
 {
 	private _idPattern: RegExp = new RegExp(/^\d{16,19}$/);
 
-	public async run(msg: Message, [tokenOrId]: [string], { alias }: CommandInformations): Promise<Message>
+	public async run(msg: Message, [tokenOrId]: [string], { alias }: CommandInformation): Promise<Message>
 	{
 		const results: string[] = [];
 

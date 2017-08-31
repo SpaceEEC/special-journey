@@ -1,21 +1,12 @@
 import { Message } from 'discord.js';
 
+import { CommandInformation } from '../Types/CommandInformation';
 import { Client } from './Client';
 import { CommandGroup } from './CommandGroup';
 import { Logger } from './Logger';
 
 export { Aliases } from '../Types/CommandDecorators';
-
-/**
- * Informations to pass to a command's execution.
- */
-export type CommandInformations =
-	{
-		/**
-		 * The command, or alias, which triggered this command's execution
-		 */
-		alias: string;
-	};
+export { CommandInformation } from '../Types/CommandInformation';
 
 /**
  * Represents a command.
@@ -75,11 +66,11 @@ export class Command<T extends CommandGroup<any> = never>
 	 * Executes this command.
 	 * @param {Message} msg The message to pass to this command
 	 * @param {string[]} args The args array to pass to this command
-	 * @param {CommandInformations} info The CommandInformations to pass to the command's execution
+	 * @param {CommandInformation} info The CommandInformation to pass to the command's execution
 	 * @returns {Promise<Message | Message[]>}
 	 * @abstract
 	 */
-	public run(msg: Message, args: string[], info: CommandInformations): any
+	public run(msg: Message, args: string[], info: CommandInformation): any
 	{
 		// tslint:disable-next-line:max-line-length
 		throw new Error(`${this.name} (${this.constructor.name}) somehow failed to implement a run() method, what a great achievement!`);
