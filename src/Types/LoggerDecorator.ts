@@ -1,10 +1,9 @@
-// copy pasted from here
-// https://github.com/zajrik/yamdbf/blob/master/src/util/logger/LoggerDecorator.ts
-
 // tslint:disable:ban-types
 
 import { Logger } from '../structures/Logger';
 
+// copy pasted from here
+// https://github.com/zajrik/yamdbf/blob/master/src/util/logger/LoggerDecorator.ts
 export function logger<T extends Object>(target: T, key: string): void
 {
 	Reflect.defineProperty(
@@ -14,6 +13,8 @@ export function logger<T extends Object>(target: T, key: string): void
 	);
 }
 
+// and this from here
+// https://github.com/RobinBuschmann/sequelize-typescript/blob/master/lib/annotations/Column.ts
 export function Loggable(prefix: string, defineStatic?: boolean): ClassDecorator;
 export function Loggable<T extends Function>(constructor: T): void;
 export function Loggable(...args: any[]): ClassDecorator | void
