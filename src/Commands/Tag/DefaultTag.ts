@@ -1,12 +1,12 @@
 import { Message, Util } from 'discord.js';
 
 import { Tag } from '../../DataProviders/Models/Tag';
-import { Command, CommandInformations } from '../../Structures/Command';
+import { Command } from '../../Structures/Command';
 import { TagCommandGroup } from './Tag';
 
 export class DefaultTagCommand extends Command<TagCommandGroup>
 {
-	public async run(msg: Message, args: string[], { alias: name }: CommandInformations): Promise<Message>
+	public async run(msg: Message, [name, ...args]: string[]): Promise<Message>
 	{
 		if (!name) return msg.edit('A name might be of use here.');
 
