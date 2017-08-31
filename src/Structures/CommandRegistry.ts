@@ -10,7 +10,6 @@ import { CommandGroup } from './CommandGroup';
 import { Logger } from './Logger';
 
 // JavaScript and its circular references <.<
-// tslint:disable-next-line:variable-name
 let commandGroup: typeof CommandGroup;
 
 /**
