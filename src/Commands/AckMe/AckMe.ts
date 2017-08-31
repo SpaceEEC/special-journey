@@ -43,9 +43,7 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 		if (!this._cache.has(guildId)) return false;
 
 		await AckMe.destroy({ where: { guildId } });
-		this._cache.delete(guildId);
-
-		return true;
+		return this._cache.delete(guildId);
 	}
 
 	/**
@@ -70,7 +68,7 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 	}
 
 	/**
-	 * Caches all guild which are part of the acking list
+	 * Caches all guilds which are part of the acking list
 	 * and assign those to the _cache property of this class and returns it.
 	 * @returns {Promise<Set<String>>}
 	 * @private
