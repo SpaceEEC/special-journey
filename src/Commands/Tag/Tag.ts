@@ -24,6 +24,8 @@ export class TagCommandGroup extends CommandGroup<TagCommandGroup>
 		const command: Command<U> = this._commands.get(name.toUpperCase()) as Command<U>
 			|| this._commands.get(this._aliases.get(name.toUpperCase())) as Command<U>;
 
-		return [command || this._commands.get('DEFAULTTAG') as Command<U>, 'DEFAULTTAG', [name, ...args]];
+		if (!command) return [this._commands.get('DEFAULTTAG') as Command<U>, 'DEFAULTTAG', [name, ...args]];
+
+		return [command, name, args];
 	}
 }
