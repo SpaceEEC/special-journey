@@ -29,7 +29,7 @@ export class EventCounter
 	 * Starting point
 	 * @private
 	 */
-	private start: Date = null;
+	private start: number = null;
 
 	/**
 	 * Resets the EventCounter's stats.
@@ -62,8 +62,8 @@ export class EventCounter
 			else ++this.ops[event];
 		}
 
-		if (!this.start) this.start = new Date();
-		this.frequency = ++this.total / ((Date.now() - +this.start) / 1000);
+		if (!this.start) this.start = Date.now();
+		this.frequency = ++this.total / ((Date.now() - this.start) / 1000);
 	}
 
 	/**
@@ -76,18 +76,26 @@ export class EventCounter
 		return `
 EventCounter
 {
-	Frequenzy => ${this.frequency.toFixed(0)} events/sec,
-	Total => ${this.total.toLocaleString('en-us')} events,
-	Start => ${this.start.toUTCString()},
+	Frequency => ${this.frequency.toFixed(0)} events/sec,
+	Total => ${this.total.toLocaleString().replace(/,/g, '.')} events,
+	Start => ${new Date(this.start).toUTCString()},
 	OPCodes:
 	{
-		${Object.entries(this.ops).map(([k, v]: [string, number]) => `${k} => ${v.toLocaleString('en-us')}`).join(',\n		')},
-	}
+		${this._formatDict(this.ops)},
+	},
 	Events:
 	{
-		${Object.entries(this.events).map(([k, v]: [string, number]) => `${k} => ${v.toLocaleString('en-us')}`).join(',\n		')}
-	}
+		${this._formatDict(this.events)},
+	},
 	// ${((this.events.PRESENCE_UPDATE / this.total) * 100).toFixed(2)}% of all events are presence updates //
 }`;
+	}
+
+	private _formatDict(dict: { [key: string]: number }): string
+	{
+		return Object.entries(dict)
+			.map(([k, v]: [string, number]) =>
+				`${k} => ${v.toLocaleString().replace(/,/g, '.')}`)
+			.join(',\n\t\t');
 	}
 }
