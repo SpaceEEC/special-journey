@@ -12,7 +12,12 @@ export class ExecCommand extends Command
 	{
 		await msg.edit(`\u200b${msg.content}\n\n...`);
 
-		const { stdout, stderr }: { stdout: string, stderr: string } = await execAsync(args.join(' '));
+		const input: string = args.join(' ');
+
+		if (!input) return msg.edit('No input was provided.');
+
+		const { stdout, stderr }: { stdout: string, stderr: string } = await execAsync(args.join(' '))
+			.catch((error: any) => ({ stdout: error.stdout, stderr: error.stderr }));
 
 		return msg.edit(
 			[
@@ -21,7 +26,7 @@ export class ExecCommand extends Command
 				args.join(' '),
 				'```',
 				stdout || (!stderr && !stdout) ? `\`STDOUT\`\n\`\`\`xl\n${stdout || 'Nothing at all'}\`\`\`` : '',
-				stderr ? `\`STDERR\`\`\`\`xl${stderr}\`\`\`` : '',
+				stderr ? `\`STDERR\`\n\`\`\`xl\n${stderr}\`\`\`` : '',
 			],
 		);
 	}
