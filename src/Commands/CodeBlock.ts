@@ -5,7 +5,7 @@ import { Aliases, Command } from '../Structures/Command';
 @Aliases('CB')
 export class CodeBlockCommand extends Command
 {
-	private _codeBlock: RegExp = /```(.+)\n/g;
+	private readonly _codeBlock: RegExp = /```(.+)\n/g;
 
 	public async run(msg: Message, [id]: [string]): Promise<Message>
 	{

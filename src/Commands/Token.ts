@@ -8,7 +8,7 @@ const { BOT }: { [key: string]: string } = process.env;
 @Aliases('ID')
 export class TokenCommand extends Command
 {
-	private _idPattern: RegExp = new RegExp(/^\d{16,19}$/);
+	private readonly _idPattern: RegExp = new RegExp(/^\d{16,19}$/);
 
 	public async run(msg: Message, [tokenOrId]: [string], { alias }: CommandInformation): Promise<Message>
 	{
