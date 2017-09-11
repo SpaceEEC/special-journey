@@ -16,9 +16,11 @@ export class AckMeNotCommand extends NotCommand
 			: msg.isMemberMentioned(msg.guild ? msg.guild.me : msg.author)
 		)
 		{
-			const shouldAck: boolean = await this.client.registry.getCommand<AckMeCommandGroup>('ACKME').has(msg.guild.id);
+			const commandGroup: AckMeCommandGroup = this.client.registry.getCommand<AckMeCommandGroup>('ACKME');
+			const shouldAck: boolean = await commandGroup.has(msg.guild.id);
 			if (shouldAck)
 			{
+				await commandGroup.increment();
 				return msg.acknowledge();
 			}
 		}

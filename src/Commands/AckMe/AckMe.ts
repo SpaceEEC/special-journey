@@ -1,4 +1,5 @@
 import { AckMe } from '../../DataProviders/Models/AckMe';
+import { Stats } from '../../DataProviders/Models/Stats';
 import { CommandGroup } from '../../Structures/CommandGroup';
 import { Directory } from '../../Types/CommandGroupDecorators';
 import { Loggable } from '../../Types/LoggerDecorator';
@@ -10,9 +11,14 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 	/**
 	 * Set of cached guilds which are part of the acking list
 	 * @private
-	 * @readonly
 	 */
 	private _cache: Set<string>;
+
+	/**
+	 * Cached stats model instance.
+	 * @private
+	 */
+	private _stats: Stats;
 
 	/**
 	 * Adds a guild to the acking list.
@@ -67,10 +73,20 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 		return this._cache || this._syncGuilds();
 	}
 
+	public async increment(): Promise<void>
+	{
+		if (!this._stats)
+		{
+			this._stats = await Stats.findById<Stats>('mentions');
+		}
+
+		await this._stats.increment('number');
+	}
+
 	/**
 	 * Caches all guilds which are part of the acking list
 	 * and assign those to the _cache property of this class and returns it.
-	 * @returns {Promise<Set<String>>}
+	 * @returns {Promise<Set<String>>} Reference!
 	 * @private
 	 */
 	private async _syncGuilds(): Promise<Set<string>>
