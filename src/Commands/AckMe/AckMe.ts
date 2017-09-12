@@ -73,6 +73,10 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 		return this._cache || this._syncGuilds();
 	}
 
+	/**
+	 * Increments the mentions in the stats table by one.
+	 * @returns {Promise<void>}
+	 */
 	public async increment(): Promise<void>
 	{
 		if (!this._stats)
