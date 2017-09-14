@@ -15,7 +15,7 @@ export class AckMeCommandGroup extends CommandGroup<AckMeCommandGroup>
 	private _cache: Set<string>;
 
 	/**
-	 * Cached stats model instance.
+	 * Cached stats model instance
 	 * @private
 	 */
 	private _stats: Stats;
