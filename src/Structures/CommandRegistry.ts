@@ -183,7 +183,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 			return;
 		}
 
-		const command: Command | CommandGroup<any> = this._commands.get(chain[0].toUpperCase()) as any
+		let command: Command | CommandGroup<any> = this._commands.get(chain[0].toUpperCase()) as any
 			|| this._commands.get(this._aliases.get(chain[0].toUpperCase()));
 
 		if (command instanceof commandGroup)
@@ -204,17 +204,17 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 		else
 		{
 			// tslint:disable-next-line:max-line-length
-			const stats: Stats = await statAsync(`${this.basePath + sep + chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase()}.js`);
+			const stats: Stats = await statAsync(`${this.basePath + sep + chain[0]}.js`);
 			if (stats.isDirectory())
 			{
-				await this.loadCommandGroup(chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase());
+				await this.loadCommandGroup(chain[0]);
 				return;
 			}
 		}
 
-		this.loadCommand(command ? command.filename : (chain[0][0].toUpperCase() + chain[0].slice(1).toLowerCase()));
+		command = this.loadCommand(command ? command.filename : chain[0]);
 
-		this.logger.info('[RELOAD]', 'Reloaded sub command:', command.name);
+		this.logger.info('[RELOAD]', `Reloaded ${this instanceof commandGroup ? 'sub-' : ''}command: ${command.name}`);
 	}
 
 	/**
@@ -222,7 +222,7 @@ export class CommandRegistry<T extends (Command<any> | CommandGroup<any>)>
 	 * @param {string} file
 	 * @returns {Command}
 	 */
-	public loadCommand(file: string): Command<any>
+	public loadCommand<U extends CommandGroup<U> = never>(file: string): Command<U>
 	{
 		const commandClass: typeof Command = require(`${this.basePath}/${file}`)[`${file}Command`];
 
